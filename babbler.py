@@ -25,6 +25,7 @@ REACTIONS_FOLDER: str = "reactions"
 REACTIONS_INDEX: int = 1
 BABBLER_EMODJI: list = ["😎", "😊", "☺", "😊", "😋"]
 NICKNAMES: list = ["softice", "софтик", "софтайсик", "ботик", "бот"]
+AT_CHAR: str = "@"
 
 
 class CBabbler(prototype.CPrototype):
@@ -136,53 +137,57 @@ class CBabbler(prototype.CPrototype):
         word_list: list = pmsg_rec[cn.MTEXT].split(" ")
         answer: str = ""
         personal: bool = False
-        nicks: str = " ".join(NICKNAMES)
-        # personal = clean_word in " ".join(NICKNAMES)
-        for word in word_list:
+        # nicks: str = " ".join(NICKNAMES)
+        # *** Переберем все слова в сообщении
+        for nick in NICKNAMES:
 
-            personal = word.rstrip(string.punctuation).lower().strip() in nicks
+            personal = nick in word_list
             if personal:
 
                 break
+
+        # *** Снова перебираем сообщение по словам (как-то неоптимально выходит)
         for word in word_list:
 
+            # *** Убираем из слова знаки пунктуации и пробелы, переводим в нижний регистр
             clean_word = word.rstrip(string.punctuation).lower().strip()
-            # dbg.dout(f"*** 4 {clean_word} {NICKNAMES} {clean_word in NICKNAMES}")
-            # clean_word = clean_word[1:]
+            # *** Если что-то осталось, двигаемся дальше.
             if len(clean_word) > 1:
 
+                # dbg.dout(f"%%% ! {clean_word}")
+                # *** Перебираем блоки памяти бота
                 for block in self.mind:
 
-                    # dbg.dout(f"*** {block}")
-                    # for block_item in block:
-                    for index, block_item in enumerate(block):
+                    # dbg.dout(f"%%%% @ {block}")
+                    triggers: list = block[0]
+                    # dbg.dout(f"%%%% # {triggers}")
+                    # *** Если в списке триггеров есть такое слово
+                    if clean_word in triggers or AT_CHAR + clean_word in triggers:
 
-                        if index == 0:
+                        # dbg.dout(f"%%%%%% Trig {triggers.index(clean_word)}")
+                        # *** если в строке есть обращение к боту
+                        if AT_CHAR in "".join(triggers) and personal:
 
-                            # dbg.dout(f"*** {block_item}")
-                            # *** Если в блоке есть такое слово
-                            if clean_word in block_item or "@" + clean_word in block_item:
+                            answer = f"{random.choice(block[REACTIONS_INDEX])}"
+                            sleep(1)
+                            break
+                        # else:
 
-                                # if personal and pmsg_rec[cn.]
-                                # dbg.dout(f"*** {pmsg_rec[cn.MTEXT].strip()[0:1]}")
-                                # *** Если этот пункт помечен как личный
-                                # dbg.dout(f"%%%%%% 5 {block_item}")
-                                if "@" in "".join(block_item):
+                        # dbg.dout("%%% Не личное сообщение")
+                        trigger: str = triggers[triggers.index(clean_word)].strip()
+                        # dbg.dout(f"%%% & {trigger}")
+                        # if " " in trigger:
+                        #
+                        #     # *** Это не слово, а фраза
+                        #     phrase: list = trigger.split(" ")
+                        #     # for word in phrase:
+                        #     #
+                        #     #     if word in clean_word
+                        # else:
 
-                                    # dbg.dout(f"%%%%%% 1 {personal}")
-                                    # *** если в строке есть обращение к боту
-                                    if personal:
-
-                                        # dbg.dout(f"%%%%%% 2")
-                                        answer = f"{random.choice(block[REACTIONS_INDEX])}"
-                                        sleep(1)
-                                        break
-                                else:
-
-                                    # dbg.dout(f"%%%%%% 3")
-                                    answer = f"{random.choice(block[REACTIONS_INDEX])}"
-                                    sleep(1)
-                                    break
+                        answer = f"{random.choice(block[REACTIONS_INDEX])}"
+                        sleep(1)
+                        break
 
                     if answer:
                         break

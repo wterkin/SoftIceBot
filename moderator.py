@@ -65,14 +65,15 @@ class CModerator(prototype.CPrototype):
             for bad_word in self.bad_words:
 
                 result: bool = True
+                # print(bad_word, text)
                 while result:
 
-                    # print(bad_word)
-                    dbg.dout(bad_word)
+                    # dbg.dout(bad_word)
                     result = re.match(bad_word, text) is not None
                     if result:
 
-                        dbg.dout("detected: ")
+                        # dbg.dout("detected: ")
+                        print("detected")
                         detected = True
                         text = replace_bad_words(bad_word, text)
             if detected:

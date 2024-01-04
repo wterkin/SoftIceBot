@@ -103,28 +103,32 @@ class CHaijin(prototype.CPrototype):
     def format_hokku(self, ptext: str) -> str:
         """Форматирует хокку так, как нам хочется."""
         # *** Вырежем номер
+        result_text: str = ""
         if "???" not in ptext:
 
-            left_par: int = ptext.index(LEFT_BRACKET)
-            right_par: int = ptext.index(RIGHT_BRACKET)
-            number: str = ptext[left_par + 1:right_par].strip()
-            text: str = ptext[right_par + 1:]
-            # *** Вырежем автора
-            left_par = text.index(LEFT_PARENTHESIS)
-            right_par = text.index(RIGHT_PARENTHESIS)
-            author = text[left_par + 1:right_par].strip()
-            text = text[:left_par]
-            # *** Разобьём текст на строки
-            text_list: list = text.split(SLASH)
-            result_text: str = ""
-            for line in text_list:
+            if LEFT_BRACKET in ptext and RIGHT_BRACKET in ptext:
 
-                result_text += line.strip() + LF
-            result_text = func.screen_text(result_text)
-            result_text = f"{BOLD}{ITALIC}{result_text[:-1]}{ITALIC}{BOLD}{LF}" \
-                          f"{AUTHOR_INDENT}{func.screen_text(author)} {SPOILER}" + \
-                          f"{DELIMITER} {number} {DELIMITER} {len(self.hokku)} {SPOILER}"
-            # print(result_text)
+                left_par: int = ptext.index(LEFT_BRACKET)
+                right_par: int = ptext.index(RIGHT_BRACKET)
+                number: str = ptext[left_par + 1:right_par].strip()
+                text: str = ptext[right_par + 1:]
+                # *** Вырежем автора
+                left_par = text.index(LEFT_PARENTHESIS)
+                right_par = text.index(RIGHT_PARENTHESIS)
+                author = text[left_par + 1:right_par].strip()
+                text = text[:left_par]
+                # *** Разобьём текст на строки
+                text_list: list = text.split(SLASH)
+                for line in text_list:
+
+                    result_text += line.strip() + LF
+                result_text = func.screen_text(result_text)
+                result_text = f"{BOLD}{ITALIC}{result_text[:-1]}{ITALIC}{BOLD}{LF}" \
+                              f"{AUTHOR_INDENT}{func.screen_text(author)} {SPOILER}" + \
+                              f"{DELIMITER} {number} {DELIMITER} {len(self.hokku)} {SPOILER}"
+            else:
+
+                print(f"!!!!! {ptext} !!!!!!!!!!!!")
             return result_text
         return ptext
 

@@ -176,7 +176,7 @@ class CStatistic(prototype.CPrototype):
                       f"{0 if item[1].fpictures is None else item[1].fpictures} фоток, " \
                       f"{0 if item[1].faudios is None else item[1].faudios} звук. и " \
                       f"{0 if item[1].fvideos is None else item[1].fvideos} вид. \n"
-        answer += f"Отсортировано по количеству {SORTED_BY[porder_by]}. \n"
+        answer += f"Отсортировано по количеству {SORTED_BY[porder_by-1]}. \n"
         return answer
 
     def get_user_id(self, ptg_user_id):
@@ -207,7 +207,12 @@ class CStatistic(prototype.CPrototype):
         """Учитывает стикеры, видео, аудиосообщения."""
         if self.is_enabled(pevent[cn.MCHAT_TITLE]):
 
-            message_text: str = pevent[cn.MTEXT]
+            if cn.MTEXT in pevent:
+
+                message_text: str = pevent[cn.MTEXT]
+            else:
+
+                message_text: str = pevent[cn.MCAPTION]
             tg_chat_id: int = pevent[cn.MCHAT_ID]
             tg_chat_title: str = pevent[cn.MCHAT_TITLE]
             # tg_user_title: str = ""
@@ -318,5 +323,7 @@ class CStatistic(prototype.CPrototype):
         query = query.filter_by(fuserid=puser_id)
         query = query.filter_by(fchatid=pchat_id)
         stat: db.CStat = query.first()
-        stat.set_all_fields(pstatfields)
-        self.database.commit_changes(stat)
+        if stat:
+
+            stat.set_all_fields(pstatfields)
+            self.database.commit_changes(stat)

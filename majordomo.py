@@ -43,6 +43,7 @@ class CMajordomo(prototype.CPrototype):
         if self.is_enabled(pchat_title):
 
             return ", ".join(COMMANDS)
+        return ""
 
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
