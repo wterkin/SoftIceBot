@@ -57,6 +57,7 @@ QUIT_BY_DEMAND: int = 1
 RESTART_BY_DEMAND: int = 2
 BOT_STATUS: int = CONTINUE_RUNNING
 RUNNING_FLAG: str = "running.flg"
+LEGAL_EXITING_FLAG: str = "exiting.flg"
 SLEEP_BEFORE_EXIT_BY_ERROR: int = 10
 
 
@@ -130,6 +131,7 @@ class CSoftIceBot:
         self.robot: telebot.TeleBot = telebot.TeleBot(self.config[TOKEN_KEY])
         self.bot_status: int = CONTINUE_RUNNING
         self.running_flag: str = os.getcwd() + "/" + RUNNING_FLAG
+        self.legal_exiting_flag: str = os.getcwd() + "/flags/" + LEGAL_EXITING_FLAG
         if os.path.exists(self.running_flag):
 
             print("* Перезапуск после падения либо по требованию.")
@@ -146,6 +148,7 @@ class CSoftIceBot:
         else:
 
             self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
+        print(f"************{self.data_path}")
         # *** Открываем БД
         self.database: database.CDataBase = database.CDataBase(self.config, self.data_path)
         if not self.database.exists():
@@ -497,6 +500,8 @@ class CSoftIceBot:
 
             self.robot.send_message(self.event[cn.MCHAT_ID], "Добби свободен!")
             os.remove(self.running_flag)
+            with open(self.legal_exiting_flag, 'tw', encoding='utf-8'):
+                pass
             raise CQuitByDemand()
         self.robot.send_message(self.event[cn.MCHAT_ID],
                                 f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")

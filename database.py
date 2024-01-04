@@ -280,6 +280,7 @@ class CDataBase:
 
     def exists(self):
         """Проверяет наличие базы данных по пути в конфигурации."""
+        # print(f"*** {self.data_path + self.}")
         return Path(self.data_path + self.database_name).exists()
 
     def get_session(self):
