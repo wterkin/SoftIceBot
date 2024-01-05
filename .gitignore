@@ -1,6 +1,7 @@
 *.cmd
 *.kdev4
 *.log
+data/
 .idea/*
 __pycache__/*
 alembic/__pycache__/*

@@ -6,17 +6,16 @@ cd ~/softice
 if [ -e "$START_FLAG" ]
 then
 
-  # rm $START_FLAG
-  #while [ $CONDITION -e 1 ] do
-  for ((;$CONDITION==0;)) do
+  rm $EXITING_FLAG
+  rm $START_FLAG
+  for ((CONDITION=0;CONDITION==0;)) do
+
     ~/env/telegram/bin/python3 softice.py
     if [ -e "$EXITING_FLAG" ]
     then
 
-      $CONDITION = 1
-
+      echo **** Exiting.. ****
+      break
     fi
-
   done
-
 fi
