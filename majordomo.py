@@ -1,3 +1,8 @@
+#! /usr/bin/python3
+# -*- coding: utf-8 -*-
+# @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
+"""Модуль мажордома."""
+
 # from pathlib import Path
 import random
 import prototype

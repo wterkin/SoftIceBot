@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
-"""Модуль бармена."""
+"""Модуль болтуна."""
 
 import random
 import string
 from datetime import datetime
-# from pdb import pm
 from time import sleep
 from pathlib import Path
+
 import functions as func
 import constants as cn
 import prototype
-import debug as dbg
+# import debug as dbg
 
 # *** Команда перегрузки текстов
 BABBLER_RELOAD: list = ["blreload", "blrl"]
-# *** Ключ для списка доступных каналов в словаре конфига
+# *** Ключ для списка доступных чатов в словаре конфига
 UNIT_ID = "babbler"
 BABBLER_PATH: str = "babbler/"
 BABBLER_PERIOD_KEY = "babbler_period"
@@ -174,7 +174,7 @@ class CBabbler(prototype.CPrototype):
                         # else:
 
                         # dbg.dout("%%% Не личное сообщение")
-                        trigger: str = triggers[triggers.index(clean_word)].strip()
+                        # trigger: str = triggers[triggers.index(clean_word)].strip()
                         # dbg.dout(f"%%% & {trigger}")
                         # if " " in trigger:
                         #

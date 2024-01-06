@@ -32,8 +32,8 @@ import stargazer
 # import supervisor
 import theolog
 import debug as dbg
-
 # *** Местоположение данных бота
+
 ALLOWED_CHATS_KEY: str = "allowed_chats"
 LINUX_DATA_FOLDER_KEY: str = "linux_data_folder"
 LOGGING_KEY: str = "logging"
@@ -504,7 +504,7 @@ class CSoftIceBot:
         if result:
 
             answer = answer + result + "\n"
-        result = self.librarian.get_hint(self.event[cn.MCHAT_TITLE]) 
+        result = self.librarian.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
             answer = answer + result + "\n"

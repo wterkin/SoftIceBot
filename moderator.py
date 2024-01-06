@@ -7,7 +7,7 @@ from pathlib import Path
 import functions as func
 import prototype
 import constants as cn
-import debug as dbg
+# import debug as dbg
 
 RELOAD_BAD_WORDS: list = ["bwreload", "bwrl"]
 HINT = ["адм", "adm"]

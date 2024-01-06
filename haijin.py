@@ -143,10 +143,9 @@ class CHaijin(prototype.CPrototype):
 
             for idx, command in enumerate(HAIJIN_COMMANDS):
 
-                if idx + 1 != len(HAIJIN_COMMANDS):
-
-                    command_list += ", ".join(command) + HAIJIN_DESC[idx]
-                    command_list += "\n"
+                # if idx + 1 != len(HAIJIN_COMMANDS):
+                command_list += ", ".join(command) + HAIJIN_DESC[idx]
+                command_list += "\n"
         # print(f"***** {func.screen_text(command_list)} **********")
 
         return func.screen_text(command_list)
