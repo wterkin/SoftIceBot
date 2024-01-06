@@ -9,5 +9,6 @@ alembic/versions/__pycache__/*
 GPL-3
 trash/*
 config.json
+config.main.json
 *.7z
 running.flg
