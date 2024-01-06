@@ -1,4 +1,4 @@
 #!/bin/sh
 cd ~/softice
 touch flags/start.flg
-./bot_start.sh
+screen  -d -m ./bot_start.sh
