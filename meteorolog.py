@@ -230,6 +230,7 @@ class CMeteorolog(prototype.CPrototype):
                             # *** Вполне еще можно
                             date_str = now.strftime(RUSSIAN_DATE_FORMAT)
                             weather_str = self.request_weather(city_id, now)
+                    # print(f"***** {weather_str}")
                     # *** Если еще не поздно, то выдадим погоду, иначе дадим знать юзеру
                     # answer = f"{city_name} : {date_str} : {weather_str}" if now.hour < 21 else
                     #    answer = "Поздно уже, какая тебе погода??!"

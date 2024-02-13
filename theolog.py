@@ -312,7 +312,10 @@ class CTheolog(prototype.CPrototype):
         assert pchat_title is not None, \
             "Assert: [theolog.theolog] No <pchat_title> parameter specified!"
         answer: str = ""
-        word_list: list = func.parse_input(pmessage_text)
+        # pmessage_text
+        # print(pmessage_text)
+        word_list: list = func.parse_input(pmessage_text.replace(":", " "))
+        # print(word_list)
         verse: str = ""
         param_count = len(word_list)
         book_name: str
@@ -372,14 +375,18 @@ class CTheolog(prototype.CPrototype):
                 else:
 
                     # *** Книгу и главу
-                    book_name = word_list[0]
+                    # print("word_list ",word_list)
+                    book_name = word_list[0].lower()
+                    # print("book_name ", book_name)
                     book_idx: int = 0
                     # chapter = word_list[1]
                     # *** Переберем всё
                     for idx, book in enumerate(BIBLE_BOOKS):
 
+                        # print("book ", book)
+                        # print("bookname ", book_name)
                         if book_name in book:
-
+                            print("-------------------")
                             book_idx = idx
                             book_name = book[2]
                             break
