@@ -13,3 +13,4 @@ config.json
 config.main.json
 *.7z
 running.flg
+test.flg

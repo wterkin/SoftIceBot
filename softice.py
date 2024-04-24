@@ -22,6 +22,7 @@ import constants as cn
 import babbler
 import barman
 import bellringer
+import collector
 import haijin
 import librarian
 import majordomo
@@ -172,6 +173,7 @@ class CSoftIceBot:
         self.barman: barman.CBarman = barman.CBarman(self.config, self.data_path)
         self.bellringer: bellringer.CBellRinger = bellringer.CBellRinger(self.config,
                                                                          self.data_path)
+        self.collector: collector.CCollector = collector.CCollector()
         self.haijin: haijin.CHaijin = haijin.CHaijin(self.config, self.data_path)
         self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.data_path)
         self.majordomo: majordomo.CMajordomo = majordomo.CMajordomo(self.config, self.data_path)
@@ -443,6 +445,11 @@ class CSoftIceBot:
                         self.logger.info("* Запрошена неподдерживаемая команда %s"
                                          " в чате %s.", rec[cn.MTEXT], rec[cn.MCHAT_TITLE])
                     # self.event[cn.MPROCESSED] = True
+                    if answer:
+
+                        if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
+
+                            answer = self.collector.collector(answer)
             self.lock = False
         return answer  # , do_not_screen
 
