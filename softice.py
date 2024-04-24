@@ -586,6 +586,7 @@ class CSoftIceBot:
                 print("# Превышен интервал ожидания ответа. Выход.")
                 self.logger.exception("Превышен интервал ожидания ответа. Выход.", exc_info=True)
                 time.sleep(SLEEP_BEFORE_EXIT_BY_ERROR)
+                self.robot.stop_polling()
                 sys.exit(3)
             except telebot.apihelper.ApiTelegramException:
 
