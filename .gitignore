@@ -1,6 +1,7 @@
 *.cmd
 *.kdev4
 *.log
+logs/*
 data/
 .idea/*
 __pycache__/*
@@ -12,3 +13,4 @@ config.json
 config.main.json
 *.7z
 running.flg
+test.flg

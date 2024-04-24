@@ -22,6 +22,7 @@ import constants as cn
 import babbler
 import barman
 import bellringer
+import collector
 import haijin
 import librarian
 import majordomo
@@ -40,6 +41,7 @@ LOGGING_KEY: str = "logging"
 WINDOWS_DATA_FOLDER_KEY: str = "windows_data_folder"
 TOKEN_KEY: str = "token"
 CONFIG_FILE_NAME: str = "config.json"
+TEST_CONFIG_FILE_NAME: str = "test_config.json"
 # BOT_NAME: str = "SoftIceBot"
 COMMAND_SIGN: str = "!"
 HELP_MESSAGE: str = "В настоящий момент я понимаю только следующие группы команд: \n"
@@ -59,6 +61,7 @@ RESTART_BY_DEMAND: int = 2
 BOT_STATUS: int = CONTINUE_RUNNING
 RUNNING_FLAG: str = "running.flg"
 LEGAL_EXITING_FLAG: str = "exiting.flg"
+TEST_RUN_FLAG: str = "test.flg"
 SLEEP_BEFORE_EXIT_BY_ERROR: int = 10
 
 
@@ -114,7 +117,6 @@ def is_foreign_command(pcommand: str) -> bool:
 # int: disable=too-many-instance-attributes # а что еще делать???
 class CSoftIceBot:
     """Универсальный бот для Телеграмма."""
-
     def __init__(self):
         """Конструктор класса."""
         super().__init__()
@@ -122,7 +124,12 @@ class CSoftIceBot:
         # self.events: list = []
         self.event: dict = {}
         self.config: dict = {}
-        self.load_config(CONFIG_FILE_NAME)
+        if os.path.exists(os.getcwd() + "/flags/" + TEST_RUN_FLAG):
+    
+            self.load_config(TEST_CONFIG_FILE_NAME)
+        else:
+            
+            self.load_config(CONFIG_FILE_NAME)
         self.lock: bool = False
         # dbg.debug_state = self.config["debug"] == "0"
         # *** Нужно ли работать через прокси?
@@ -172,6 +179,7 @@ class CSoftIceBot:
         self.barman: barman.CBarman = barman.CBarman(self.config, self.data_path)
         self.bellringer: bellringer.CBellRinger = bellringer.CBellRinger(self.config,
                                                                          self.data_path)
+        self.collector: collector.CCollector = collector.CCollector(self.config)
         self.haijin: haijin.CHaijin = haijin.CHaijin(self.config, self.data_path)
         self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.data_path)
         self.majordomo: majordomo.CMajordomo = majordomo.CMajordomo(self.config, self.data_path)
@@ -443,6 +451,11 @@ class CSoftIceBot:
                         self.logger.info("* Запрошена неподдерживаемая команда %s"
                                          " в чате %s.", rec[cn.MTEXT], rec[cn.MCHAT_TITLE])
                     # self.event[cn.MPROCESSED] = True
+                    if answer:
+
+                        if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
+
+                            answer = self.collector.collector(answer)
             self.lock = False
         return answer  # , do_not_screen
 
