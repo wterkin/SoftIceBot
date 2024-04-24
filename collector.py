@@ -2,28 +2,31 @@
 # @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
 """Модуль выпрашивания пожертвований ;) """
 
-import random
 import string
 from datetime import datetime
 from time import sleep
 from pathlib import Path
+from random import randint
 
 import functions as func
 import constants as cn
 import prototype
 
-WORK_HOURS: tuple = (12 - 14) 
+UNIT_ID = "collector"
+WORK_HOURS: tuple = (12, 13, 14) 
 PROBABILITY: int = 32
 CHANCE_VALUE: int = 11
-DONATE_MESSAGE: str = """\n Нравится SoftIce? Поддержи проект!
-                         Пожертвуй 50 рублей на содержание бота, 
-                         это очень просто: 
+DONATE_MESSAGE: str = """\n \n Нравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на содержание бота, это очень просто: 
                          https://yoomoney.ru/to/41001510609674/50"""
 
 
 
 class CCollector(prototype.CPrototype):
     """Класс сборщика пожертвований"""
+
+    def __init__(self, pconfig: dict):
+        super().__init__()
+        self.config: dict = pconfig
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Коллектор никакие команды не обрабатывает."""
@@ -57,7 +60,7 @@ class CCollector(prototype.CPrototype):
 
         # *** Время рабочее? 
         just_now = datetime.now()
-        if now.hour in WORK_HOUR:
+        if just_now.hour in WORK_HOURS:
             
             # *** Запросим случайное число
             chance: int = randint(1, PROBABILITY)

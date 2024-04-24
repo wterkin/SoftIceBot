@@ -179,7 +179,7 @@ class CSoftIceBot:
         self.barman: barman.CBarman = barman.CBarman(self.config, self.data_path)
         self.bellringer: bellringer.CBellRinger = bellringer.CBellRinger(self.config,
                                                                          self.data_path)
-        self.collector: collector.CCollector = collector.CCollector()
+        self.collector: collector.CCollector = collector.CCollector(self.config)
         self.haijin: haijin.CHaijin = haijin.CHaijin(self.config, self.data_path)
         self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.data_path)
         self.majordomo: majordomo.CMajordomo = majordomo.CMajordomo(self.config, self.data_path)

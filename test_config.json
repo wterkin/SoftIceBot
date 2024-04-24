@@ -21,6 +21,6 @@
   		       ],
     "chats": {
               "Ботовка": ["babbler", "barman", "bellringer", "collector", "haijin", "librarian", "majordomo", "meteorolog", "moderator", "statistic", "stargazer", "supervisor", "theolog"],
-              "ПравЧат": ["babbler", "barman", "haijin", "collector", "librarian", "majordomo", "meteorolog", "moderator", "statistic", "stargazer", "supervisor", "theolog"],
+              "ПравЧат": ["babbler", "barman", "haijin", "collector", "librarian", "majordomo", "meteorolog", "moderator", "statistic", "stargazer", "supervisor", "theolog"]
              }
     }
