@@ -125,10 +125,10 @@ class CSoftIceBot:
         self.event: dict = {}
         self.config: dict = {}
         if os.path.exists(os.getcwd() + "/flags/" + TEST_RUN_FLAG):
-    
+
             self.load_config(TEST_CONFIG_FILE_NAME)
         else:
-            
+
             self.load_config(CONFIG_FILE_NAME)
         self.lock: bool = False
         # dbg.debug_state = self.config["debug"] == "0"
@@ -452,7 +452,7 @@ class CSoftIceBot:
                                          " в чате %s.", rec[cn.MTEXT], rec[cn.MCHAT_TITLE])
                     # self.event[cn.MPROCESSED] = True
             if answer:
- 
+
                 if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
 
                     answer = self.collector.collector(answer)

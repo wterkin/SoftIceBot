@@ -2,23 +2,22 @@
 # @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
 """Модуль выпрашивания пожертвований ;) """
 
-import string
+# import string
 from datetime import datetime
-from time import sleep
-from pathlib import Path
+# from time import sleep
+# from pathlib import Path
 from random import randint
 
-import functions as func
-import constants as cn
+# import functions as func
+# import constants as cn
 import prototype
 
 UNIT_ID = "collector"
-WORK_HOURS: tuple = (12, 13, 14, 15, 16, 17, 18) 
+WORK_HOURS: tuple = (12, 13, 14, 15, 16, 17, 18)
 PROBABILITY: int = 16
 CHANCE_VALUE: int = 8
-DONATE_MESSAGE: str = """\n\nНравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на содержание бота, это очень просто: 
+DONATE_MESSAGE: str = """\n\nНравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на содержание бота, это очень просто:
                          https://yoomoney.ru/to/41001510609674/50"""
-
 
 
 class CCollector(prototype.CPrototype):
@@ -58,16 +57,19 @@ class CCollector(prototype.CPrototype):
     def collector(self, panswer: str) -> str:
         """Функция будет в определенные часы просить пожертвований."""
 
-        # *** Время рабочее? 
+        # *** Время рабочее?
         just_now = datetime.now()
         if just_now.hour in WORK_HOURS:
-            
+
             # *** Запросим случайное число
             chance: int = randint(1, PROBABILITY)
             print(f"chance: {chance} value {CHANCE_VALUE}")
             if chance == CHANCE_VALUE:
-                
+
                 # *** Сформируем ответ
                 panswer = panswer + DONATE_MESSAGE
 
         return panswer
+
+    def reload(self):
+        """Вызывает перезагрузку внешних данных модуля."""

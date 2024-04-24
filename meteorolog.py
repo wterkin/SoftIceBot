@@ -8,13 +8,14 @@ import requests
 import functions as func
 import prototype
 
-WEATHER_COMMANDS = ["погода", "пг", "weather", "wt", "прогноз", "пр", "forecast", "fr"]
-ENABLED_IN_CHATS_KEY = "meteorolog_chats"
-UNIT_ID = "meteorolog"
-
-HINT = ["метео", "meteo"]
-FIND_CITY_URL = 'http://api.openweathermap.org/data/2.5/find'
-FORECAST_WEATHER_URL = 'http://api.openweathermap.org/data/2.5/forecast'
+WEATHER_COMMANDS: list = ["погода", "пг", "weather", "wt",
+                          "прогноз", "пр", "forecast", "fr"]
+ENABLED_IN_CHATS_KEY: str = "meteorolog_chats"
+UNIT_ID: str = "meteorolog"
+READ_TIMEOUT = 0.001
+HINT: list = ["метео", "meteo"]
+FIND_CITY_URL: str = 'http://api.openweathermap.org/data/2.5/find'
+FORECAST_WEATHER_URL: str = 'http://api.openweathermap.org/data/2.5/forecast'
 ICON_CONVERT: dict = {"01d": "Ясно. ☀️",
                       "02d": "Ясно. ☀️",
                       "01n": "Ясно. 🌜",
@@ -33,7 +34,7 @@ ICON_CONVERT: dict = {"01d": "Ясно. ☀️",
                       "13n": "Снег. ❄",
                       "50d": "Туман.🌫",
                       "50n": "Туман.🌫"}
-RUSSIAN_DATE_FORMAT = "%d.%m.%Y"
+RUSSIAN_DATE_FORMAT: str = "%d.%m.%Y"
 
 
 def get_wind_direction(pdegree):
@@ -145,7 +146,8 @@ class CMeteorolog(prototype.CPrototype):
             res = requests.get(FIND_CITY_URL,
                                params={'q': pcity_name, 'type': 'like',
                                        'units': 'metric', 'lang': plang,
-                                       'APPID': self.config["api_key"]})
+                                       'APPID': self.config["api_key"]},
+                               timeout=READ_TIMEOUT)
             data = res.json()
             if 'list' in data:
 
@@ -259,7 +261,8 @@ class CMeteorolog(prototype.CPrototype):
             # *** Запрашиваем информацию
             data = requests.get(FORECAST_WEATHER_URL,
                                 params={'id': pcity_id, 'units': 'metric',
-                                        'lang': plang, 'APPID': self.config["api_key"]}).json()
+                                        'lang': plang, 'APPID': self.config["api_key"]},
+                               timeout=READ_TIMEOUT).json()
             answer = parse_weather(data, prequest_date.date())
 
         except requests.TooManyRedirects as ex:

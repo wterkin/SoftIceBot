@@ -26,14 +26,6 @@ REACTIONS_INDEX: int = 1
 BABBLER_EMODJI: list = ["😎", "😊", "☺", "😊", "😋"]
 NICKNAMES: list = ["softice", "софтик", "софтайсик", "ботик", "бот"]
 AT_CHAR: str = "@"
-
-# DONATE_CHATS: tuple = ("Maftown",
-#                       "Mafia City", 
-#                       "keytown-club", 
-#                        "Смоленск * Smolensk", 
-#                        "Смоленск")
-#DONATE_CHAT_LAST_SHOW: list = [None, None, None, None, None]
-#DONATE_MESSAGE_PERIOD: int = 1
 DONATE_MESSAGE: str = """\n Нравится SoftIce? Поддержи проект!
                          Пожертвуй 50 рублей на содержание бота, 
                          это очень просто: 
@@ -208,19 +200,4 @@ class CBabbler(prototype.CPrototype):
             if answer:
 
                 break
-        """
-        if answer:
-
-            if pmsg_rec[cn.MCHAT_TITLE] in DONATE_CHATS:
-
-                chat_index = DONATE_CHATS.index(pmsg_rec[cn.MCHAT_TITLE])
-                if DONATE_CHAT_LAST_SHOW[chat_index] is not None:
-
-                    delta = datetime.now() - DONATE_CHAT_LAST_SHOW[chat_index]
-                    if delta.days > DONATE_MESSAGE_PERIOD:
-
-                        answer = answer + DONATE_MESSAGE
-                        DONATE_CHAT_LAST_SHOW[chat_index] = datetime.now()
-                DONATE_CHAT_LAST_SHOW[chat_index] = datetime.now()
-        """
         return answer
