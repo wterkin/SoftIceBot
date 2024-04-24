@@ -451,11 +451,11 @@ class CSoftIceBot:
                         self.logger.info("* Запрошена неподдерживаемая команда %s"
                                          " в чате %s.", rec[cn.MTEXT], rec[cn.MCHAT_TITLE])
                     # self.event[cn.MPROCESSED] = True
-                    if answer:
+            if answer:
+ 
+                if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
 
-                        if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
-
-                            answer = self.collector.collector(answer)
+                    answer = self.collector.collector(answer)
             self.lock = False
         return answer  # , do_not_screen
 
@@ -593,6 +593,7 @@ class CSoftIceBot:
                 print("# Соединение прервано. Выход.")
                 self.logger.exception("Соединение прервано. Выход.", exc_info=True)
                 time.sleep(SLEEP_BEFORE_EXIT_BY_ERROR)
+                self.robot.stop_polling()
                 sys.exit(2)
             except ReadTimeout:
 

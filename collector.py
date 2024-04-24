@@ -13,10 +13,10 @@ import constants as cn
 import prototype
 
 UNIT_ID = "collector"
-WORK_HOURS: tuple = (12, 13, 14) 
+WORK_HOURS: tuple = (12, 13, 14, 15, 16, 17, 18) 
 PROBABILITY: int = 16
 CHANCE_VALUE: int = 8
-DONATE_MESSAGE: str = """\n \n Нравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на содержание бота, это очень просто: 
+DONATE_MESSAGE: str = """\n\nНравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на содержание бота, это очень просто: 
                          https://yoomoney.ru/to/41001510609674/50"""
 
 
@@ -64,6 +64,7 @@ class CCollector(prototype.CPrototype):
             
             # *** Запросим случайное число
             chance: int = randint(1, PROBABILITY)
+            print(f"chance: {chance} value {CHANCE_VALUE}")
             if chance == CHANCE_VALUE:
                 
                 # *** Сформируем ответ
