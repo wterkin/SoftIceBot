@@ -63,7 +63,7 @@ RUNNING_FLAG: str = "running.flg"
 LEGAL_EXITING_FLAG: str = "exiting.flg"
 TEST_RUN_FLAG: str = "test.flg"
 SLEEP_BEFORE_EXIT_BY_ERROR: int = 10
-
+ANSWERS_LOG: str = "logs/answers.log"
 
 class CQuitByDemand(Exception):
     """Исключение выхода."""
@@ -456,6 +456,20 @@ class CSoftIceBot:
                 if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
 
                     answer = self.collector.collector(answer)
+                
+                if os.path.exists(ANSWERS_LOG):	
+                
+                    access = "a"
+                else:
+
+                    access = "w"
+                with open(ANSWERS_LOG, access, encoding='utf-8') as file:
+                    file.write(rec[cn.MCHAT_TITLE])
+                    file.write("\n")
+                    file.write(rec[cn.MTEXT])
+                    file.write("\n")
+                    file.write(answer)
+                    file.write("\n\n")
             self.lock = False
         return answer  # , do_not_screen
 
