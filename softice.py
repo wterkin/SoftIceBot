@@ -312,7 +312,7 @@ class CSoftIceBot:
         except FileNotFoundError:
 
             print(f"* Файл конфигурации {pconfig_name} отсутствует.")
-            self.logger.warning("* Файл конфигурации %s отсутствует.", pconfig_name)
+            # self.logger.warning("* Файл конфигурации %s отсутствует.", pconfig_name)
             self.stop_working()
 
         except ValueError:

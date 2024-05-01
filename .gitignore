@@ -13,4 +13,5 @@ config.json
 config.main.json
 *.7z
 running.flg
+flags/*
 test.flg

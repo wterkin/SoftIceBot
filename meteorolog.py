@@ -12,7 +12,7 @@ WEATHER_COMMANDS: list = ["погода", "пг", "weather", "wt",
                           "прогноз", "пр", "forecast", "fr"]
 ENABLED_IN_CHATS_KEY: str = "meteorolog_chats"
 UNIT_ID: str = "meteorolog"
-READ_TIMEOUT = 0.001
+READ_TIMEOUT = 1
 HINT: list = ["метео", "meteo"]
 FIND_CITY_URL: str = 'http://api.openweathermap.org/data/2.5/find'
 FORECAST_WEATHER_URL: str = 'http://api.openweathermap.org/data/2.5/forecast'
