@@ -76,7 +76,7 @@ class CStarGazer(prototype.CPrototype):
         """Возвращает дополнительные сведения об указанном дне."""
         answer: str = ""
         easter_date = calculate_easter(pnow_date.year)
-        pnow_date = datetime(pnow_date.year, 5, 6)
+        # pnow_date = datetime(pnow_date.year, 5, 6)
         # print(easter_date)
         # print(pnow_date)
         # print(easter_date == pnow_date)
