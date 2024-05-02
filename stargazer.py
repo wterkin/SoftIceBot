@@ -47,7 +47,7 @@ def calculate_easter(pyear):
         if day > 31:
             month += 1
             day = day - 31
-    return date(pyear, month, day)
+    return datetime(pyear, month, day)
 
 
 # def gather_day_and_month():
@@ -76,6 +76,10 @@ class CStarGazer(prototype.CPrototype):
         """Возвращает дополнительные сведения об указанном дне."""
         answer: str = ""
         easter_date = calculate_easter(pnow_date.year)
+        pnow_date = datetime(pnow_date.year, 5, 6)
+        # print(easter_date)
+        # print(pnow_date)
+        # print(easter_date == pnow_date)
         if easter_date > pnow_date:
 
             if pnow_date < datetime(pnow_date.year, 1, 7):
@@ -87,21 +91,22 @@ class CStarGazer(prototype.CPrototype):
             elif datetime(pnow_date.year, 1, 7) < pnow_date < datetime(pnow_date.year, 1, 18):
 
                 answer = "Святки."
-            elif easter_date - pnow_date < timedelta(days=56):
+            elif timedelta(days=56) <= (easter_date - pnow_date) <= timedelta(days=62):
 
                 answer = "Сырная седмица."
-            elif easter_date - pnow_date < timedelta(days=48):
+            elif timedelta(days=7) <= (easter_date - pnow_date) <= timedelta(days=55):
 
                 answer = "Великий пост."
-            elif easter_date - pnow_date < timedelta(days=7):
+            elif timedelta(days=1) <= (easter_date - pnow_date) <= timedelta(days=7):
 
                 answer = "Страстная седмица."
-            elif pnow_date == easter_date:
+        elif pnow_date == easter_date:
 
-                answer = "Пасха."
-            elif pnow_date - easter_date  < timedelta(days=7):
-
-                answer = "Светлая седмица."
+            answer = "Пасха."
+            print("!!!!!")
+        elif (pnow_date - easter_date)  < timedelta(days=7):
+                
+            answer = "Светлая седмица."
 
         return answer
 
