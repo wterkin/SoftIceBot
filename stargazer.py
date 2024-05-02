@@ -75,20 +75,20 @@ class CStarGazer(prototype.CPrototype):
     def additional_info(self, pnow_date):
         """Возвращает дополнительные сведения об указанном дне."""
         answer: str = ""
-        easter_date = calculate_easter(pnow_date.year)
+        easter_date: date = calculate_easter(pnow_date.year).date()
         # pnow_date = datetime(pnow_date.year, 5, 6)
         # print(easter_date)
         # print(pnow_date)
         # print(easter_date == pnow_date)
         if easter_date > pnow_date:
 
-            if pnow_date < datetime(pnow_date.year, 1, 7):
+            if pnow_date < datetime(pnow_date.year, 1, 7).date():
 
                 answer = "Рождественский пост."
-            elif pnow_date == datetime(pnow_date.year, 1, 7):
+            elif pnow_date == datetime(pnow_date.year, 1, 7).date():
 
                 answer = "Рождество."
-            elif datetime(pnow_date.year, 1, 7) < pnow_date < datetime(pnow_date.year, 1, 18):
+            elif datetime(pnow_date.year, 1, 7).date() < pnow_date < datetime(pnow_date.year, 1, 18).date():
 
                 answer = "Святки."
             elif timedelta(days=56) <= (easter_date - pnow_date) <= timedelta(days=62):
