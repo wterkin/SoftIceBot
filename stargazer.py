@@ -78,27 +78,30 @@ class CStarGazer(prototype.CPrototype):
         easter_date = calculate_easter(pnow_date.year)
         if easter_date > pnow_date:
 
-            # *** Перед Пасхой
-            if easter_date - pnow_date < timedelta(days=7):
+            if pnow_date < datetime(pnow_date.year, 1, 7):
 
-                answer = "Страстная седмица."
-            elif easter_date - pnow_date < timedelta(days=48):
+                answer = "Рождественский пост."
+            elif pnow_date == datetime(pnow_date.year, 1, 7):
 
-                answer = "Великий пост"
-            elif easter_date - pnow_date < timedelta(days=56):
-
-                answer = "Сырная седмица"
-            elif pnow_date < datetime(pnow_date.year, 1, 7):
-
-                answer = "Рождественский пост"
+                answer = "Рождество."
             elif datetime(pnow_date.year, 1, 7) < pnow_date < datetime(pnow_date.year, 1, 18):
 
-                answer = "Святки"
-        # else:
-        #
-        #     # *** После Пасхи
-        #     if (pnow_date > (easter_date + timedelta(days=1))) and \
-        #        (pnow_date < (easter_date + timedelta(days=7)))
+                answer = "Святки."
+            elif easter_date - pnow_date < timedelta(days=56):
+
+                answer = "Сырная седмица."
+            elif easter_date - pnow_date < timedelta(days=48):
+
+                answer = "Великий пост."
+            elif easter_date - pnow_date < timedelta(days=7):
+
+                answer = "Страстная седмица."
+            elif pnow_date == easter_date:
+
+                answer = "Пасха."
+            elif pnow_date - easter_date  < timedelta(days=7):
+
+                answer = "Светлая седмица."
 
         return answer
 
