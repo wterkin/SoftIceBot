@@ -138,7 +138,6 @@ class CHaijin(prototype.CPrototype):
             "Assert: [haijin.get_help] " \
             "Пропущен параметр <pchat_title> !"
         command_list: str = ""
-        # ToDo: вот тут не выводится команда удаления
         if self.is_enabled(pchat_title):
 
             for idx, command in enumerate(HAIJIN_COMMANDS):
