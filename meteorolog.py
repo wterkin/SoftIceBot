@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
 """Погодный модуль для бота."""
 
