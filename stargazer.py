@@ -76,7 +76,8 @@ class CStarGazer(prototype.CPrototype):
         """Возвращает дополнительные сведения об указанном дне."""
         answer: str = ""
         easter_date: date = calculate_easter(pnow_date.year).date()
-        # pnow_date = datetime(pnow_date.year, 5, 6)
+	peter_paul_date: date = datetime(pnow_date.year, 7, 12)
+        pnow_date = datetime(pnow_date.year, 7, 1)
         # print(easter_date)
         # print(pnow_date)
         # print(easter_date == pnow_date)
@@ -103,11 +104,12 @@ class CStarGazer(prototype.CPrototype):
         elif pnow_date == easter_date:
 
             answer = "Пасха."
-            print("!!!!!")
         elif (pnow_date - easter_date)  < timedelta(days=7):
                 
             answer = "Светлая седмица."
-
+        elif pnow_date < peter_paul_date and (pnow_date - easter_date) < timedelta(days=57):
+	    
+            answer = "Петров пост"
         return answer
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
