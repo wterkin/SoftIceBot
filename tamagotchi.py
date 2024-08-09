@@ -2,22 +2,65 @@
 # @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
 """Модуль тамагочи для бота."""
 
-
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import MetaData, Column, Integer, String, Boolean, DateTime 
+from sqlalchemy.ext.declarative import declarative_base
 
 import prototype
-import database as db
 import functions as func
 import constants as cn
 
 
+TAMAGOTCHI_DATABASE: str = "tamagotchi.db"
 HINT = ["tamagotchi", "тамагочи"]
-COMMANDS = ["", "", "топ50", "перс", "top10", "top25", "top50", "pers"]
+RUS_COMMANDS = ["взять", "кормить", "миска", "лоток", "гладить"]
+ENG_COMMANDS = ["get", "feed", "dish", "tray", "pet"]
 UNIT_ID = "tamagotchi"
 BOTS = ("TrueMafiaBot", "MafiaWarBot", "glagolitic_bot", "combot", "chgk_bot")
 FOREIGN_BOTS = "foreign_bots"
 
-class CTamagotchi(CAncestor):
+convention = {
+    "all_column_names": lambda constraint, table: "_".join([
+        column.name for column in constraint.columns.values()
+    ]),
+    "ix": "ix__%(table_name)s__%(all_column_names)s",
+    "uq": "uq__%(table_name)s__%(all_column_names)s",
+    "cq": "cq__%(table_name)s__%(constraint_name)s",
+    "fk": ("fk__%(table_name)s__%(all_column_names)s__"
+           "%(referred_table_name)s"),
+    "pk": "pk__%(table_name)s"
+}
+
+meta_data = MetaData(naming_convention=convention)
+Base = declarative_base(metadata=meta_data)
+
+
+class CAncestor(Base):
+    """Класс-предок всех классов-моделей таблиц SQLAlchemy."""
+    __abstract__ = True
+    id = Column(Integer,
+                autoincrement=True,
+                nullable=False,
+                primary_key=True,
+                unique=True)
+    fstatus = Column(Integer,
+                     nullable=False,
+                     )
+
+    def __init__(self):
+        """Конструктор."""
+        self.fstatus = STATUS_ACTIVE
+
+    def __repr__(self):
+        return f"""ID:{self.id},
+                   Status:{self.fstatus}"""
+
+    def null(self):
+        """Чтоб линтер был щаслиф."""
+
+
+class CTamagotchiModel(CAncestor):
     """Класс тамагочи"""
 
     __tablename__ = 'tbl_tamagotchi'
@@ -69,48 +112,32 @@ class CTamagotchi(CAncestor):
                    Last Dish Clean:{self.flastdishclean}
                    """
 
-
-
-def decode_stat(pstat: db.CStat):
-    """Декодирует запись статистики."""
-
-    return pstat.fletters, pstat.fwords, pstat.fphrases, pstat.fstickers, \
-        pstat.fpictures, pstat.faudios, pstat.fvideos
-
-
-def extract_user_name(pevent: dict):
-    """Возвращает имя пользователя, при его наличии."""
-    tg_user_title: str = ""
-    # *** Если есть у юзера первое имя - берем.
-
-    if cn.MUSER_TITLE in pevent:
-
-        tg_user_title: str = pevent[cn.MUSER_TITLE]
-    # *** Если есть у юзера второе имя - тож берем.
-    if cn.MUSER_LASTNAME in pevent:
-
-        tg_user_title += " " + pevent[cn.MUSER_LASTNAME]
-    return tg_user_title
-
-
-class CStatistic(prototype.CPrototype):
+class CTamagotchi(prototype.CPrototype):
     """Класс статистика."""
 
-    def __init__(self, pconfig: dict, pdatabase: db.CDataBase):
+    def __init__(self, pconfig: dict, pdata_path: str):
         super().__init__()
+        self.locked: bool = False
         self.config: dict = pconfig
-        self.database: db.CDataBase = pdatabase
+        self.engine = create_engine('sqlite:///' + self.data_path + TAMAGOTCHI_DATABASE,
+                                    echo=1,
+                                    connect_args={'check_same_thread': False})
+        session = sessionmaker()
+        session.configure(bind=self.engine)
+        self.session = session()
+        Base.metadata.bind = self.engine
+        
+        if not Path(self.data_path + TAMAGOTCHI_DATABASE).exists():
+            
+            Base.metadata.create_all()
+            
+            
 
     def add_chat_to_base(self, ptg_chat_id: int, ptg_chat_title: str):
         """Добавляет новый чат в БД и возвращает его ID."""
         chat = db.CChat(ptg_chat_id, ptg_chat_title)
         self.database.commit_changes(chat)
         return chat.id
-
-    def add_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
-        """Добавляет новую запись статистики по человеку."""
-        stat = db.CStat(puser_id, pchat_id, pstatfields)
-        self.database.commit_changes(stat)
 
     def add_user_to_base(self, ptg_user_id: int, ptg_user_title: str):
         """Добавляет нового пользователя в БД и возвращает его ID."""
@@ -124,7 +151,9 @@ class CStatistic(prototype.CPrototype):
         if self.is_enabled(pchat_title):
 
             word_list: list = func.parse_input(pmessage_text)
-            return word_list[0] in COMMANDS or word_list[0] in HINT
+            return word_list[0] in RUS_COMMANDS or 
+                   word_list[0] in ENG_COMMANDS or
+                   word_list[0] in HINT
         return False
 
     def get_chat_id(self, ptg_chat_id):
@@ -145,8 +174,8 @@ class CStatistic(prototype.CPrototype):
         """Возвращает список команд модуля, доступных пользователю."""
         if self.is_enabled(pchat_title):
 
-            command_list: str = ", ".join(COMMANDS)
-            command_list += "\n"
+            command_list: str = ", ".join(RUS_COMMANDS)
+            command_list += "\n, ".join(ENG_COMMANDS)"
             return command_list
         return ""
 
@@ -158,75 +187,6 @@ class CStatistic(prototype.CPrototype):
             return ", ".join(HINT)
         return ""
 
-    def get_personal_information(self, ptg_chat_id: int, puser_title: str):
-        """Возвращает информацию о пользователе"""
-        answer: str = ""
-        query = self.database.query_data(db.CUser)
-        query = query.filter_by(fusername=puser_title)
-        user = query.first()
-        if user is not None:
-
-            # *** Получим ID чата в базе
-            query = self.database.query_data(db.CChat)
-            query = query.filter_by(fchatid=ptg_chat_id)
-            chat = query.first()
-            if chat is not None:
-
-                query = self.database.query_data(db.CStat)
-                query = query.filter_by(fuserid=user.id)
-                query = query.filter_by(fchatid=chat.id)
-                stat = query.first()
-                if stat is not None:
-
-                    answer = f"{puser_title} наболтал {stat.fphrases} фраз, " \
-                             f"{stat.fwords} слов, {stat.fletters} букв, запостил " \
-                             f"{0 if stat.fstickers is None else stat.fstickers} стик., " \
-                             f"{0 if stat.fpictures is None else stat.fpictures} фоток, " \
-                             f"{0 if stat.faudios is None else stat.faudios} аудио и " \
-                             f"{0 if stat.fvideos is None else stat.fvideos} видео,"
-
-        return answer
-
-    def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
-        """Получает из базы статистику по самым говорливым юзерам."""
-        session = self.database.get_session()
-        query = session.query(db.CChat, db.CStat, db.CUser)
-        query = query.filter_by(fchatid=ptg_chat_id)
-        query = query.join(db.CStat, db.CStat.fchatid == db.CChat.id)
-        query = query.join(db.CUser, db.CUser.id == db.CStat.fuserid)
-        if porder_by == 1:
-
-            query = query.order_by(db.CStat.fphrases.desc())
-        elif porder_by == 2:
-
-            query = query.order_by(db.CStat.fwords.desc())
-        elif porder_by == 3:
-
-            query = query.order_by(db.CStat.fstickers.desc())
-        elif porder_by == 4:
-
-            query = query.order_by(db.CStat.fpictures.desc())
-        elif porder_by == 5:
-
-            query = query.order_by(db.CStat.faudios.desc())
-        elif porder_by == 6:
-
-            query = query.order_by(db.CStat.fvideos.desc())
-        else:
-
-            query = query.order_by(db.CStat.fphrases.desc())
-        stat = query.limit(pcount).all()
-        answer = "Самые говорливые:\n"
-        for number, item in enumerate(stat):
-
-            answer += f"{number + 1} : {item[2].fusername} : {item[1].fphrases}" \
-                      f" фраз, {item[1].fwords} слов, " \
-                      f"{0 if item[1].fstickers is None else item[1].fstickers} стик., " \
-                      f"{0 if item[1].fpictures is None else item[1].fpictures} фоток, " \
-                      f"{0 if item[1].faudios is None else item[1].faudios} звук. и " \
-                      f"{0 if item[1].fvideos is None else item[1].fvideos} вид. \n"
-        answer += f"Отсортировано по количеству {SORTED_BY[porder_by-1]}. \n"
-        return answer
 
     def get_user_id(self, ptg_user_id):
         """Если пользователь уже есть в базе, возвращает его ID, если нет - None."""
@@ -238,11 +198,6 @@ class CStatistic(prototype.CPrototype):
             return user.id
         return None
 
-    def get_user_stat(self, pchat_id: int, puser_id: int):
-        """Получает из базы статистику пользователя и возвращает её."""
-        query = self.database.query_data(db.CStat)
-        query = query.filter_by(fuserid=puser_id, fchatid=pchat_id)
-        return query.first()
 
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
@@ -252,85 +207,8 @@ class CStatistic(prototype.CPrototype):
     def reload(self):
         """Вызывает перезагрузку внешних данных модуля."""
 
-    def save_all_type_of_messages(self, pevent: dict):
-        """Учитывает стикеры, видео, аудиосообщения."""
-        if self.is_enabled(pevent[cn.MCHAT_TITLE]):
 
-            if cn.MTEXT in pevent:
-
-                message_text: str = pevent[cn.MTEXT]
-            else:
-
-                message_text: str = pevent[cn.MCAPTION]
-            tg_chat_id: int = pevent[cn.MCHAT_ID]
-            tg_chat_title: str = pevent[cn.MCHAT_TITLE]
-            # tg_user_title: str = ""
-            tg_user_id: int = pevent[cn.MUSER_ID]
-            tg_user_name: str = ""
-            if cn.MUSER_NAME in pevent:
-
-                tg_user_name = pevent[cn.MUSER_NAME]
-
-            statfields: dict = {db.STATUSERID: 0,
-                                db.STATLETTERS: 0,
-                                db.STATWORDS: 0,
-                                db.STATPHRASES: 0,
-                                db.STATPICTURES: 0,
-                                db.STATSTICKERS: 0,
-                                db.STATAUDIOS: 0,
-                                db.STATVIDEOS: 0}
-
-            tg_user_title = extract_user_name(pevent)
-            # *** Это не бот написал? Чужой бот, не наш?
-            if tg_user_name not in self.config[FOREIGN_BOTS]:
-
-                # Проверить, нет ли уже этого чата в таблице чатов
-                chat_id = self.get_chat_id(tg_chat_id)
-                if chat_id is None:
-
-                    # Нету еще, новый чат - добавить, и получить id
-                    chat_id = self.add_chat_to_base(tg_chat_id, tg_chat_title)
-                # *** Проверить, нет ли юзера в таблице тг юзеров
-                user_id = self.get_user_id(tg_user_id)
-                if user_id is None:
-
-                    # *** Нету, новый пользователь
-                    user_id = self.add_user_to_base(tg_user_id, tg_user_title)
-                # *** Имеется ли в БД статистика по этому пользователю?
-                user_stat = self.get_user_stat(chat_id, user_id)
-                if user_stat is not None:
-
-                    statfields = user_stat.get_all_fields()  # !!! тут
-                # *** Изменяем статистику юзера в зависимости от типа сообщения
-                if pevent[cn.MCONTENT_TYPE] in ["video", "video_note"]:
-
-                    statfields[db.STATVIDEOS] += 1
-                elif pevent[cn.MCONTENT_TYPE] in ["audio", "voice"]:
-
-                    statfields[db.STATAUDIOS] += 1
-                elif pevent[cn.MCONTENT_TYPE] == "photo":
-
-                    statfields[db.STATPICTURES] += 1
-                elif pevent[cn.MCONTENT_TYPE] == "sticker":
-
-                    statfields[db.STATSTICKERS] += 1
-                elif pevent[cn.MCONTENT_TYPE] == "text":
-
-                    if message_text[0] != "!":
-
-                        statfields[db.STATLETTERS] += len(message_text)
-                        statfields[db.STATWORDS] += len(message_text.split(" "))
-                        statfields[db.STATPHRASES] += 1
-
-                if user_stat is None:
-
-                    self.add_user_stat(user_id, chat_id, statfields)
-
-                else:
-
-                    self.update_user_stat(user_id, chat_id, statfields)
-
-    def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
+    def tamagotchi(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
         """Обработчик команд."""
         command: int
         answer: str = ""
@@ -365,14 +243,3 @@ class CStatistic(prototype.CPrototype):
 
                         answer = self.get_personal_information(pchat_id, puser_title)
         return answer
-
-    def update_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
-        """Изменяет запись статистики по человеку."""
-        query = self.database.query_data(db.CStat)
-        query = query.filter_by(fuserid=puser_id)
-        query = query.filter_by(fchatid=pchat_id)
-        stat: db.CStat = query.first()
-        if stat:
-
-            stat.set_all_fields(pstatfields)
-            self.database.commit_changes(stat)

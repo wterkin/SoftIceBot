@@ -62,14 +62,16 @@ class CModerator(prototype.CPrototype):
         if pmessage is not None:
 
             text: str = pmessage.lower()
+            # print(f"*** {text} ***")
             for bad_word in self.bad_words:
 
                 result: bool = True
-                # print(bad_word, text)
+                # print(bad_word)
                 while result:
 
                     # dbg.dout(bad_word)
                     result = re.match(bad_word, text) is not None
+                    # print(bad_word, result)
                     if result:
 
                         # dbg.dout("detected: ")
