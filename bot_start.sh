@@ -1,8 +1,8 @@
 #!/bin/bash
-START_FLAG=~/softice/flags/start.flg
-EXITING_FLAG=~/softice/flags/exiting.flg
+START_FLAG=~/flags/start.flg
+EXITING_FLAG=~/flags/exiting.flg
 CONDITION=0
-cd ~/softice
+cd ~/
 if [ -e "$START_FLAG" ]
 then
 

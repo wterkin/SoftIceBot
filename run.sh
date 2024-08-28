@@ -1,6 +1,7 @@
 #!/bin/sh
-cd ~/softice
+cd ~/
 touch flags/start.flg
-screen  -d -m ./bot_start.sh
+yes | rm /home/softice/logs/output.log
+screen -L -Logfile logs/output.log -d -m ./bot_start.sh 
 #./bot_start.sh
 
