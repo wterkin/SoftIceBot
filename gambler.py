@@ -128,7 +128,7 @@ class CGambler(prototype.CPrototype):
                 print(f"ход  {turn}")
                 if command == turn:
 
-                    answer += f"Я выбрал также {EMODJIES[turn]}{GAMBLER_COMMANDS[turn]}. Ничья."
+                    answer += f"Я выбрал также {EMODJIES[turn]}{GAMBLER_COMMANDS[turn]}. Ничья. 🤝"
                 else:
 
                     answer += f"Я выбираю {EMODJIES[turn]} {GAMBLER_COMMANDS[turn]}."
