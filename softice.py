@@ -23,6 +23,7 @@ import babbler
 import barman
 import bellringer
 import collector
+import gambler
 import haijin
 import librarian
 import majordomo
@@ -180,6 +181,7 @@ class CSoftIceBot:
         self.bellringer: bellringer.CBellRinger = bellringer.CBellRinger(self.config,
                                                                          self.data_path)
         self.collector: collector.CCollector = collector.CCollector(self.config)
+        self.gambler: gambler.CGambler = gambler.CGambler(self.config)
         self.haijin: haijin.CHaijin = haijin.CHaijin(self.config, self.data_path)
         self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.data_path)
         self.majordomo: majordomo.CMajordomo = majordomo.CMajordomo(self.config, self.data_path)
@@ -391,6 +393,14 @@ class CSoftIceBot:
                         answer = self.bellringer.bellringer(rec[cn.MCHAT_TITLE],
                                                             rec[cn.MTEXT]).strip()
                         dbg.dout(f"*** bellringer [{answer}]")
+                    if not answer:
+
+                        # *** ... потом игрок
+                        answer = self.gambler.gambler(rec[cn.MCHAT_TITLE],
+                                                    rec[cn.MUSER_NAME],
+                                                    rec[cn.MUSER_TITLE],
+                                                    rec[cn.MTEXT]).strip()
+                        dbg.dout(f"*** gambler [{answer}]")
                     if not answer:
 
                         # *** ... потом хайдзин
