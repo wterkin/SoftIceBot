@@ -5,22 +5,23 @@
 
 
 import random
-import typing as type
+# import typing as type
 import prototype
 import functions as func
 
 UNIT_ID: str = "gambler"
-HINT: type.Tuple(str) = ("игра", "game")
-GAMBLER_COMMANDS: type.Tuple(str) = ("камень", "ножницы", "бумага")
-GAMBLER_SHORT_COMMANDS: type.Tuple(str) = ("кам", "нож", "бум")
+HINT: tuple = ("игра", "game")
+GAMBLER_COMMANDS: tuple = ("камень", "ножницы", "бумага")
+GAMBLER_SHORT_COMMANDS: tuple = ("кам", "нож", "бум")
 ROCK_COMMAND: int = 0
 SCISSORS_COMMAND: int = 1
 PAPER_COMMAND: int = 2
+EMODJIES: tuple = ("👊🏻", "✌🏻", "✋🏻")
 
 class CGambler(prototype.CPrototype):
     """Класс библиотекаря."""
 
-    def __init__(self, pconfig: dict, pdata_path: str):
+    def __init__(self, pconfig: dict):
 
         super().__init__()
         self.config = pconfig
@@ -122,41 +123,42 @@ class CGambler(prototype.CPrototype):
                     command = -1
             if command >= 0:
 
-                answer = f"Ваш выбор {GAMBLER_COMMANDS[command]}\n"
-                turn = random.randint(0,3)
+                answer = f"Ваш выбор {EMODJIES[command]} {GAMBLER_COMMANDS[command]}\n"
+                turn = random.randint(0,2)
+                print(f"ход  {turn}")
                 if command == turn:
 
-                    answer += f"Я выбрал также {GAMBLER_COMMANDS[command]}. Ничья."
+                    answer += f"Я выбрал также {EMODJIES[turn]}{GAMBLER_COMMANDS[turn]}. Ничья."
                 else:
 
-                    answer += f"Мой выбор {GAMBLER_COMMANDS[turn]}."
+                    answer += f"Я выбираю {EMODJIES[turn]} {GAMBLER_COMMANDS[turn]}."
                     if turn == ROCK_COMMAND:
 
                         # *** Камень
                         if command == SCISSORS_COMMAND:
 
-                            answer += " Вы проиграли."
+                            answer += " Вы проиграли. 👎🏻"
                         else:
 
-                            answer += " Вы выиграли."
+                            answer += " Вы выиграли. 👍🏻"
                     elif turn == SCISSORS_COMMAND:
 
                         # *** Ножницы
                         if command == PAPER_COMMAND:
 
-                            answer +=  " Вы проиграли."
+                            answer +=  " Вы проиграли. 👎🏻"
                         else:
 
-                            answer += " Вы выиграли."
+                            answer += " Вы выиграли. 👍🏻"
                     else:
 
                         # *** Бумага.
                         if command == ROCK_COMMAND:
 
-                            answer +=  " Вы проиграли."
+                            answer +=  " Вы проиграли. 👎🏻"
                         else:
 
-                            answer += " Вы выиграли."
+                            answer += " Вы выиграли. 👍🏻"
 
             else:
 
