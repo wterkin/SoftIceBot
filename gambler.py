@@ -188,25 +188,40 @@ class CGambler(prototype.CPrototype):
                         
                             answer += f" Спок ломает ножницы. Вы выиграли. {THUMBS_UP}"
  
+                case PAPER_COMMAND:
+                 
+                    match pcommand:
+                        case ROCK_COMMAND:
+                        
+                            answer += f" Бумага обёртывает камень. Вы проиграли. {THUMBS_DOWN}"
+                        case SCISSORS_COMMAND:
+                            
+                            answer += f" Ножницы режут бумагу. Вы выиграли. {THUMBS_UP}"
+                        case LIZARD_COMMAND:
 
+                            answer += f" Ящерица съедает бумагу. Вы выиграли. {THUMBS_UP}"
+                        case SPOCK_COMMAND:
+                        
+                            answer += f" Бумага обвиняет Спока. Вы проиграли. {THUMBS_DOWN}"
+ 
+                case LIZARD_COMMAND:
+                 
+                    match pcommand:
+                        case ROCK_COMMAND:
+                        
+                            answer += f" Камень давит ящерицу. Вы выиграли. {THUMBS_UP}"
+                        case SCISSORS_COMMAND:
+                            
+                            answer += f" Ножницы убивают ящерицу. Вы выиграли. {THUMBS_UP}"
+                        case PAPER_COMMAND:
 
-                # *** Ножницы
-                if pcommand == PAPER_COMMAND:
+                            answer += f" Ящерица съедает бумагу. Вы проиграли. {THUMBS_DOWN}"
+                        case SPOCK_COMMAND:
+                        
+                            answer += f" Ящерица кусает Спока. Вы проиграли. {THUMBS_DOWN}"
+ 
 
-                    answer +=  " Ножницы режут бумагу. Вы проиграли. 👎🏻"
-                else:
-
-                    answer += " Камень тупит ножницы. Вы выиграли. 👍🏻"
-            else:
-
-                # *** Бумага.
-                if pcommand == ROCK_COMMAND:
-
-                    answer +=  " Бумага обёртывает камень. Вы проиграли. 👎🏻"
-                else:
-
-                    answer += " Ножницы режут бумагу. Вы выиграли. 👍🏻"
-        return answer
+return answer
 
 
     def gambler(self, pchat_title, puser_name: str, puser_title: str, pmessage_text: str):
