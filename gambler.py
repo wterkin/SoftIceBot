@@ -15,12 +15,15 @@ ROCKSCIPAP_COMMANDS: tuple = ("камень", "ножницы", "бумага")
 ROCKSCIPAP_SHORT_COMMANDS: tuple = ("кам", "нож", "бум")
 ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("камень2", "ножницы2", "бумага2", "ящерица", "спок")
 ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("кам2", "нож2", "бум2", "ящер", "спок")
-GAMBLER_COMMANDS: tuple = ("камень", "ножницы", "бумага")
-GAMBLER_SHORT_COMMANDS: tuple = ("кам", "нож", "бум")
 ROCK_COMMAND: int = 0
 SCISSORS_COMMAND: int = 1
 PAPER_COMMAND: int = 2
-EMODJIES: tuple = ("👊🏻", "✌🏻", "✋🏻")
+LIZARD_COMMAND: int = 3
+SPOCK_COMMAND: int = 4
+EMODJIES: tuple = ("👊🏻", "✌🏻", "✋🏻", "🦎", "🖖🏻")
+THUMBS_UP: str = "👍🏻"
+THUMBS_DOWN: str = "👎🏻"
+
 
 class CGambler(prototype.CPrototype):
     """Класс библиотекаря."""
@@ -65,7 +68,7 @@ class CGambler(prototype.CPrototype):
         command_list: str = ""
         if self.is_enabled(pchat_title):
 
-            for command in GAMBLER_COMMANDS:
+            for command in GAMBLER_COMMAN:
 
                 command_list += ", ".join(command)
                 command_list += "\n"
@@ -124,6 +127,68 @@ class CGambler(prototype.CPrototype):
 
                     answer += " Бумага обёртывает камень. Вы выиграли. 👍🏻"
             elif turn == SCISSORS_COMMAND:
+
+                # *** Ножницы
+                if pcommand == PAPER_COMMAND:
+
+                    answer +=  " Ножницы режут бумагу. Вы проиграли. 👎🏻"
+                else:
+
+                    answer += " Камень тупит ножницы. Вы выиграли. 👍🏻"
+            else:
+
+                # *** Бумага.
+                if pcommand == ROCK_COMMAND:
+
+                    answer +=  " Бумага обёртывает камень. Вы проиграли. 👎🏻"
+                else:
+
+                    answer += " Ножницы режут бумагу. Вы выиграли. 👍🏻"
+        return answer
+
+    def rock_scissors_paper_lizard_spock(self, pcommand: int):
+        """Камень-ножницы-бумага."""
+        answer = f"Ваш выбор {EMODJIES[pcommand]} {ROCKSCIPAPLIZSPOCK_COMMANDS[pcommand]}\n"
+        turn = random.randint(0,4)
+        if pcommand == turn:
+
+            answer += f"Я выбрал также {EMODJIES[turn]}{ROCKSCIPAPLIZSPOCK_COMMANDS[turn]}. Ничья. 🤝"
+        else:
+
+            answer += f"Я выбираю {EMODJIES[turn]} {ROCKSCIPAPLIZSPOCK_COMMANDS[turn]}."
+            match turn:
+                case ROCK_COMMAND:
+
+                    match pcommand:
+                        case SCISSORS_COMMAND:
+                        
+                            answer += f" Камень тупит ножницы. Вы проиграли. {THUMBS_DOWN}"
+                        case PAPER_COMMAND:
+                            
+                            answer += f" Бумага обёртывает камень. Вы выиграли. {THUMBS_UP}"
+                        case LIZARD_COMMAND:
+
+                            answer += f" Камень давит ящерицу. Вы проиграли. {THUMBS_DOWN}"
+                        case SPOCK_COMMAND:
+                        
+                            answer += f" Спок испаряет камень. Вы выиграли. {THUMBS_UP}"
+                case SCISSORS_COMMAND:
+                 
+                    match pcommand:
+                        case ROCK_COMMAND:
+                        
+                            answer += f" Камень тупит ножницы. Вы выиграли. {THUMBS_UP}"
+                        case PAPER_COMMAND:
+                            
+                            answer += f" Ножницы режут бумагу. Вы проиграли. {THUMBS_DOWN}"
+                        case LIZARD_COMMAND:
+
+                            answer += f" Ножницы убивают ящерицу. Вы проиграли. {THUMBS_DOWN}"
+                        case SPOCK_COMMAND:
+                        
+                            answer += f" Спок ломает ножницы. Вы выиграли. {THUMBS_UP}"
+ 
+
 
                 # *** Ножницы
                 if pcommand == PAPER_COMMAND:
