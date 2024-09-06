@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
+# @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль для контроля над чатом."""
 # from pathlib import Path
 import functions as func
