@@ -51,7 +51,7 @@ class CGambler(prototype.CPrototype):
         if self.is_enabled(pchat_title):
 
             word_list: list = func.parse_input(pmessage_text)
-            for command in GAMBLER_COMMANDS:
+            for command in ROCKSCIPAPLIZSPOCK_COMMANDS:
 
                 found = word_list[0] in command
                 if found:
@@ -71,7 +71,7 @@ class CGambler(prototype.CPrototype):
         command_list: str = ""
         if self.is_enabled(pchat_title):
 
-            for command in GAMBLER_COMMAN:
+            for command in ROCKSCIPAPLIZSPOCK_COMMANDS:
 
                 command_list += ", ".join(command)
                 command_list += "\n"
