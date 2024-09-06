@@ -240,7 +240,7 @@ class CGambler(prototype.CPrototype):
 
                             answer += f" Ящерица кусает Спока. Вы выиграли. {THUMBS_UP}"
 
-    return answer
+        return answer
 
 
     def gambler(self, pchat_title, puser_name: str, puser_title: str, pmessage_text: str):
