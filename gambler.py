@@ -15,11 +15,14 @@ ROCKSCIPAP_COMMANDS: tuple = ("камень", "ножницы", "бумага")
 ROCKSCIPAP_SHORT_COMMANDS: tuple = ("кам", "нож", "бум")
 ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("камень2", "ножницы2", "бумага2", "ящерица", "спок")
 ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("кам2", "нож2", "бум2", "ящер", "спок")
-ROCK_COMMAND: int = 0
-SCISSORS_COMMAND: int = 1
-PAPER_COMMAND: int = 2
-LIZARD_COMMAND: int = 3
-SPOCK_COMMAND: int = 4
+
+class CGameCommand:
+    ROCK_COMMAND: int = 0
+    SCISSORS_COMMAND: int = 1
+    PAPER_COMMAND: int = 2
+    LIZARD_COMMAND: int = 3
+    SPOCK_COMMAND: int = 4
+
 EMODJIES: tuple = ("👊🏻", "✌🏻", "✋🏻", "🦎", "🖖🏻")
 THUMBS_UP: str = "👍🏻"
 THUMBS_DOWN: str = "👎🏻"
@@ -157,83 +160,83 @@ class CGambler(prototype.CPrototype):
 
             answer += f"Я выбираю {EMODJIES[turn]} {ROCKSCIPAPLIZSPOCK_COMMANDS[turn]}."
             match turn:
-                case ROCK_COMMAND:
+                case CGameCommand.ROCK_COMMAND:
 
                     match pcommand:
-                        case SCISSORS_COMMAND:
+                        case CGameCommand.RSCISSORS_COMMAND:
 
                             answer += f" Камень тупит ножницы. Вы проиграли. {THUMBS_DOWN}"
-                        case PAPER_COMMAND:
+                        case CGameCommand.RPAPER_COMMAND:
 
                             answer += f" Бумага обёртывает камень. Вы выиграли. {THUMBS_UP}"
-                        case LIZARD_COMMAND:
+                        case CGameCommand.RLIZARD_COMMAND:
 
                             answer += f" Камень давит ящерицу. Вы проиграли. {THUMBS_DOWN}"
-                        case SPOCK_COMMAND:
+                        case CGameCommand.RSPOCK_COMMAND:
 
                             answer += f" Спок испаряет камень. Вы выиграли. {THUMBS_UP}"
 
-                case SCISSORS_COMMAND:
+                case CGameCommand.RSCISSORS_COMMAND:
 
                     match pcommand:
-                        case ROCK_COMMAND:
+                        case CGameCommand.RROCK_COMMAND:
 
                             answer += f" Камень тупит ножницы. Вы выиграли. {THUMBS_UP}"
-                        case PAPER_COMMAND:
+                        case CGameCommand.RPAPER_COMMAND:
 
                             answer += f" Ножницы режут бумагу. Вы проиграли. {THUMBS_DOWN}"
-                        case LIZARD_COMMAND:
+                        case CGameCommand.RLIZARD_COMMAND:
 
                             answer += f" Ножницы убивают ящерицу. Вы проиграли. {THUMBS_DOWN}"
-                        case SPOCK_COMMAND:
+                        case CGameCommand.RSPOCK_COMMAND:
 
                             answer += f" Спок ломает ножницы. Вы выиграли. {THUMBS_UP}"
 
-                case PAPER_COMMAND:
+                case CGameCommand.RPAPER_COMMAND:
 
                     match pcommand:
-                        case ROCK_COMMAND:
+                        case CGameCommand.RROCK_COMMAND:
 
                             answer += f" Бумага обёртывает камень. Вы проиграли. {THUMBS_DOWN}"
-                        case SCISSORS_COMMAND:
+                        case CGameCommand.RSCISSORS_COMMAND:
 
                             answer += f" Ножницы режут бумагу. Вы выиграли. {THUMBS_UP}"
-                        case LIZARD_COMMAND:
+                        case CGameCommand.RLIZARD_COMMAND:
 
                             answer += f" Ящерица съедает бумагу. Вы выиграли. {THUMBS_UP}"
-                        case SPOCK_COMMAND:
+                        case CGameCommand.RSPOCK_COMMAND:
 
                             answer += f" Бумага обвиняет Спока. Вы проиграли. {THUMBS_DOWN}"
 
-                case LIZARD_COMMAND:
+                case CGameCommand.RLIZARD_COMMAND:
 
                     match pcommand:
-                        case ROCK_COMMAND:
+                        case CGameCommand.RROCK_COMMAND:
 
                             answer += f" Камень давит ящерицу. Вы выиграли. {THUMBS_UP}"
-                        case SCISSORS_COMMAND:
+                        case CGameCommand.RSCISSORS_COMMAND:
 
                             answer += f" Ножницы убивают ящерицу. Вы выиграли. {THUMBS_UP}"
-                        case PAPER_COMMAND:
+                        case CGameCommand.RPAPER_COMMAND:
 
                             answer += f" Ящерица съедает бумагу. Вы проиграли. {THUMBS_DOWN}"
-                        case SPOCK_COMMAND:
+                        case CGameCommand.RSPOCK_COMMAND:
 
                             answer += f" Ящерица кусает Спока. Вы проиграли. {THUMBS_DOWN}"
 
-                case SPOCK_COMMAND:
+                case CGameCommand.RSPOCK_COMMAND:
 
                     match pcommand:
-                        case ROCK_COMMAND:
+                        case CGameCommand.RROCK_COMMAND:
 
                             answer += f" Спок испаряет камень. Вы проиграли. {THUMBS_DOWN}"
-                        case SCISSORS_COMMAND:
+                        case CGameCommand.RSCISSORS_COMMAND:
 
                             answer += f" Спок ломает ножницы. Вы проиграли. {THUMBS_DOWN}"
-                        case PAPER_COMMAND:
+                        case CGameCommand.RPAPER_COMMAND:
 
                             answer += f" Бумага обвиняет Спока. Вы выиграли. {THUMBS_UP}"
-                        case LIZARD_COMMAND:
+                        case CGameCommand.RLIZARD_COMMAND:
 
                             answer += f" Ящерица кусает Спока. Вы выиграли. {THUMBS_UP}"
 
