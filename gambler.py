@@ -16,12 +16,11 @@ ROCKSCIPAP_SHORT_COMMANDS: tuple = ("кам", "нож", "бум")
 ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("камень2", "ножницы2", "бумага2", "ящерица", "спок")
 ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("кам2", "нож2", "бум2", "ящер", "спок")
 
-class CGameCommand:
-    ROCK_COMMAND: int = 0
-    SCISSORS_COMMAND: int = 1
-    PAPER_COMMAND: int = 2
-    LIZARD_COMMAND: int = 3
-    SPOCK_COMMAND: int = 4
+ROCK_COMMAND: int = 0
+SCISSORS_COMMAND: int = 1
+PAPER_COMMAND: int = 2
+LIZARD_COMMAND: int = 3
+SPOCK_COMMAND: int = 4
 
 EMODJIES: tuple = ("👊🏻", "✌🏻", "✋🏻", "🦎", "🖖🏻")
 THUMBS_UP: str = "👍🏻"
@@ -159,86 +158,80 @@ class CGambler(prototype.CPrototype):
         else:
 
             answer += f"Я выбираю {EMODJIES[turn]} {ROCKSCIPAPLIZSPOCK_COMMANDS[turn]}."
-            match turn:
-                case CGameCommand.ROCK_COMMAND:
+            if turn == ROCK_COMMAND:
 
-                    match pcommand:
-                        case CGameCommand.RSCISSORS_COMMAND:
+                if pcommand == SCISSORS_COMMAND:
 
-                            answer += f" Камень тупит ножницы. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RPAPER_COMMAND:
+                    answer += f" Камень тупит ножницы. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == PAPER_COMMAND:
 
-                            answer += f" Бумага обёртывает камень. Вы выиграли. {THUMBS_UP}"
-                        case CGameCommand.RLIZARD_COMMAND:
+                    answer += f" Бумага обёртывает камень. Вы выиграли. {THUMBS_UP}"
+                elif pcommand == LIZARD_COMMAND:
 
-                            answer += f" Камень давит ящерицу. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RSPOCK_COMMAND:
+                    answer += f" Камень давит ящерицу. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == SPOCK_COMMAND:
 
-                            answer += f" Спок испаряет камень. Вы выиграли. {THUMBS_UP}"
+                    answer += f" Спок испаряет камень. Вы выиграли. {THUMBS_UP}"
 
-                case CGameCommand.RSCISSORS_COMMAND:
+            elif turn == SCISSORS_COMMAND:
 
-                    match pcommand:
-                        case CGameCommand.RROCK_COMMAND:
+                if pcommand == ROCK_COMMAND:
 
-                            answer += f" Камень тупит ножницы. Вы выиграли. {THUMBS_UP}"
-                        case CGameCommand.RPAPER_COMMAND:
+                    answer += f" Камень тупит ножницы. Вы выиграли. {THUMBS_UP}"
+                elif pcommand == PAPER_COMMAND:
 
-                            answer += f" Ножницы режут бумагу. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RLIZARD_COMMAND:
+                    answer += f" Ножницы режут бумагу. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == LIZARD_COMMAND:
 
-                            answer += f" Ножницы убивают ящерицу. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RSPOCK_COMMAND:
+                    answer += f" Ножницы убивают ящерицу. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == SPOCK_COMMAND:
 
-                            answer += f" Спок ломает ножницы. Вы выиграли. {THUMBS_UP}"
+                    answer += f" Спок ломает ножницы. Вы выиграли. {THUMBS_UP}"
 
-                case CGameCommand.RPAPER_COMMAND:
+            elif turn == PAPER_COMMAND:
 
-                    match pcommand:
-                        case CGameCommand.RROCK_COMMAND:
+                if pcommand == ROCK_COMMAND:
 
-                            answer += f" Бумага обёртывает камень. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RSCISSORS_COMMAND:
+                    answer += f" Бумага обёртывает камень. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == SCISSORS_COMMAND:
 
-                            answer += f" Ножницы режут бумагу. Вы выиграли. {THUMBS_UP}"
-                        case CGameCommand.RLIZARD_COMMAND:
+                    answer += f" Ножницы режут бумагу. Вы выиграли. {THUMBS_UP}"
+                elif pcommand == LIZARD_COMMAND:
 
-                            answer += f" Ящерица съедает бумагу. Вы выиграли. {THUMBS_UP}"
-                        case CGameCommand.RSPOCK_COMMAND:
+                    answer += f" Ящерица съедает бумагу. Вы выиграли. {THUMBS_UP}"
+                elif pcommand == SPOCK_COMMAND:
 
-                            answer += f" Бумага обвиняет Спока. Вы проиграли. {THUMBS_DOWN}"
+                    answer += f" Бумага обвиняет Спока. Вы проиграли. {THUMBS_DOWN}"
 
-                case CGameCommand.RLIZARD_COMMAND:
+            elif turn == LIZARD_COMMAND:
 
-                    match pcommand:
-                        case CGameCommand.RROCK_COMMAND:
+                if pcommand == ROCK_COMMAND:
 
-                            answer += f" Камень давит ящерицу. Вы выиграли. {THUMBS_UP}"
-                        case CGameCommand.RSCISSORS_COMMAND:
+                    answer += f" Камень давит ящерицу. Вы выиграли. {THUMBS_UP}"
+                elif pcommand == SCISSORS_COMMAND:
 
-                            answer += f" Ножницы убивают ящерицу. Вы выиграли. {THUMBS_UP}"
-                        case CGameCommand.RPAPER_COMMAND:
+                    answer += f" Ножницы убивают ящерицу. Вы выиграли. {THUMBS_UP}"
+                elif pcommand == PAPER_COMMAND:
 
-                            answer += f" Ящерица съедает бумагу. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RSPOCK_COMMAND:
+                    answer += f" Ящерица съедает бумагу. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == SPOCK_COMMAND:
 
-                            answer += f" Ящерица кусает Спока. Вы проиграли. {THUMBS_DOWN}"
+                    answer += f" Ящерица кусает Спока. Вы проиграли. {THUMBS_DOWN}"
 
-                case CGameCommand.RSPOCK_COMMAND:
+            elif turn == SPOCK_COMMAND:
 
-                    match pcommand:
-                        case CGameCommand.RROCK_COMMAND:
+                if pcommand == ROCK_COMMAND:
 
-                            answer += f" Спок испаряет камень. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RSCISSORS_COMMAND:
+                    answer += f" Спок испаряет камень. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == SCISSORS_COMMAND:
 
-                            answer += f" Спок ломает ножницы. Вы проиграли. {THUMBS_DOWN}"
-                        case CGameCommand.RPAPER_COMMAND:
+                    answer += f" Спок ломает ножницы. Вы проиграли. {THUMBS_DOWN}"
+                elif pcommand == PAPER_COMMAND:
 
-                            answer += f" Бумага обвиняет Спока. Вы выиграли. {THUMBS_UP}"
-                        case CGameCommand.RLIZARD_COMMAND:
+                    answer += f" Бумага обвиняет Спока. Вы выиграли. {THUMBS_UP}"
+                elif pcommand == LIZARD_COMMAND:
 
-                            answer += f" Ящерица кусает Спока. Вы выиграли. {THUMBS_UP}"
+                    answer += f" Ящерица кусает Спока. Вы выиграли. {THUMBS_UP}"
 
         return answer
 
