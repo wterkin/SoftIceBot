@@ -13,8 +13,8 @@ UNIT_ID: str = "gambler"
 HINT: tuple = ("игра", "game")
 ROCKSCIPAP_COMMANDS: tuple = ("камень", "ножницы", "бумага")
 ROCKSCIPAP_SHORT_COMMANDS: tuple = ("кам", "нож", "бум")
-ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("камень2", "ножницы2", "бумага2", "ящерица", "спок")
-ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("кам2", "нож2", "бум2", "ящер", "спок")
+ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("камень", "ножницы", "бумага", "ящерица", "спок")
+ROCKSCIPAPLIZSPOCK_SHORT_COMMANDS: tuple = ("кам", "нож", "бум", "ящер", "спок")
 
 ROCK_COMMAND: int = 0
 SCISSORS_COMMAND: int = 1
@@ -56,6 +56,11 @@ class CGambler(prototype.CPrototype):
                 if found:
 
                     break
+            if not found:
+
+                for command in ROCKSCIPAPLIZSPOCK_SHORT_COMMANDS:
+
+                    found = word_list[0] in command
             if not found:
 
                 found = word_list[0] in HINT
@@ -107,7 +112,6 @@ class CGambler(prototype.CPrototype):
 
     def reload(self):
         """Пустая заглушка."""
-        pass
 
     def rock_scissors_paper(self, pcommand: int):
         """Камень-ножницы-бумага."""
@@ -263,4 +267,3 @@ class CGambler(prototype.CPrototype):
                 print("> Gambler отвечает: ", answer[:func.OUT_MSG_LOG_LEN])
 
         return answer
-
