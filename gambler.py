@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
-# @author: Andrey Pakhomenkov
+# @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Игровой модуль."""
 
 
