@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
+# @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
+
 """Модуль статистики для бота."""
 
 import prototype

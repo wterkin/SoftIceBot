@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
-# @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
+# @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль прототипа классов модулей бота."""
 
 from abc import ABCMeta, abstractmethod  # , abstractproperty

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @author: Andrey Pakhomenkov pakhomenkov@yandex.ru
+# @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль антимата для бота."""
 import re
 from pathlib import Path
