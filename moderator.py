@@ -73,6 +73,7 @@ class CModerator(prototype.CPrototype):
                     result = re.match(bad_word, text) is not None
                     # print(bad_word, result)
                     if result:
+                        
 
                         # dbg.dout("detected: ")
                         print("detected")
