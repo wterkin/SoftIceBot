@@ -466,9 +466,9 @@ class CSoftIceBot:
                 if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
 
                     answer = self.collector.collector(answer)
-                
-                if os.path.exists(ANSWERS_LOG):	
-                
+
+                if os.path.exists(ANSWERS_LOG):
+
                     access = "a"
                 else:
 

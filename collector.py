@@ -17,7 +17,7 @@ WORK_HOURS: tuple = (12, 13, 14, 15, 16, 17, 18)
 PROBABILITY: int = 16
 CHANCE_VALUE: int = 8
 DONATE_MESSAGE: str = ("\n\nНравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на "
-                       "содержание бота, это очень просто:"
+                       "содержание бота, это очень просто: "
                        "https://yoomoney.ru/to/41001510609674/50")
 
 
