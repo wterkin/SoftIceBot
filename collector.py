@@ -64,7 +64,7 @@ class CCollector(prototype.CPrototype):
 
             # *** Запросим случайное число
             chance: int = randint(1, PROBABILITY)
-            print(f"chance: {chance} value {CHANCE_VALUE}")
+            #rint(f"chance: {chance} value {CHANCE_VALUE}")
             if chance == CHANCE_VALUE:
 
                 # *** Сформируем ответ

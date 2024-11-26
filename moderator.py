@@ -75,7 +75,7 @@ class CModerator(prototype.CPrototype):
                     if result:
 
                         # dbg.dout("detected: ")
-                        print("detected")
+                        print(f"detected: {bad_word}")
                         detected = True
                         text = replace_bad_words(bad_word, text)
             if detected:
