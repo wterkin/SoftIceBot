@@ -31,7 +31,7 @@ DONATE_MESSAGE: str = """\n Нравится SoftIce? Поддержи прое�
                          это очень просто: 
                          https://yoomoney.ru/to/41001510609674/50"""
 
-
+DELIMIGHTER: str = "//"
 class CBabbler(prototype.CPrototype):
     """Класс болтуна."""
 
@@ -82,7 +82,7 @@ class CBabbler(prototype.CPrototype):
         return ""
 
     def is_enabled(self, pchat_title: str) -> bool:
-        """Возвращает True, если бармен разрешен на этом канале."""
+        """Возвращает True, если болтун разрешен на этом канале."""
         assert pchat_title is not None, \
             "Assert: [babbler.is_enabled] Пропущен параметр <pchat_title> !"
         return UNIT_ID in self.config["chats"][pchat_title]
@@ -121,6 +121,7 @@ class CBabbler(prototype.CPrototype):
         """Улучшенная версия болтуна."""
 
         answer: str = ""
+        file_name: str = ""
         # *** Заданный период времени с последней фразы прошел?
         # print(f"&&&&& 2 {pmsg_rec[cn.MCHAT_TITLE]}")
         # s = self.config["chats"][pmsg_rec[cn.MCHAT_TITLE]]
@@ -130,16 +131,19 @@ class CBabbler(prototype.CPrototype):
             minutes: float = (datetime.now() - self.last_phrase_time).total_seconds() / \
                              int(self.config[BABBLER_PERIOD_KEY])
             if minutes > 1:
-                answer = self.think(pmsg_rec)
+                answer, file_name = self.think(pmsg_rec)
             if answer:
                 print(f"> Babbler отвечает: {answer[:func.OUT_MSG_LOG_LEN]}...")
                 self.last_phrase_time = datetime.now()
-        return answer
+        return answer, file_name
 
+      
     def think(self, pmsg_rec: dict):
         """Процесс принятия решений =)"""
+        reactions_path = Path(self.data_path) / REACTIONS_FOLDER
         word_list: list = pmsg_rec[cn.MTEXT].split(" ")
         answer: str = ""
+        file_name: str = ""
         personal: bool = False
         # nicks: str = " ".join(NICKNAMES)
         # *** Переберем все слова в сообщении
@@ -191,6 +195,11 @@ class CBabbler(prototype.CPrototype):
                         # else:
 
                         answer = f"{random.choice(block[REACTIONS_INDEX])}"
+                        if DELIMIGHTER in answer:
+                                
+                            file_name, answer = answer.split(DELIMIGHTER) 
+                            file_name = f"{str(reactions_path)}/{file_name}"
+                            print(file_name)				
                         sleep(1)
                         break
 
@@ -200,4 +209,4 @@ class CBabbler(prototype.CPrototype):
             if answer:
 
                 break
-        return answer
+        return answer, file_name
