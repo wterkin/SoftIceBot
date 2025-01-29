@@ -129,9 +129,11 @@ class CSoftIceBot:
         if os.path.exists(os.getcwd() + "/flags/" + TEST_RUN_FLAG):
 
             self.config__is_correct = self.load_config(TEST_CONFIG_FILE_NAME)
+            print("** Using test config")
         else:
 
             self.config__is_correct = self.load_config(CONFIG_FILE_NAME)
+            print("** Using work config")
         if self.config__is_correct:
 	
 	        self.lock: bool = False
@@ -403,6 +405,7 @@ class CSoftIceBot:
 
                         # *** ... потом звонарь
                         answer = self.bellringer.bellringer(rec[cn.MCHAT_TITLE],
+                                                            rec[cn.MUSER_NAME],
                                                             rec[cn.MTEXT]).strip()
                         dbg.dout(f"*** bellringer [{answer}]")
                     if not answer:
@@ -464,7 +467,7 @@ class CSoftIceBot:
                     if not answer:
 
                         # *** ... потом болтун
-                        answer, file_name = self.babbler.babbler(rec).strip()
+                        answer = self.babbler.babbler(rec).strip()
                         dbg.dout(f"*** babbler [{answer}]")
                     if not answer:
 

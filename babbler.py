@@ -100,13 +100,16 @@ class CBabbler(prototype.CPrototype):
         assert reactions_path.is_dir(), f"{REACTIONS_FOLDER} must be folder"
         result: bool = False
         self.mind.clear()
+        # print("Loading babler data..")
         for trigger in triggers_path.iterdir():
 
             if trigger.is_file():
 
                 module = Path(trigger).resolve().name
                 reaction = reactions_path / module
+                # print(str(trigger.name), end=", ")
                 if reaction.is_file():
+
                     trigger_content: list = func.load_from_file(str(trigger))
                     block: list = [trigger_content]
                     reaction_content: list = func.load_from_file(str(reaction))
@@ -114,7 +117,7 @@ class CBabbler(prototype.CPrototype):
                     self.mind.append(block)
                     result = True
         if self.mind:
-            print(f"> Babbler успешно (пере)загрузил {len(self.mind)} реакций.")
+            print(f"\n> Babbler успешно (пере)загрузил {len(self.mind)} реакций.")
         return result
 
     def talk(self, pmsg_rec: dict) -> str:
@@ -163,17 +166,17 @@ class CBabbler(prototype.CPrototype):
             # *** Если что-то осталось, двигаемся дальше.
             if len(clean_word) > 1:
 
-                # dbg.dout(f"%%% ! {clean_word}")
+                print(f"%%% ! {clean_word}")
                 # *** Перебираем блоки памяти бота
                 for block in self.mind:
 
-                    # dbg.dout(f"%%%% @ {block}")
+                    # print(f"%%%% @ {block}")
                     triggers: list = block[0]
-                    # dbg.dout(f"%%%% # {triggers}")
+                    # print(f"%%%% # {triggers}")
                     # *** Если в списке триггеров есть такое слово
                     if clean_word in triggers or AT_CHAR + clean_word in triggers:
-
-                        # dbg.dout(f"%%%%%% Trig {triggers.index(clean_word)}")
+                          
+                        # print(f"%%%%%% Trig {triggers.index(clean_word)}")
                         # *** если в строке есть обращение к боту
                         if AT_CHAR in "".join(triggers) and personal:
 
