@@ -31,7 +31,7 @@ class CBellRinger(prototype.CPrototype):
         if self.can_process(pchat_title, pmessage_text):
 
             if word_list[0] in BELLRINGER_HINT:
- 
+
                 answer = self.get_help(pchat_title)
             else:
 
@@ -43,39 +43,45 @@ class CBellRinger(prototype.CPrototype):
 
                         # *** Пользователь хочет добавить игрока
                         if puser_name == self.config["master"]:
-                        
+
                             file_name:str = self.data_path+"/"+pchat_title+".txt"
                             player_list = func.load_from_file(file_name)
-                            if word_list[1] not in player_list:
-                                player_list.append(word_list[1])
+                            player_name: str = word_list[1]
+                            if player_name not in player_list:
+
+                                player_list.append(player_name)
                                 func.save_list(player_list, file_name)
-                                answer = f"Игрок {word_list[1]} добавлен."
+                                answer = f"Игрок {player_name} добавлен."
                             else:
-                                answer = f"Игрок {word_list[1]} уже есть в списке."
+
+                                answer = f"Игрок {player_name} уже есть в списке."
                     elif word_list[0] in COMMANDS[DEL_PLAYER_CMDS_OFFSET:DEL_PLAYER_CMDS_OFFSET+2]:
-                      
+
                         # *** Пользователь хочет удалить игрока
                         if puser_name == self.config["master"]:
 
-                            #del self.quotes[int(pword_list[1])-1]
-                            player_name: str = word_list[1]            
+                            player_name: str = word_list[1]
                             file_name:str = self.data_path+"/"+pchat_title+".txt"
                             player_list = func.load_from_file(file_name)
                             if player_name in player_list:
 
-                                player_idx = player_list.index(player_name) 
+                                player_idx = player_list.index(player_name)
                                 if player_idx > 0:
 
                                     del player_list[player_idx]
                                     func.save_list(player_list, file_name)
-                                    answer = f"Игрок {word_list[1]} удален"
-                     
+                                    answer = f"Игрок {player_name} удален"
+                            else:
+
+                                answer = f"Игрок {player_name} отсутствует в списке"
                     elif word_list[0] in COMMANDS[RING_CMDS_OFFSET:RING_CMDS_OFFSET+4]:
-	
-	                    if pchat_title in MAFIA_CHANNELS:
-                                user_list = func.load_from_file(self.data_path+"/"+pchat_title+".txt")
-                                answer = "Эй, " + ", ".join(user_list) + \
-                	                 "! Пошли, поохотимся на дона! или на мителей..."
+
+                        if pchat_title in MAFIA_CHANNELS:
+
+                            user_list = func.load_from_file(self.data_path+"/"+
+                                                            pchat_title+".txt")
+                            answer = "Эй, " + ", ".join(user_list) + \
+                                     "! Пошли, поохотимся на дона! или на мителей..."
 
         if answer:
 

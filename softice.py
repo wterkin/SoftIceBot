@@ -232,10 +232,10 @@ class CSoftIceBot:
 	
 	                                answer, file_name = self.process_modules()
 	                        self.statistic.save_all_type_of_messages(self.event)
-	            # *** Ответ имеется?
-	            if answer or file_name:
-	
-	                self.send_answer(answer.strip(), file_name)
+                    # *** Ответ имеется?
+                    if answer or file_name:
+
+                        self.send_answer(answer.strip(), file_name)
 
     def decode_message(self, pmessage):
         """Декодирует нужные поля сообщения в словарь."""
@@ -303,8 +303,7 @@ class CSoftIceBot:
         if cn.MUSER_NAME in self.event:
 
             return self.event[cn.MUSER_NAME] == self.config["master"]
-        else:
-            return False
+        return False
 
     def is_message_actual(self) -> bool:
         """Проверяет, является ли сообщение актуальным."""
@@ -329,12 +328,12 @@ class CSoftIceBot:
             # self.logger.warning("* Файл конфигурации %s отсутствует.", pconfig_name)
             # self.stop_working()
             sys.exit(0)
-            return False;
+            # return False
         except ValueError:
 
             print(f"* Ошибка в процессе парсинге файла конфигурации {pconfig_name}")
             sys.exit(0)
-            return False;
+            # return False
 
     def process_command(self) -> bool:
         """Обрабатывает системные команды"""
@@ -611,7 +610,7 @@ class CSoftIceBot:
                 pass
             os.remove(self.running_flag)
             raise CQuitByDemand()
-            self.robot.stop_polling()
+            # self.robot.stop_polling()
         self.robot.send_message(self.event[cn.MCHAT_ID],
                                         f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")
 
