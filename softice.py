@@ -54,6 +54,8 @@ CONFIG_COMMANDS: list = ["конфиг", "config"]
 EXIT_COMMANDS: list = ["прощай", "bye", "!!", "носок"]
 HELP_COMMANDS: list = ["помощь", "help"]
 RESTART_COMMAND: list = ["перезапуск", "restart", "22"]
+MUTE_COMMAND: list = ["молчи", "mute"]
+UNMUTE_COMMAND: list = ["болтай", "talk"]
 NON_STOP: bool = True
 POLL_INTERVAL: int = 0
 CONTINUE_RUNNING: int = 0
@@ -136,104 +138,107 @@ class CSoftIceBot:
             print("** Using work config")
         if self.config__is_correct:
 	
-	        self.lock: bool = False
+            self.lock: bool = False
+            self.silent: bool = False
+	    # dbg.debug_state = self.config["debug"] == "0"
+	    # *** Нужно ли работать через прокси?
+        if self.config["proxy"]:
 	
-	        # dbg.debug_state = self.config["debug"] == "0"
-	        # *** Нужно ли работать через прокси?
-	        if self.config["proxy"]:
-	
-	            apihelper.proxy = {'https': self.config["proxy"]}
-	        # *** Создаём собственно бота.
-	        self.robot: telebot.TeleBot = telebot.TeleBot(self.config[TOKEN_KEY])
-	        self.bot_status: int = CONTINUE_RUNNING
-	        # *** Определим флаг работающего бота^M
-	        self.running_flag: str = os.getcwd() + "/flags/" + RUNNING_FLAG
-	        # *** Определим флаг выхода по требованию^M
-	        self.legal_exiting_flag: str = os.getcwd() + "/flags/" + LEGAL_EXITING_FLAG
-	        if os.path.exists(self.running_flag):
-	
-	            print("* Перезапуск после падения либо по требованию.")
-	        else:
-	
-	            with open(self.running_flag, 'tw', encoding='utf-8'):
-	
-	                pass
-	        # *** Где у нас данные лежат?
-	        if platform in ("linux", "linux2"):
-	
-	            self.data_path: str = self.config[LINUX_DATA_FOLDER_KEY]
-	        else:
-	
-	            self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
-	        # *** Открываем БД
-	        self.database: database.CDataBase = database.CDataBase(self.config, self.data_path)
-	        if not self.database.exists():
-	
-	            # *** А нету ещё БД, создавать треба.
-	            database.create()
-	        # *** Включаем логирование
-	        log_name: str = './logs/softice.log'
-	        print(f"* Создаём файл журнала {log_name} с уровнем {self.config[LOGGING_KEY]}")
-	        self.logger = logging.getLogger(__name__)
-	        self.logger.propagate = False
-	        handler = logging.FileHandler(log_name)
-	        handler.setLevel(int(self.config[LOGGING_KEY]))
-	        formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
-	        handler.setFormatter(formatter)
-	        self.logger.addHandler(handler)
-	        # *** Поехали создавать объекты модулей =)
-	        self.babbler: babbler.CBabbler = babbler.CBabbler(self.config, self.data_path)
-	        self.barman: barman.CBarman = barman.CBarman(self.config, self.data_path)
-	        self.bellringer: bellringer.CBellRinger = bellringer.CBellRinger(self.config,
-	                                                                         self.data_path)
-	        self.collector: collector.CCollector = collector.CCollector(self.config)
-	        self.gambler: gambler.CGambler = gambler.CGambler(self.config)
-	        self.haijin: haijin.CHaijin = haijin.CHaijin(self.config, self.data_path)
-	        self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.data_path)
-	        self.majordomo: majordomo.CMajordomo = majordomo.CMajordomo(self.config, self.data_path)
-	        self.meteorolog: meteorolog.CMeteorolog = meteorolog.CMeteorolog(self.config)
-	        self.moderator: moderator.CModerator = moderator.CModerator(self.robot, self.config,
-	                                                                    self.data_path)
-	        self.statistic: statistic.CStatistic = statistic.CStatistic(self.config, self.database)
-	        self.stargazer: stargazer.CStarGazer = stargazer.CStarGazer(self.config, self.data_path)
-	        self.theolog: theolog.CTheolog = theolog.CTheolog(self.config, self.data_path)
-	        # !!! self.supervisor: supervisor.CSupervisor =
-	        # supervisor.CSupervisor(self.robot, self.config,  self.database)
-	
-	        # *** Обработчик сообщений
-	        @self.robot.message_handler(content_types=EVENTS)
-	        def process_message(pmessage):
-	
-	            answer: str = ""
-	            file_name: str = ""
-	            # *** Вытаскиваем из сообщения нужные поля
-	            self.decode_message(pmessage)
-	            # if not self.msg_rec[cn.MPROCESSED]:
-	
-	            if not self.lock:
-	
-	                self.event = copy.deepcopy(self.msg_rec)
-	                # if self.event[cn.MCHAT_TITLE] == "Ботовка":
-	                #
-	                #     print(pmessage)
-	                # *** Проверим, легитимный ли этот чат
-	                answer = self.is_chat_legitimate(self.event).strip()
-	                if not answer:
-	
-	                    # *** Сообщение не протухло?
-	                    if self.is_message_actual():
-	
-	                        # *** Если это текстовое сообщение - обрабатываем в этой ветке.
-	                        if self.event[cn.MCONTENT_TYPE] == "text" and \
-	                                self.event[cn.MTEXT] is not None:
-	
-	                            # *** Если сообщение адресовано другому боту - пропускаем
-	                            if not is_foreign_command(self.event[cn.MCOMMAND]):
-	
-	                                answer, file_name = self.process_modules()
-	                        self.statistic.save_all_type_of_messages(self.event)
-                    # *** Ответ имеется?
-                    if answer or file_name:
+            apihelper.proxy = {'https': self.config["proxy"]}
+	    # *** Создаём собственно бота.
+        self.robot: telebot.TeleBot = telebot.TeleBot(self.config[TOKEN_KEY])
+        self.bot_status: int = CONTINUE_RUNNING
+        # *** Определим флаг работающего бота^M
+        self.running_flag: str = os.getcwd() + "/flags/" + RUNNING_FLAG
+        # *** Определим флаг выхода по требованию^M
+        self.legal_exiting_flag: str = os.getcwd() + "/flags/" + LEGAL_EXITING_FLAG
+        if os.path.exists(self.running_flag):
+    
+            print("* Перезапуск после падения либо по требованию.")
+        else:
+    
+            with open(self.running_flag, 'tw', encoding='utf-8'):
+    
+                pass
+        # *** Где у нас данные лежат?
+        if platform in ("linux", "linux2"):
+    
+            self.data_path: str = self.config[LINUX_DATA_FOLDER_KEY]
+        else:
+    
+            self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
+        # *** Открываем БД
+        self.database: database.CDataBase = database.CDataBase(self.config, self.data_path)
+        if not self.database.exists():
+    
+            # *** А нету ещё БД, создавать треба.
+            database.create()
+        # *** Включаем логирование
+        log_name: str = './logs/softice.log'
+        print(f"* Создаём файл журнала {log_name} с уровнем {self.config[LOGGING_KEY]}")
+        self.logger = logging.getLogger(__name__)
+        self.logger.propagate = False
+        handler = logging.FileHandler(log_name)
+        handler.setLevel(int(self.config[LOGGING_KEY]))
+        formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        # *** Поехали создавать объекты модулей =)
+        self.babbler: babbler.CBabbler = babbler.CBabbler(self.config, self.data_path)
+        self.barman: barman.CBarman = barman.CBarman(self.config, self.data_path)
+        self.bellringer: bellringer.CBellRinger = bellringer.CBellRinger(self.config,
+                                                                         self.data_path)
+        self.collector: collector.CCollector = collector.CCollector(self.config)
+        self.gambler: gambler.CGambler = gambler.CGambler(self.config)
+        self.haijin: haijin.CHaijin = haijin.CHaijin(self.config, self.data_path)
+        self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.data_path)
+        self.majordomo: majordomo.CMajordomo = majordomo.CMajordomo(self.config, self.data_path)
+        self.meteorolog: meteorolog.CMeteorolog = meteorolog.CMeteorolog(self.config)
+        self.moderator: moderator.CModerator = moderator.CModerator(self.robot, self.config,
+                                                                    self.data_path)
+        self.statistic: statistic.CStatistic = statistic.CStatistic(self.config, self.database)
+        self.stargazer: stargazer.CStarGazer = stargazer.CStarGazer(self.config, self.data_path)
+        self.theolog: theolog.CTheolog = theolog.CTheolog(self.config, self.data_path)
+        # !!! self.supervisor: supervisor.CSupervisor =
+        # supervisor.CSupervisor(self.robot, self.config,  self.database)
+    
+        # *** Обработчик сообщений
+        @self.robot.message_handler(content_types=EVENTS)
+        def process_message(pmessage):
+    
+            answer: str = ""
+            file_name: str = ""
+            # *** Вытаскиваем из сообщения нужные поля
+            self.decode_message(pmessage)
+            # if not self.msg_rec[cn.MPROCESSED]:
+    
+            if not self.lock:
+    
+                self.event = copy.deepcopy(self.msg_rec)
+                # if self.event[cn.MCHAT_TITLE] == "Ботовка":
+                #
+                #     print(pmessage)
+                # *** Проверим, легитимный ли этот чат
+                answer = self.is_chat_legitimate(self.event).strip()
+                if not answer:
+    
+                    # *** Сообщение не протухло?
+                    if self.is_message_actual():
+    
+                        # *** Если это текстовое сообщение - обрабатываем в этой ветке.
+                        if self.event[cn.MCONTENT_TYPE] == "text" and \
+                                self.event[cn.MTEXT] is not None:
+    
+                            # *** Если сообщение адресовано другому боту - пропускаем
+                            if not is_foreign_command(self.event[cn.MCOMMAND]):
+    
+                                answer, file_name = self.process_modules()
+                        self.statistic.save_all_type_of_messages(self.event)
+                # *** Ответ имеется?
+                if answer or file_name:
+
+                    # *** Если не включён режим молчания...
+                    if not self.silent:
 
                         self.send_answer(answer.strip(), file_name)
 
@@ -360,6 +365,22 @@ class CSoftIceBot:
 
             self.restart()
             result = True
+        elif self.event[cn.MCOMMAND] in MUTE_COMMAND:
+
+	        if self.is_master():
+                
+                silent = True
+            else:
+
+                self.robot.send_message(self.event[cn.MCHAT_ID], "Да щаз, так я и заткнулся.")
+        elif self.event[cn.MCOMMAND] in UNMUTE_COMMAND:
+
+	        if self.is_master():
+
+                silent = False        
+            else:
+
+                self.robot.send_message(self.event[cn.MCHAT_ID], "Как хозяин решит.")
         return result
 
     def process_modules(self):
