@@ -16,11 +16,10 @@
                        "glagolitic_bot",
                        "combot",
                        "chgk_bot"],
-    "allowed_chats":   ["ПравЧат",
+    "allowed_chats":   ["TestPlace",
                         "Ботовка"	
   		       ],
     "chats": {
-              "Ботовка": ["babbler", "barman", "bellringer", "collector", "haijin", "librarian", "majordomo", "meteorolog", "moderator", "statistic", "stargazer", "supervisor", "theolog"],
-              "ПравЧат": ["babbler", "barman", "haijin", "collector", "librarian", "majordomo", "meteorolog", "moderator", "statistic", "stargazer", "supervisor", "theolog"]
+              "TestPlace": ["babbler", "barman", "bellringer", "collector", "haijin", "librarian", "majordomo", "meteorolog", "moderator", "statistic", "stargazer", "supervisor", "theolog"]
              }
     }

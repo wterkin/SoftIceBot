@@ -80,7 +80,6 @@ class CBellRinger(prototype.CPrototype):
                                 user_list = func.load_from_file(self.data_path+"/"+pchat_title+".txt")
                                 answer = "Эй, " + ", ".join(user_list) + \
                 	                 "! Пошли, поохотимся на дона! или на мителей..."
-
         if answer:
 
             print(f"BellRinger отвечает: {answer[:func.OUT_MSG_LOG_LEN]}")
