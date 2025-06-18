@@ -15,7 +15,7 @@ ROCKSCIPAP_COMMANDS: tuple = ("камень", "ножницы", "бумага")
 ROCKSCIPAP_SHORT_COMMANDS: tuple = ("кам", "нож", "бум")
 ROCKSCIPAPLIZSPOCK_COMMANDS: tuple = ("камень", "ножницы", "бумага", "ящерица", "спок")
 ROCKSCIPAPLIZSPOCK_SHORT_COMMANDS: tuple = ("кам", "нож", "бум", "ящер", "спок")
-
+THROW_COIN_COMMANDS: tuple = ("монета", "coin")
 ROCK_COMMAND: int = 0
 SCISSORS_COMMAND: int = 1
 PAPER_COMMAND: int = 2

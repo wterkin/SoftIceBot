@@ -5,15 +5,14 @@
 import functions as func
 import prototype
 
-COMMANDS: list = ["звонить", "звон", "зв", "ring"]
+COMMANDS: list = ["звонить", "звон", "зв", "ring", "игрок+", "игр+", "игрок-", "игр-"]
 BELLRINGER_HINT: list = ["звонарь", "ringer"]
 BELLRINGER_FOLDER: str = "bellringer/"
-UNIT_ID = "bellringer"
-TOAD_COMMANDS = ["данж", "туса"]
-DUNGEON_COMMAND = 0
-TOAD_CHANNELS = ["OSQ Жабки"]
-MAFIA_CHANNELS = ["Maftown", "Mafia City"]
-
+UNIT_ID: str = "bellringer"
+MAFIA_CHANNELS: list = ["Асы мафии", "TestPlace"]
+RING_CMDS_OFFSET: int = 0
+ADD_PLAYER_CMDS_OFFSET: int = 4
+DEL_PLAYER_CMDS_OFFSET: int = 6
 
 class CBellRinger(prototype.CPrototype):
     """Класс звонаря."""
@@ -24,37 +23,64 @@ class CBellRinger(prototype.CPrototype):
         self.config = pconfig
         self.data_path = pdata_path + BELLRINGER_FOLDER
 
-    def bellringer(self, pchat_title: str, pmessage_text: str):
+    def bellringer(self, pchat_title: str, puser_name: str, pmessage_text: str):
         """Основная функция модуля."""
         answer: str = ""
+        player_list: list
         word_list: list = func.parse_input(pmessage_text)
         if self.can_process(pchat_title, pmessage_text):
 
             if word_list[0] in BELLRINGER_HINT:
-
+ 
                 answer = self.get_help(pchat_title)
             else:
 
-                # print(word_list[0], COMMANDS)
+                print(word_list[0], COMMANDS)
+                print(COMMANDS[ADD_PLAYER_CMDS_OFFSET:ADD_PLAYER_CMDS_OFFSET+2])
+                print(COMMANDS[DEL_PLAYER_CMDS_OFFSET:DEL_PLAYER_CMDS_OFFSET+2])
                 if word_list[0] in COMMANDS:
+                    if word_list[0] in COMMANDS[ADD_PLAYER_CMDS_OFFSET:ADD_PLAYER_CMDS_OFFSET+2]:
 
-                    if pchat_title in MAFIA_CHANNELS:
+                        # *** Пользователь хочет добавить игрока
+                        if puser_name == self.config["master"]:
+                        
+                            file_name:str = self.data_path+"/"+pchat_title+".txt"
+                            player_list = func.load_from_file(file_name)
+                            player_name: str = word_list[1]            
+                            if player_name not in player_list:
 
-                        user_list = func.load_from_file(self.data_path+"/"+pchat_title+".txt")
-                        answer = "Эй, " + ", ".join(user_list) + \
-                                 "! Пошли, поохотимся на дона! или на мителей..."
-                elif word_list[0] in TOAD_COMMANDS:
+                                player_list.append(player_name)
+                                func.save_list(player_list, file_name)
+                                answer = f"Игрок {player_name} добавлен."
+                            else:
 
-                    if pchat_title in TOAD_CHANNELS:
+                                answer = f"Игрок {player_name} уже есть в списке."
+                    elif word_list[0] in COMMANDS[DEL_PLAYER_CMDS_OFFSET:DEL_PLAYER_CMDS_OFFSET+2]:
+                      
+                        # *** Пользователь хочет удалить игрока
+                        if puser_name == self.config["master"]:
 
-                        user_list = func.load_from_file(self.data_path+"/"+pchat_title+".txt")
-                        answer = "Эй, " + ", ".join(user_list)
-                        if word_list[0] == TOAD_COMMANDS[DUNGEON_COMMAND]:
+                            player_name: str = word_list[1]            
+                            file_name:str = self.data_path+"/"+pchat_title+".txt"
+                            player_list = func.load_from_file(file_name)
+                            if player_name in player_list:
 
-                            answer += ", пошли в рейд! Подземелье ждёт!"
-                        else:
+                                player_idx = player_list.index(player_name) 
+                                if player_idx > 0:
 
-                            answer += ", пошли потусим!"
+                                    del player_list[player_idx]
+                                    func.save_list(player_list, file_name)
+                                    answer = f"Игрок {player_name} удален"
+                            else: 
+
+                                 answer = f"Игрок {player_name} отсутствует в списке"
+                    elif word_list[0] in COMMANDS[RING_CMDS_OFFSET:RING_CMDS_OFFSET+4]:
+	
+	                    if pchat_title in MAFIA_CHANNELS:
+                                user_list = func.load_from_file(self.data_path+"/"+pchat_title+".txt")
+                                answer = "Эй, " + ", ".join(user_list) + \
+                	                 "! Пошли, поохотимся на дона! или на мителей..."
+
         if answer:
 
             print(f"BellRinger отвечает: {answer[:func.OUT_MSG_LOG_LEN]}")
@@ -66,12 +92,12 @@ class CBellRinger(prototype.CPrototype):
         if self.is_enabled(pchat_title):
 
             word_list: list = func.parse_input(pmessage_text)
-            cmd_list: list = []
-            cmd_list.extend(COMMANDS)
-            cmd_list.extend(TOAD_COMMANDS)
-            for command in cmd_list:
+            # cmd_list: list = []
+            # cmd_list.extend(COMMANDS)
+            for command in COMMANDS:
 
                 found = word_list[0] in command
+                # print(word_list[0], command, found)
                 if found:
 
                     break
@@ -82,7 +108,7 @@ class CBellRinger(prototype.CPrototype):
 
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
-        return ", ".join(COMMANDS) + ", ".join(TOAD_COMMANDS) + "\n"
+        return ", ".join(COMMANDS) + "\n"
 
     def get_hint(self, pchat_title: str) -> str:
         """Возвращает команду верхнего уровня, в ответ на которую

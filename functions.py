@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль общих функций."""
+from datetime import datetime as dtime
+import os
 
 BACKSLASH: str = "\\"
 OUT_MSG_LOG_LEN = 60
@@ -72,3 +74,13 @@ def screen_text(ptext: str) -> str:
     result_text = result_text.replace("=", f"{BACKSLASH}=")
     # print(result_text)
     return result_text
+
+def save_list(plist: list, pfile_name: str): # noqa
+    """Сохраняет заданную книгу."""
+    new_file_name: str = f"{pfile_name}_{dtime.now().strftime('%Y%m%d-%H%M%S')}"
+    os.rename(pfile_name, new_file_name)
+    with open(pfile_name, "w", encoding="utf8") as out_file:
+
+        for line in plist:
+
+            out_file.write(line + "\n")
