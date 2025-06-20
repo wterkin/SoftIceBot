@@ -15,11 +15,10 @@ PERS_COMMAND = [3, 7]
 
 HINT = ["стат", "stat"]
 COMMANDS = ["топ10", "топ25", "топ50", "перс", "top10", "top25", "top50", "pers"]
-# ENABLED_IN_CHATS_KEY = "statistic_chats"
 UNIT_ID = "statistic"
 BOTS = ("TrueMafiaBot", "MafiaWarBot", "glagolitic_bot", "combot", "chgk_bot")
 FOREIGN_BOTS = "foreign_bots"
-SORTED_BY: tuple = ("предложений", "слов", "стикеров", "картинок",
+SORTED_BY: tuple = ("фраз", "слов", "стикеров", "картинок",
                     "звуковых сообщений", "видео сообщений")
 
 
@@ -146,6 +145,7 @@ class CStatistic(prototype.CPrototype):
         query = query.filter_by(fchatid=ptg_chat_id)
         query = query.join(db.CStat, db.CStat.fchatid == db.CChat.id)
         query = query.join(db.CUser, db.CUser.id == db.CStat.fuserid)
+        print(f"0 {porder_by}")
         if porder_by == 1:
 
             query = query.order_by(db.CStat.fphrases.desc())
@@ -171,13 +171,14 @@ class CStatistic(prototype.CPrototype):
         answer = "Самые говорливые:\n"
         for number, item in enumerate(stat):
 
+            print(f"{number} {porder_by}")
             answer += f"{number + 1} : {item[2].fusername} : {item[1].fphrases}" \
                       f" фраз, {item[1].fwords} слов, " \
                       f"{0 if item[1].fstickers is None else item[1].fstickers} стик., " \
                       f"{0 if item[1].fpictures is None else item[1].fpictures} фоток, " \
                       f"{0 if item[1].faudios is None else item[1].faudios} звук. и " \
                       f"{0 if item[1].fvideos is None else item[1].fvideos} вид. \n"
-        answer += f"Отсортировано по количеству {SORTED_BY[porder_by-1]}. \n"
+        answer += f"Отсортировано по количеству {SORTED_BY[porder_by]}. \n"
         return answer
 
     def get_user_id(self, ptg_user_id):

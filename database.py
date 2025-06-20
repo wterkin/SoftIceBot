@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль функций, связанных с БД."""
-# from datetime import datetime
 from pathlib import Path
 from time import sleep
 
@@ -50,6 +49,7 @@ Base = declarative_base(metadata=meta_data)
 
 class CAncestor(Base):
     """Класс-предок всех классов-моделей таблиц SQLAlchemy."""
+
     __abstract__ = True
     id = Column(Integer,
                 autoincrement=True,
@@ -62,9 +62,11 @@ class CAncestor(Base):
 
     def __init__(self):
         """Конструктор."""
+
         self.fstatus = STATUS_ACTIVE
 
     def __repr__(self):
+
         return f"""ID:{self.id},
                    Status:{self.fstatus}"""
 
@@ -86,11 +88,13 @@ class CChat(CAncestor):
 
     def __init__(self, pchat_id: int, pchat_name: str):
         """Конструктор"""
+
         super().__init__()
         self.fchatid = pchat_id
         self.fchatname = pchat_name
 
     def __repr__(self):
+
         ancestor_repr = super().__repr__()
         return f"""{ancestor_repr},
                    Chat ID:{self.fchatid}
@@ -113,11 +117,13 @@ class CUser(CAncestor):
 
     def __init__(self, ptguserid: int, pusername: str = ""):
         """Конструктор"""
+
         super().__init__()
         self.ftguserid = ptguserid
         self.fusername = pusername
 
     def __repr__(self):
+
         ancestor_repr = super().__repr__()
         return f"""{ancestor_repr},
                    TG user ID:{self.ftguserid},
@@ -143,12 +149,14 @@ class CStat(CAncestor):
 
     def __init__(self, puserid: int, pchatid: int, pdata_dict: dict):
         """Конструктор"""
+
         super().__init__()
         self.fuserid = puserid
         self.fchatid = pchatid
         self.set_all_fields(pdata_dict)
 
     def __repr__(self):
+
         ancestor_repr = super().__repr__()
         return f"""{ancestor_repr},
                    User id:{self.fuserid}
@@ -190,11 +198,13 @@ class CRights(CAncestor):
 
     def __init__(self, puser_id: int, pchat_id: int):
         """Конструктор"""
+
         super().__init__()
         self.fuserid = puser_id
         self.fchatid = pchat_id
 
     def __repr__(self):
+
         ancestor_repr = super().__repr__()
         return f"""{ancestor_repr},
                    User ID:{self.fuserid}
@@ -205,17 +215,8 @@ class CRights(CAncestor):
 
 def create():
     """Создает или изменяет БД в соответствии с описанной в классах структурой."""
+
     Base.metadata.create_all()
-    # information = c_inform.CInformation(DATABASE_VERSION)
-    # self.session.add(information)
-    # for context in STANDARD_CONTEXTS:
-    #
-    #     context_object = c_context.CContext(context)
-    #     self.session.add(context_object)
-    # tag_object = c_tag.CTag(EMPTY_TAG)
-    # print("DB:CR:tag ", tag_object)
-    # self.session.add(tag_object)
-    # self.session.commit()
 
 
 class CDataBase:
@@ -223,7 +224,6 @@ class CDataBase:
 
     def __init__(self, pconfig, pdata_path, pdatabase_name=DATABASE_NAME):
         """Конструктор класса."""
-        # super(CMainWindow, self).__init__()
         self.application_folder = Path.cwd()
         self.config = pconfig
         self.data_path = pdata_path
@@ -235,6 +235,7 @@ class CDataBase:
 
     def commit_changes(self, obj):
         """Сохраняет изменения в БД."""
+
         # *** Если база залочена - подождем.
         delayed: int = 0
         while self.busy:
@@ -246,11 +247,6 @@ class CDataBase:
         # *** Сохраняем данные
         try:
 
-            # print("\n")
-            # # while self.is_session_dirty():
-            #
-            #     # sleep(WAITING_TIME)
-            #     # print("+", end=""
             self.session.add(obj)
             self.session.commit()
             if delayed > 0:
@@ -263,8 +259,8 @@ class CDataBase:
 
     def connect(self):
         """Устанавливает соединение с БД."""
+
         alchemy_echo: bool = self.config["alchemy_echo"] == "1"
-        # print(alchemy_echo, self.config["alchemy_echo"])
         self.engine = create_engine('sqlite:///' + self.data_path + self.database_name,
                                     echo=alchemy_echo,
                                     connect_args={'check_same_thread': False})
@@ -274,21 +270,24 @@ class CDataBase:
         Base.metadata.bind = self.engine
 
     def disconnect(self):
+
         """Разрывает соединение с БД."""
         self.session.close()
         self.engine.dispose()
 
     def exists(self):
         """Проверяет наличие базы данных по пути в конфигурации."""
-        # print(f"*** {self.data_path + self.}")
+
         return Path(self.data_path + self.database_name).exists()
 
     def get_session(self):
+
         """Возвращает экземпляр session."""
         return self.session
 
     def query_data(self, cls):
         """Возвращает выборку заданнного класса."""
+
         # *** Если база залочена - подождем.
         while self.busy:
 

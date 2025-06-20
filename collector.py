@@ -8,8 +8,6 @@ from datetime import datetime
 # from pathlib import Path
 from random import randint
 
-# import functions as func
-# import constants as cn
 import prototype
 
 UNIT_ID = "collector"
@@ -17,7 +15,7 @@ WORK_HOURS: tuple = (12, 13, 14, 15, 16, 17, 18)
 PROBABILITY: int = 16
 CHANCE_VALUE: int = 8
 DONATE_MESSAGE: str = ("\n\nНравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на "
-                       "содержание бота, это очень просто: "
+                       "содержание бота, это очень просто: \n"
                        "https://yoomoney.ru/to/41001510609674/50")
 
 
@@ -30,6 +28,7 @@ class CCollector(prototype.CPrototype):
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Коллектор никакие команды не обрабатывает."""
+
         assert pchat_title is not None, \
             "Assert: [collector.can_process] Пропущен параметр <pchat_title> !"
         assert pmessage_text is not None, \
@@ -38,22 +37,27 @@ class CCollector(prototype.CPrototype):
 
     def get_help(self, pchat_title: str):
         """Возвращает список команд модуля, доступных пользователю."""
+
         return ""
 
     def get_hint(self, pchat_title: str):
         """Возвращает команду верхнего уровня, в ответ на которую
            модуль возвращает полный список команд, доступных пользователю."""
+
         return ""
 
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если коллектор разрешен на этом канале."""
+
         assert pchat_title is not None, \
             "Assert: [collector.is_enabled] Пропущен параметр <pchat_title> !"
         return UNIT_ID in self.config["chats"][pchat_title]
 
     def is_master(self, puser_name: str) -> bool:
         """Проверяет, хозяин ли отдал команду."""
+
         return puser_name == self.config["master"]
+
 
     def collector(self, panswer: str) -> str:
         """Функция будет в определенные часы просить пожертвований."""
@@ -64,7 +68,6 @@ class CCollector(prototype.CPrototype):
 
             # *** Запросим случайное число
             chance: int = randint(1, PROBABILITY)
-            #rint(f"chance: {chance} value {CHANCE_VALUE}")
             if chance == CHANCE_VALUE:
 
                 # *** Сформируем ответ
