@@ -170,6 +170,7 @@ class CSoftIceBot:
 
             self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
         # *** Открываем БД
+        print(self.data_path)
         self.database: database.CDataBase = database.CDataBase(self.config, self.data_path)
         if not self.database.exists():
 
@@ -203,7 +204,7 @@ class CSoftIceBot:
         self.theolog: theolog.CTheolog = theolog.CTheolog(self.config, self.data_path)
         # !!! self.supervisor: supervisor.CSupervisor =
         # supervisor.CSupervisor(self.robot, self.config,  self.database)
-
+        print("*** Бот запущен.")
         # *** Обработчик сообщений
         @self.robot.message_handler(content_types=EVENTS)
         def process_message(pmessage):
@@ -287,6 +288,7 @@ class CSoftIceBot:
         """Проверяет, есть ли ли этот чат в списке разрешенных."""
 
         answer: str = ""
+        print(self.config[ALLOWED_CHATS_KEY])
         # *** Если это не приват...
         if pevent[cn.MCHAT_TITLE] is not None:
 
@@ -321,10 +323,6 @@ class CSoftIceBot:
 
         date_time: datetime = datetime.fromtimestamp(self.event[cn.MDATE])
         return (datetime.now() - date_time).total_seconds() < 60
-
-#     def is_this_chat_enabled(self) -> bool:
-#         """Проверяет, находится ли данный чат в списке разрешенных."""
-#         return self.event[cn.MCHAT_TITLE] in self.config[ALLOWED_CHATS_KEY]
 
 
     def load_config(self, pconfig_name: str):

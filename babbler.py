@@ -25,12 +25,9 @@ REACTIONS_INDEX: int = 1
 BABBLER_EMODJI: list = ["😎", "😊", "☺", "😊", "😋"]
 NICKNAMES: list = ["softice", "софтик", "софтайсик", "ботик", "бот"]
 AT_CHAR: str = "@"
-DONATE_MESSAGE: str = """\n Нравится SoftIce? Поддержи проект!
-                         Пожертвуй 50 рублей на содержание бота, 
-                         это очень просто: 
-                         https://yoomoney.ru/to/41001510609674/50"""
-
 DELIMIGHTER: str = "//"
+
+
 class CBabbler(prototype.CPrototype):
     """Класс болтуна."""
 
@@ -69,21 +66,25 @@ class CBabbler(prototype.CPrototype):
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Болтун всегда может обработать эту команду."""
+
         assert pchat_title is not None, \
             "Assert: [babbler.can_process] Пропущен параметр <pchat_title> !"
         assert pmessage_text is not None, \
             "Assert: [babbler.can_process] Пропущен параметр <pmessage_text> !"
+
         return self.is_enabled(pchat_title)
 
 
     def get_help(self, pchat_title: str):
         """Возвращает список команд модуля, доступных пользователю."""
+
         return ""
 
 
     def get_hint(self, pchat_title: str):
         """Возвращает команду верхнего уровня, в ответ на которую
            модуль возвращает полный список команд, доступных пользователю."""
+
         return ""
 
 
@@ -91,16 +92,19 @@ class CBabbler(prototype.CPrototype):
         """Возвращает True, если болтун разрешен на этом канале."""
         assert pchat_title is not None, \
             "Assert: [babbler.is_enabled] Пропущен параметр <pchat_title> !"
+
         return UNIT_ID in self.config["chats"][pchat_title]
 
 
     def is_master(self, puser_name: str) -> bool:
         """Проверяет, хозяин ли отдал команду."""
+
         return puser_name == self.config["master"]
 
 
     def reload(self):
         """Загружает тексты болтуна."""
+
         # *** Собираем пути
         triggers_path = Path(self.data_path) / TRIGGERS_FOLDER
         assert triggers_path.is_dir(), f"{TRIGGERS_FOLDER} must be folder"
@@ -114,7 +118,6 @@ class CBabbler(prototype.CPrototype):
 
                 module = Path(trigger).resolve().name
                 reaction = reactions_path / module
-                # print(str(trigger.name), end=", ")
                 if reaction.is_file():
 
                     trigger_content: list = func.load_from_file(str(trigger))
@@ -124,6 +127,7 @@ class CBabbler(prototype.CPrototype):
                     self.mind.append(block)
                     result = True
         if self.mind:
+
             print(f"\n> Babbler успешно (пере)загрузил {len(self.mind)} реакций.")
         return result
 
@@ -150,6 +154,7 @@ class CBabbler(prototype.CPrototype):
 
     def think(self, pmsg_rec: dict):
         """Процесс принятия решений =)"""
+
         reactions_path = Path(self.data_path) / REACTIONS_FOLDER
         word_list: list = pmsg_rec[cn.MTEXT].split(" ")
         answer: str = ""
@@ -172,7 +177,7 @@ class CBabbler(prototype.CPrototype):
             # *** Если что-то осталось, двигаемся дальше.
             if len(clean_word) > 1:
 
-                print(f"%%% ! {clean_word}")
+                # print(f"%%% ! {clean_word}")
                 # *** Перебираем блоки памяти бота
                 for block in self.mind:
 
