@@ -15,7 +15,6 @@ config.main.json
 running.flg
 flags/*
 test.flg
-<<<<<<< HEAD
 .Xauthority
 .bash*
 .cache/*
@@ -28,6 +27,4 @@ test.flg
 .ssh/*
 env/*
 old_data/*
-=======
 lastwork/*
->>>>>>> fd070a5534bd0c62bb214b97dc28de8be6a4d1ae

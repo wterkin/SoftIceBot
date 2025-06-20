@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Бот для Телеграмма"""
+
 import copy
 import os
 from datetime import datetime
@@ -41,9 +42,9 @@ LINUX_DATA_FOLDER_KEY: str = "linux_data_folder"
 LOGGING_KEY: str = "logging"
 WINDOWS_DATA_FOLDER_KEY: str = "windows_data_folder"
 TOKEN_KEY: str = "token"
+
 CONFIG_FILE_NAME: str = "config.json"
 TEST_CONFIG_FILE_NAME: str = "test_config.json"
-# BOT_NAME: str = "SoftIceBot"
 COMMAND_SIGN: str = "!"
 HELP_MESSAGE: str = "В настоящий момент я понимаю только следующие группы команд: \n"
 EVENTS: list = ["text", "sticker", "photo", "audio", "video", "video_note", "voice"]
@@ -104,9 +105,9 @@ class CRestartByDemand(Exception):
 # write_access_allowed=None, has_media_spoiler=None, user_shared=None,
 # chat_shared=None, *, api_kwargs=None
 
-
 def is_foreign_command(pcommand: str) -> bool:
     """Возвращает True, если в команде присутствует имя другого бота."""
+
     result: bool = False
     for bot in statistic.BOTS:
 
@@ -120,58 +121,59 @@ def is_foreign_command(pcommand: str) -> bool:
 # int: disable=too-many-instance-attributes # а что еще делать???
 class CSoftIceBot:
     """Универсальный бот для Телеграмма."""
+
     def __init__(self):
         """Конструктор класса."""
+
         super().__init__()
         self.msg_rec: dict = {}
-        # self.events: list = []
         self.event: dict = {}
         self.config: dict = {}
-        self.config__is_correct: bool = False
+        self.config_is_correct: bool = False
         if os.path.exists(os.getcwd() + "/flags/" + TEST_RUN_FLAG):
 
-            self.config__is_correct = self.load_config(TEST_CONFIG_FILE_NAME)
+            self.config_is_correct = self.load_config(TEST_CONFIG_FILE_NAME)
             print("** Using test config")
         else:
 
-            self.config__is_correct = self.load_config(CONFIG_FILE_NAME)
+            self.config_is_correct = self.load_config(CONFIG_FILE_NAME)
             print("** Using work config")
-        if self.config__is_correct:
-	
+        if self.config_is_correct:
+
             self.lock: bool = False
             self.silent: bool = False
-	    # dbg.debug_state = self.config["debug"] == "0"
 	    # *** Нужно ли работать через прокси?
         if self.config["proxy"]:
-	
+
             apihelper.proxy = {'https': self.config["proxy"]}
 	    # *** Создаём собственно бота.
         self.robot: telebot.TeleBot = telebot.TeleBot(self.config[TOKEN_KEY])
         self.bot_status: int = CONTINUE_RUNNING
-        # *** Определим флаг работающего бота^M
+        # *** Определим флаг работающего бота
         self.running_flag: str = os.getcwd() + "/flags/" + RUNNING_FLAG
-        # *** Определим флаг выхода по требованию^M
+        # *** Определим флаг выхода по требованию
         self.legal_exiting_flag: str = os.getcwd() + "/flags/" + LEGAL_EXITING_FLAG
         if os.path.exists(self.running_flag):
-    
+
             print("* Перезапуск после падения либо по требованию.")
         else:
-    
+
             with open(self.running_flag, 'tw', encoding='utf-8'):
-    
+
+                # ***  ничего не делаем, просто создаём файл
                 pass
         # *** Где у нас данные лежат?
         if platform in ("linux", "linux2"):
-    
+
             self.data_path: str = self.config[LINUX_DATA_FOLDER_KEY]
         else:
-    
+
             self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
         # *** Открываем БД
         self.database: database.CDataBase = database.CDataBase(self.config, self.data_path)
         if not self.database.exists():
-    
-            # *** А нету ещё БД, создавать треба.
+
+            # *** А нету ещё БД, создавать нужно.
             database.create()
         # *** Включаем логирование
         log_name: str = './logs/softice.log'
@@ -201,37 +203,34 @@ class CSoftIceBot:
         self.theolog: theolog.CTheolog = theolog.CTheolog(self.config, self.data_path)
         # !!! self.supervisor: supervisor.CSupervisor =
         # supervisor.CSupervisor(self.robot, self.config,  self.database)
-    
+
         # *** Обработчик сообщений
         @self.robot.message_handler(content_types=EVENTS)
         def process_message(pmessage):
-    
+
             answer: str = ""
             file_name: str = ""
             # *** Вытаскиваем из сообщения нужные поля
             self.decode_message(pmessage)
             # if not self.msg_rec[cn.MPROCESSED]:
-    
+
             if not self.lock:
-    
+
                 self.event = copy.deepcopy(self.msg_rec)
-                # if self.event[cn.MCHAT_TITLE] == "Ботовка":
-                #
-                #     print(pmessage)
                 # *** Проверим, легитимный ли этот чат
                 answer = self.is_chat_legitimate(self.event).strip()
                 if not answer:
-    
+
                     # *** Сообщение не протухло?
                     if self.is_message_actual():
-    
+
                         # *** Если это текстовое сообщение - обрабатываем в этой ветке.
                         if self.event[cn.MCONTENT_TYPE] == "text" and \
                                 self.event[cn.MTEXT] is not None:
-    
+
                             # *** Если сообщение адресовано другому боту - пропускаем
                             if not is_foreign_command(self.event[cn.MCOMMAND]):
-    
+
                                 answer, file_name = self.process_modules()
                         self.statistic.save_all_type_of_messages(self.event)
                 # *** Ответ имеется?
@@ -242,8 +241,10 @@ class CSoftIceBot:
 
                         self.send_answer(answer.strip(), file_name)
 
+
     def decode_message(self, pmessage):
         """Декодирует нужные поля сообщения в словарь."""
+
         self.msg_rec[cn.MPROCESSED] = False
         if pmessage.text:
 
@@ -281,8 +282,10 @@ class CSoftIceBot:
         self.msg_rec[cn.MCONTENT_TYPE] = pmessage.content_type
         self.msg_rec[cn.MMESSAGE_ID] = pmessage.message_id
 
+
     def is_chat_legitimate(self, pevent) -> str:
-        """Проверяет, если ли этот чат в списке разрешенных."""
+        """Проверяет, есть ли ли этот чат в списке разрешенных."""
+
         answer: str = ""
         # *** Если это не приват...
         if pevent[cn.MCHAT_TITLE] is not None:
@@ -303,24 +306,30 @@ class CSoftIceBot:
 
         return answer
 
+
     def is_master(self) -> bool:
         """Проверяет, хозяин ли отдал команду."""
+
         if cn.MUSER_NAME in self.event:
 
             return self.event[cn.MUSER_NAME] == self.config["master"]
         return False
 
+
     def is_message_actual(self) -> bool:
         """Проверяет, является ли сообщение актуальным."""
+
         date_time: datetime = datetime.fromtimestamp(self.event[cn.MDATE])
         return (datetime.now() - date_time).total_seconds() < 60
 
-    def is_this_chat_enabled(self) -> bool:
-        """Проверяет, находится ли данный чат в списке разрешенных."""
-        return self.event[cn.MCHAT_TITLE] in self.config[ALLOWED_CHATS_KEY]
+#     def is_this_chat_enabled(self) -> bool:
+#         """Проверяет, находится ли данный чат в списке разрешенных."""
+#         return self.event[cn.MCHAT_TITLE] in self.config[ALLOWED_CHATS_KEY]
+
 
     def load_config(self, pconfig_name: str):
         """Загружает конфигурацию из JSON."""
+
         try:
 
             with open(pconfig_name, "r", encoding="utf-8") as json_file:
@@ -330,16 +339,16 @@ class CSoftIceBot:
         except FileNotFoundError:
 
             print(f"* Файл конфигурации {pconfig_name} отсутствует.")
-            # self.logger.warning("* Файл конфигурации %s отсутствует.", pconfig_name)
-            # self.stop_working()
             sys.exit(0)
         except ValueError:
 
             print(f"* Ошибка в процессе парсинге файла конфигурации {pconfig_name}")
             sys.exit(0)
 
+
     def process_command(self) -> bool:
         """Обрабатывает системные команды"""
+
         result: bool = False
         # *** Это команда перезагрузки конфига?
         if self.event[cn.MCOMMAND] in CONFIG_COMMANDS:
@@ -365,24 +374,26 @@ class CSoftIceBot:
             result = True
         elif self.event[cn.MCOMMAND] in MUTE_COMMAND:
 
-	        if self.is_master():
-                
+            if self.is_master():
+
                 silent = True
             else:
 
                 self.robot.send_message(self.event[cn.MCHAT_ID], "Да щаз, так я и заткнулся.")
         elif self.event[cn.MCOMMAND] in UNMUTE_COMMAND:
 
-	        if self.is_master():
+            if self.is_master():
 
-                silent = False        
+                silent = False
             else:
 
                 self.robot.send_message(self.event[cn.MCHAT_ID], "Как хозяин решит.")
         return result
 
+
     def process_modules(self):
         """Пытается обработать команду различными модулями."""
+
         # *** Проверим, не запросил ли пользователь что-то у бармена...
         answer: str = ""
         file_name: str = ""
@@ -404,8 +415,9 @@ class CSoftIceBot:
                     # *** Болтуну есть что ответить?
                     answer, file_name = self.babbler.talk(self.event)
                 # # *** Теперь очередь статистика...
-                # self.statistic.save_all_type_of_messages(self.event)
+                self.statistic.save_all_type_of_messages(self.event)
             else:
+
                 # *** Если команда не обработана обработчиком системных команд...
                 if not self.process_command():
 
@@ -413,6 +425,7 @@ class CSoftIceBot:
                     answer = self.moderator.moderator(rec)
                     dbg.dout(f"*** moderator [{answer}]")
                     if not answer:
+
                         # *** ... потом бармен
                         answer: str = self.barman.barman(rec[cn.MCHAT_TITLE],
                                                          rec[cn.MUSER_NAME],
@@ -430,9 +443,9 @@ class CSoftIceBot:
 
                         # *** ... потом игрок
                         answer = self.gambler.gambler(rec[cn.MCHAT_TITLE],
-                                                    rec[cn.MUSER_NAME],
-                                                    rec[cn.MUSER_TITLE],
-                                                    rec[cn.MTEXT]).strip()
+                                                      rec[cn.MUSER_NAME],
+                                                      rec[cn.MUSER_TITLE],
+                                                      rec[cn.MTEXT]).strip()
                         dbg.dout(f"*** gambler [{answer}]")
                     if not answer:
 
@@ -458,7 +471,7 @@ class CSoftIceBot:
                         dbg.dout(f"*** majordomo [{answer}]")
                     if not answer:
 
-                        # *** ... потом метеоролога
+                        # *** ... потом метеоролог
                         answer = self.meteorolog.meteorolog(rec[cn.MCHAT_TITLE],
                                                             rec[cn.MTEXT]).strip()
                         print(f"*** meteorolog [{answer}]")
@@ -493,7 +506,6 @@ class CSoftIceBot:
                         print(f"* Запрошена неподдерживаемая команда {rec[cn.MTEXT]}.")
                         self.logger.info("* Запрошена неподдерживаемая команда %s"
                                          " в чате %s.", rec[cn.MTEXT], rec[cn.MCHAT_TITLE])
-                    # self.event[cn.MPROCESSED] = True
             answer = answer.strip()
             if answer:
 
@@ -515,10 +527,12 @@ class CSoftIceBot:
                     file.write(answer)
                     file.write("\n\n")
             self.lock = False
-        return answer, file_name  # , do_not_screen
+        return answer, file_name
+
 
     def reload_config(self) -> bool:
         """Проверяет, не является ли поданная команда командой перезагрузки конфигурации."""
+
         # *** Такое запрашивать может только хозяин
         if self.is_master():
 
@@ -536,18 +550,16 @@ class CSoftIceBot:
 
     def send_answer(self, panswer, pfile_name: str = ""):
         """Выбирает форматированный или неформатированный вывод"""
+
         answer: str
         # *** Выводим ответ
-        # print(f"*** 0 *** [{panswer}]")
         if panswer[0:1] != cn.SCREENED:
 
             answer = func.screen_text(panswer)
-            # print(f"*** 1 *** [{answer}]")
         else:
 
 
             answer = panswer[1:]
-            # print(f"*** 2 *** [{answer}]")
         if pfile_name:
 
             self.send_gif(pfile_name, self.event[cn.MCHAT_ID], answer)
@@ -557,6 +569,7 @@ class CSoftIceBot:
 
     def send_gif(self, pfilename: str, pchat_id: int, panswer: str):
         """Отправляет в чат gif """
+
         with open(pfilename, 'rb') as gif:
 
             self.robot.send_animation(pchat_id, gif, None, panswer)
@@ -564,16 +577,8 @@ class CSoftIceBot:
 
     def send_help(self) -> str:
         """Проверяет, не была ли запрошена подсказка."""
+
         # *** Собираем ответы модулей на запрос помощи
-        # answer: str = f"""\n{self.barman.get_hint(self.event[cn.MCHAT_TITLE])}
-        #                  \n{self.bellringer.get_hint(self.event[cn.MCHAT_TITLE])}
-        #                  \n{self.haijin.get_hint(self.event[cn.MCHAT_TITLE])[1:]}
-        #                  \n{self.librarian.get_hint(self.event[cn.MCHAT_TITLE])}
-        #                  \n{self.majordomo.get_hint(self.event[cn.MCHAT_TITLE])}
-        #                  \n{self.meteorolog.get_hint(self.event[cn.MCHAT_TITLE])}
-        #                  \n{self.statistic.get_hint(self.event[cn.MCHAT_TITLE])}
-        #                  \n{self.stargazer.get_hint(self.event[cn.MCHAT_TITLE])}
-        #                  \n{self.theolog.get_hint(self.event[cn.MCHAT_TITLE])}""".strip()
         answer: str = ""
         result: str = self.barman.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
@@ -617,12 +622,14 @@ class CSoftIceBot:
             return HELP_MESSAGE + answer
         return answer
 
+
     def stop_working(self):
         """Проверка, вдруг была команда выхода."""
+
         if self.is_master():
 
             if hasattr(self, 'robot'):
-  
+
                 self.robot.send_message(self.event[cn.MCHAT_ID], "Добби свободен!")
             with open(self.legal_exiting_flag, 'tw', encoding='utf-8'):
 
@@ -634,6 +641,7 @@ class CSoftIceBot:
 
     def restart(self):
         """Проверка, вдруг была команда рестарта."""
+
         if self.is_master():
 
             self.robot.send_message(self.event[cn.MCHAT_ID], "Щасвирнус.")
@@ -643,6 +651,7 @@ class CSoftIceBot:
 
     def poll_forever(self):
         """Функция опроса ботом телеграмма."""
+
         while self.bot_status == CONTINUE_RUNNING:
 
             try:
@@ -708,12 +717,3 @@ if __name__ == "__main__":
     SofticeBot.logger.info("SoftIce (пере)запущен %s",
                            datetime.now().strftime(RUSSIAN_DATETIME_FORMAT))
     SofticeBot.poll_forever()
-
-# logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
-# logging.basicConfig(filename='msg.log', filemode='w',
-#   format='%(name)s - %(levelname)s - %(message)s')
-# logging.debug('The debug message is displaying')
-# logging.info('The info message is displaying')
-# logging.warning('The warning message is displaying')
-# logging.error('The error message is displaying')
-# logging.critical('The critical message is displaying')
