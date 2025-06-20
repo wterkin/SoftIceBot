@@ -8,7 +8,7 @@ import functions as func
 import prototype
 
 # *** Список списков доступных команд
-COMMANDS: list = [["пиво", "beer", "пв", "br"],  # ***
+COMMANDS: list = [["пиво", "beer", "пв", "br"],
                   ["водка", "vodka", "вк", "vk"],
                   ["коньяк", "cognac", "кн", "cn"],
                   ["коктейль", "cocktail", "кт", "ct"],
@@ -17,7 +17,7 @@ COMMANDS: list = [["пиво", "beer", "пв", "br"],  # ***
                   ["печеньки", "cookies", "пч", "ck"],
                   ["шоколад", "chocolate", "шк", "ch"],
                   ["мороженое", "icecream", "мр", "ic"],
-                  ["булочка", "bun", "бч", "bn"]
+                  ["булочка", "bun", "бч", "bn"],
                   ]
 
 # *** Идентификаторы, они же индексы, напитков, их ключи и эмодзи
@@ -43,97 +43,96 @@ CHOCOLATE_ID: int = 7
 ICECREAM_ID: int = 8
 BUN_ID: int = 9
 
-ASSORTIMENT: tuple = ({ID_KEY: BEER_ID,
-                       EMODJI_KEY: "🍺",
-                       COMMAND_KEY: COMMANDS[BEER_ID],
-                       SOURCES_KEY: "drink_sources.txt",
-                       CANS_KEY: "beer_cans.txt",
-                       MARKS_KEY: "beer_marks.txt",
-                       TRANSFER_KEY: "drink_transfer.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, CANS_KEY, MARKS_KEY, TRANSFER_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} пива \"{2}\" {3} {4} {5}"},
-                      {ID_KEY: VODKA_ID,
-                       EMODJI_KEY: "🍸",
-                       COMMAND_KEY: COMMANDS[VODKA_ID],
-                       SOURCES_KEY: "drink_sources.txt",
-                       CANS_KEY: "vodka_cans.txt",
-                       MARKS_KEY: "vodka_marks.txt",
-                       FILLS_KEY: "vodka_fills.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, CANS_KEY, MARKS_KEY, FILLS_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} {2} и {3} {4} {5}"},
-                      {ID_KEY: COGNAC_ID,
-                       EMODJI_KEY: "🥃",
-                       COMMAND_KEY: COMMANDS[COGNAC_ID],
-                       SOURCES_KEY: "drink_sources.txt",
-                       CANS_KEY: "cognac_cans.txt",
-                       MARKS_KEY: "cognac_marks.txt",
-                       FILLS_KEY: "cognac_fills.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, CANS_KEY, MARKS_KEY, FILLS_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} {2} и {3} {4} {5}"},
-                      {ID_KEY: COCKTAIL_ID,
-                       EMODJI_KEY: "🍹",
-                       COMMAND_KEY: COMMANDS[COCKTAIL_ID],
-                       SOURCES_KEY: "drink_sources.txt",
-                       MARKS_KEY: "cocktail_marks.txt",
-                       FILLS_KEY: "cocktail_fills.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, FILLS_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} и {2} {3} {4}"},
-                      {ID_KEY: TEA_ID,
-                       EMODJI_KEY: "🫖",
-                       COMMAND_KEY: COMMANDS[TEA_ID],
-                       FILLS_KEY: "tea_fills.txt",
-                       MARKS_KEY: "tea_marks.txt",
-                       TRANSFER_KEY: "drink_transfer.txt",
-                       PROPERTIES_KEY: (FILLS_KEY, MARKS_KEY, TRANSFER_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
-                      {ID_KEY: COFFEE_ID,
-                       EMODJI_KEY: "☕️",
-                       COMMAND_KEY: COMMANDS[COFFEE_ID],
-                       TRANSFER_KEY: "drink_transfer.txt",
-                       MARKS_KEY: "coffee_marks.txt",
-                       FILLS_KEY: "coffee_fills.txt",
-                       PROPERTIES_KEY: (FILLS_KEY, MARKS_KEY, TRANSFER_KEY),
-                       TEMPLATE_KEY: "Softice {0} кофе \"{1}\" {2} {3} {4}"},
-                      {ID_KEY: COOKIE_ID,
-                       EMODJI_KEY: "🍪",
-                       COMMAND_KEY: COMMANDS[COOKIE_ID],
-                       SOURCES_KEY: "cookies_sources.txt",
-                       MARKS_KEY: "cookies_marks.txt",
-                       TRANSFER_KEY: "cookies_transfer.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
-                       TEMPLATE_KEY: "Softice {0} печенье \"{1}\" {2} {3} {4}"},
-                      {ID_KEY: CHOCOLATE_ID,
-                       EMODJI_KEY: "🍫",
-                       COMMAND_KEY: COMMANDS[CHOCOLATE_ID],
-                       SOURCES_KEY: "chocolate_sources.txt",
-                       MARKS_KEY: "chocolate_marks.txt",
-                       TRANSFER_KEY: "chocolate_transfer.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
-                      {ID_KEY: ICECREAM_ID,
-                       EMODJI_KEY: "🍦",
-                       COMMAND_KEY: COMMANDS[ICECREAM_ID],
-                       SOURCES_KEY: "icecream_sources.txt",
-                       MARKS_KEY: "icecream_marks.txt",
-                       TRANSFER_KEY: "icecream_transfer.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
-                      {ID_KEY: BUN_ID,
-                       EMODJI_KEY: "🥯",
-                       COMMAND_KEY: COMMANDS[BUN_ID],
-                       SOURCES_KEY: "bun_sources.txt",
-                       MARKS_KEY: "bun_marks.txt",
-                       TRANSFER_KEY: "bun_transfer.txt",
-                       PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
-                       TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"}
-                      )
+ASSORTMENT: tuple = ({ID_KEY: BEER_ID,
+                      EMODJI_KEY: "🍺",
+                      COMMAND_KEY: COMMANDS[BEER_ID],
+                      SOURCES_KEY: "drink_sources.txt",
+                      CANS_KEY: "beer_cans.txt",
+                      MARKS_KEY: "beer_marks.txt",
+                      TRANSFER_KEY: "drink_transfer.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, CANS_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} пива \"{2}\" {3} {4} {5}"},
+                     {ID_KEY: VODKA_ID,
+                      EMODJI_KEY: "🍸",
+                      COMMAND_KEY: COMMANDS[VODKA_ID],
+                      SOURCES_KEY: "drink_sources.txt",
+                      CANS_KEY: "vodka_cans.txt",
+                      MARKS_KEY: "vodka_marks.txt",
+                      FILLS_KEY: "vodka_fills.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, CANS_KEY, MARKS_KEY, FILLS_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} {2} и {3} {4} {5}"},
+                     {ID_KEY: COGNAC_ID,
+                      EMODJI_KEY: "🥃",
+                      COMMAND_KEY: COMMANDS[COGNAC_ID],
+                      SOURCES_KEY: "drink_sources.txt",
+                      CANS_KEY: "cognac_cans.txt",
+                      MARKS_KEY: "cognac_marks.txt",
+                      FILLS_KEY: "cognac_fills.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, CANS_KEY, MARKS_KEY, FILLS_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} {2} и {3} {4} {5}"},
+                     {ID_KEY: COCKTAIL_ID,
+                      EMODJI_KEY: "🍹",
+                      COMMAND_KEY: COMMANDS[COCKTAIL_ID],
+                      SOURCES_KEY: "drink_sources.txt",
+                      MARKS_KEY: "cocktail_marks.txt",
+                      FILLS_KEY: "cocktail_fills.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, FILLS_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} и {2} {3} {4}"},
+                     {ID_KEY: TEA_ID,
+                      EMODJI_KEY: "🫖",
+                      COMMAND_KEY: COMMANDS[TEA_ID],
+                      FILLS_KEY: "tea_fills.txt",
+                      MARKS_KEY: "tea_marks.txt",
+                      TRANSFER_KEY: "drink_transfer.txt",
+                      PROPERTIES_KEY: (FILLS_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
+                     {ID_KEY: COFFEE_ID,
+                      EMODJI_KEY: "☕️",
+                      COMMAND_KEY: COMMANDS[COFFEE_ID],
+                      TRANSFER_KEY: "drink_transfer.txt",
+                      MARKS_KEY: "coffee_marks.txt",
+                      FILLS_KEY: "coffee_fills.txt",
+                      PROPERTIES_KEY: (FILLS_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} кофе \"{1}\" {2} {3} {4}"},
+                     {ID_KEY: COOKIE_ID,
+                      EMODJI_KEY: "🍪",
+                      COMMAND_KEY: COMMANDS[COOKIE_ID],
+                      SOURCES_KEY: "cookies_sources.txt",
+                      MARKS_KEY: "cookies_marks.txt",
+                      TRANSFER_KEY: "cookies_transfer.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} печенье \"{1}\" {2} {3} {4}"},
+                     {ID_KEY: CHOCOLATE_ID,
+                      EMODJI_KEY: "🍫",
+                      COMMAND_KEY: COMMANDS[CHOCOLATE_ID],
+                      SOURCES_KEY: "chocolate_sources.txt",
+                      MARKS_KEY: "chocolate_marks.txt",
+                      TRANSFER_KEY: "chocolate_transfer.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
+                     {ID_KEY: ICECREAM_ID,
+                      EMODJI_KEY: "🍦",
+                      COMMAND_KEY: COMMANDS[ICECREAM_ID],
+                      SOURCES_KEY: "icecream_sources.txt",
+                      MARKS_KEY: "icecream_marks.txt",
+                      TRANSFER_KEY: "icecream_transfer.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
+                     {ID_KEY: BUN_ID,
+                      EMODJI_KEY: "🥯",
+                      COMMAND_KEY: COMMANDS[BUN_ID],
+                      SOURCES_KEY: "bun_sources.txt",
+                      MARKS_KEY: "bun_marks.txt",
+                      TRANSFER_KEY: "bun_transfer.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"}
+                     )
 
 # *** Команда перегрузки текстов
 BAR_HINT: list = ["бар", "bar"]
 BAR_RELOAD: list = ["brreload", "brrl"]
 BARMAN_FOLDER: str = "barman/"
 # *** Ключ для списка доступных каналов в словаре конфига
-# ENABLED_IN_CHATS_KEY: str = "barman_chats"
 UNIT_ID = "barman"
 
 
@@ -146,10 +145,11 @@ class CBarman(prototype.CPrototype):
         self.config = pconfig
         self.data_path = pdata_path + BARMAN_FOLDER
         self.bar_content: dict = {}
-        self.load_assortiment()
+        self.load_assortment()
 
     def barman(self, pchat_title: str, puser_name: str, puser_title: str,
                pmessage_text: str) -> str:
+
         """Процедура разбора запроса пользователя."""
         assert pchat_title is not None, \
             "Assert: [barman.barman] Пропущен параметр <pchat_title> !"
@@ -171,7 +171,6 @@ class CBarman(prototype.CPrototype):
                 if self.is_master(puser_name):
 
                     self.reload()
-                    # print("> Barman успешно перегрузил содержимое бара.")
                     answer = "Ассортимент бара обновлён."
                 else:
 
@@ -193,6 +192,7 @@ class CBarman(prototype.CPrototype):
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если бармен может обработать эту команду"""
+
         assert pchat_title is not None, \
             "Assert: [barman.can_process] " \
             "Пропущен параметр <pchat_title> !"
@@ -242,25 +242,28 @@ class CBarman(prototype.CPrototype):
 
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если бармен разрешен на этом канале."""
+
         assert pchat_title is not None, \
             "Assert: [barman.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
         return UNIT_ID in self.config["chats"][pchat_title]
-        # return pchat_title in self.config[ENABLED_IN_CHATS_KEY]
+
 
     def is_master(self, puser_name: str) -> bool:
         """Проверяет, хозяин ли отдал команду."""
+
         return puser_name == self.config["master"]
 
-    def load_assortiment(self):
+    def load_assortment(self):
         """Загружает ассортимент бара."""
-        for item in ASSORTIMENT:
+        for item in ASSORTMENT:
 
             self.load_item(item)
-        print(f"> Barman успешно (пере)загрузил {len(ASSORTIMENT)} типов товаров.")
+        print(f"> Barman успешно (пере)загрузил {len(ASSORTMENT)} типов товаров.")
 
-    def load_item(self, pitem: dict):  # pmainkey: str, pkeys: tuple, pproperties: dict):
+    def load_item(self, pitem: dict):
         """Загружает одно наименование ассортимента бара."""
+
         assert pitem is not None, \
             "Assert: [barman.load_item] " \
             "Пропущен параметр <pitem> !"
@@ -273,16 +276,17 @@ class CBarman(prototype.CPrototype):
 
     def reload(self):  # , pchat_id: int, puser_name: str, puser_title):
         """Перегружает все содержимое бара."""
-        self.load_assortiment()
+        self.load_assortment()
 
     def serve_client(self, puser_name: str, pcommand: str):
         """Обслуживает клиентов."""
+
         assert puser_name is not None, \
             "Assert: [barman.serve_client] Пропущен параметр <puser_name> !"
         assert pcommand is not None, \
             "Assert: [barman.serve_client] Пропущен параметр <pcommand> !"
         answer: str = ""
-        for item in ASSORTIMENT:
+        for item in ASSORTMENT:
 
             if pcommand.strip() in item[COMMAND_KEY]:
 
