@@ -19,6 +19,7 @@ def parse_input(pmessage_text: str) -> list:
 
 def get_command(pword: str, pcommands : list) -> int:  # noqa
     """Распознает команду и возвращает её код, в случае неудачи - None."""
+
     assert pword is not None, \
         "Assert: [function.get_command] " \
         "No <pword> parameter specified!"
@@ -38,6 +39,7 @@ def get_command(pword: str, pcommands : list) -> int:  # noqa
 
 def load_from_file(pfile_name: str) -> list:
     """Загружает файл в список
+
     >>> load_from_file("data/bar/bar_test.txt")
     ['Test 1', 'Test 2', 'Test 3']
     >>> type(load_from_file("ABCDEF"))
@@ -63,7 +65,7 @@ def load_from_file(pfile_name: str) -> list:
 
 def screen_text(ptext: str) -> str:
     """Экранирует текст перед выводом в телеграм."""
-    # print(ptext)
+
     result_text: str = ptext.replace(".", f"{BACKSLASH}.")
     result_text = result_text.replace("-", f"{BACKSLASH}-")
     result_text = result_text.replace("!", f"{BACKSLASH}!")
@@ -72,11 +74,12 @@ def screen_text(ptext: str) -> str:
     result_text = result_text.replace("+", f"{BACKSLASH}+")
     result_text = result_text.replace("_", f"{BACKSLASH}_")
     result_text = result_text.replace("=", f"{BACKSLASH}=")
-    # print(result_text)
     return result_text
+
 
 def save_list(plist: list, pfile_name: str): # noqa
     """Сохраняет заданную книгу."""
+
     new_file_name: str = f"{pfile_name}_{dtime.now().strftime('%Y%m%d-%H%M%S')}"
     os.rename(pfile_name, new_file_name)
     with open(pfile_name, "w", encoding="utf8") as out_file:
