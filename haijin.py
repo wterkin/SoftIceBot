@@ -44,8 +44,8 @@ DELIMITER: str = f"{func.BACKSLASH}|"
 
 
 def get_command(pword: str) -> int:
-    """Распознает команду и возвращает её код, в случае неудачи - None.
-    """
+    """Распознает команду и возвращает её код, в случае неудачи - None."""
+
     assert pword is not None, \
         "Assert: [haijin.get_command] " \
         "Пропущен параметр <pword> !"
@@ -70,8 +70,10 @@ class CHaijin(prototype.CPrototype):
         self.hokku: list = []
         self.reload()
 
+
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если хайдзин может обработать эту команду."""
+
         assert pchat_title is not None, \
             "Assert: [haijin.can_process] " \
             "Пропущен параметр <pchat_title> !"
@@ -100,8 +102,10 @@ class CHaijin(prototype.CPrototype):
                         found = word_list[0] in SAVE_BOOK
         return found
 
+
     def format_hokku(self, ptext: str) -> str:
         """Форматирует хокку так, как нам хочется."""
+
         # *** Вырежем номер
         result_text: str = ""
         if "???" not in ptext:
@@ -126,14 +130,13 @@ class CHaijin(prototype.CPrototype):
                 result_text = f"{BOLD}{ITALIC}{result_text[:-1]}{ITALIC}{BOLD}{LF}" \
                               f"{AUTHOR_INDENT}{func.screen_text(author)} {SPOILER}" + \
                               f"{DELIMITER} {number} {DELIMITER} {len(self.hokku)} {SPOILER}"
-            else:
-
-                print(f"!!!!! {ptext} !!!!!!!!!!!!")
             return result_text
         return ptext
 
+
     def get_help(self, pchat_title: str) -> str:
         """Пользователь запросил список команд."""
+
         assert pchat_title is not None, \
             "Assert: [haijin.get_help] " \
             "Пропущен параметр <pchat_title> !"
@@ -142,15 +145,15 @@ class CHaijin(prototype.CPrototype):
 
             for idx, command in enumerate(HAIJIN_COMMANDS):
 
-                # if idx + 1 != len(HAIJIN_COMMANDS):
                 command_list += ", ".join(command) + HAIJIN_DESC[idx]
                 command_list += "\n"
-        # print(f"***** {func.screen_text(command_list)} **********")
 
         return func.screen_text(command_list)
 
+
     def get_hint(self, pchat_title: str) -> str:  # [arguments-differ]
         """Возвращает список команд, поддерживаемых модулем.  """
+
         assert pchat_title is not None, \
             "Assert: [haijin.get_hint] " \
             "Пропущен параметр <pchat_title> !"
@@ -159,8 +162,10 @@ class CHaijin(prototype.CPrototype):
             return cn.SCREENED + func.screen_text(", ".join(HINT))
         return ""
 
+
     def haijin(self, pchat_title, puser_name: str, puser_title: str, pmessage_text: str) -> str:
         """Процедура разбора запроса пользователя."""
+
         assert pchat_title is not None, \
             "Assert: [haijin.haijin] " \
             "Пропущен параметр <pchat_title> !"
@@ -210,13 +215,15 @@ class CHaijin(prototype.CPrototype):
             answer = f"{cn.SCREENED}{answer}"
         return answer
 
+
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если библиотекарь разрешен на этом канале."""
+
         assert pchat_title is not None, \
             "Assert: [haijin.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
         return UNIT_ID in self.config["chats"][pchat_title]
-        # return pchat_title in self.config[ENABLED_IN_CHATS_KEY]
+
 
     def is_master(self, puser_name, puser_title):
         """Проверяет, является ли пользователь хозяином бота."""
@@ -226,6 +233,7 @@ class CHaijin(prototype.CPrototype):
             return True, ""
         # *** Низзя
         return False, f"У вас нет на это прав, {puser_title}."
+
 
     def process_command(self, pcommand: list, puser_name: str, puser_title: str):
         """Обрабатывает пользовательские команды."""
@@ -244,9 +252,6 @@ class CHaijin(prototype.CPrototype):
                 if answer:
                     unformatted_answer = answer
                     answer = self.format_hokku(unformatted_answer)
-                    # print(unformatted_answer)
-                    # print(answer)
-                    # answer = ""
             elif command == ADD_HOKKU_CMD:
 
                 # *** Пользователь хочет добавить хокку в книгу
@@ -272,6 +277,7 @@ class CHaijin(prototype.CPrototype):
                     answer = (f"Извини, {puser_title}, "
                               f"только {self.config['master_name']} может удалять хокку")
         return answer, unformatted_answer
+
 
     def reload(self):
         """Перезагружает библиотеку."""

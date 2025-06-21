@@ -35,6 +35,7 @@ UNIT_ID = "librarian"
 
 def find_in_book(pbook: list, pword_list: list) -> str:
     """Ищет хокку или цитату в книге по заданной строке"""
+
     assert pbook is not None, \
         "Assert: [librarian.find_in_book] " \
         "Пропущен параметр <pbook> parameter !"
@@ -62,6 +63,7 @@ def find_in_book(pbook: list, pword_list: list) -> str:
 
 def get_command(pword: str) -> int:
     """Распознает команду и возвращает её код, в случае неудачи - None. """
+
     assert pword is not None, \
         "Assert: [librarian.get_command] " \
         "Пропущен параметр <pword> !"
@@ -77,6 +79,7 @@ def get_command(pword: str) -> int:
 
 def load_book_from_file(pfile_name: str) -> list:  # noqa
     """Загружает файл в список"""
+
     assert pfile_name is not None, \
         "Assert: [librarian.load_book_from_file] " \
         "Пропущен параметр <pfile_name> !"
@@ -95,6 +98,7 @@ def load_book_from_file(pfile_name: str) -> list:  # noqa
 
 def quote(pbook: list, pword_list: list) -> str:
     """ Возвращает хокку или цитату с заданным номером, если номер не задан, то случайную."""
+
     assert pbook is not None, \
         "Assert: [librarian.quote] " \
         "Пропущен параметр <pbook> !"
@@ -132,6 +136,7 @@ def quote(pbook: list, pword_list: list) -> str:
 
 def save_book(pbook: list, pbook_name: str): # noqa
     """Сохраняет заданную книгу."""
+
     assert pbook is not None, \
         "Assert: [librarian.save_book] " \
         "Пропущен параметр <pbook> !"
@@ -158,8 +163,10 @@ class CLibrarian(prototype.CPrototype):
         self.quotes: list = []
         self.reload()
 
+
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если библиотекарь может обработать эту команду."""
+
         assert pchat_title is not None, \
             "Assert: [librarian.can_process] " \
             "Пропущен параметр <pchat_title> !"
@@ -187,9 +194,11 @@ class CLibrarian(prototype.CPrototype):
                         found = word_list[0] in SAVE_LIBRARY
         return found
 
+
     def execute_quotes_commands(self, puser_name: str, puser_title: str,
                                 pword_list: list, pcommand: int) -> str:
         """Выполняет команды, касающиеся базы цитат."""
+
         assert pword_list is not None, \
             "Assert: [librarian.execute_quotes_commands] " \
             "Пропущен параметр <pword_list> !"
@@ -225,8 +234,10 @@ class CLibrarian(prototype.CPrototype):
             answer = find_in_book(self.quotes, pword_list)
         return answer
 
+
     def get_help(self, pchat_title: str) -> str:
         """Пользователь запросил список команд."""
+
         assert pchat_title is not None, \
             "Assert: [librarian.get_help] " \
             "No <pchat_title> parameter specified!"
@@ -238,8 +249,10 @@ class CLibrarian(prototype.CPrototype):
                 command_list += "\n"
         return command_list
 
+
     def get_hint(self, pchat_title: str) -> str:  # [arguments-differ]
         """Возвращает список команд, поддерживаемых модулем.  """
+
         assert pchat_title is not None, \
             "Assert: [librarian.get_hint] " \
             "Пропущен параметр <pchat_title> !"
@@ -248,13 +261,15 @@ class CLibrarian(prototype.CPrototype):
             return ", ".join(HINT)
         return ""
 
+
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если библиотекарь разрешен на этом канале."""
+
         assert pchat_title is not None, \
             "Assert: [librarian.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
         return UNIT_ID in self.config["chats"][pchat_title]
-        # return pchat_title in self.config[ENABLED_IN_CHATS_KEY]
+
 
     def is_master(self, puser_name, puser_title):
         """Проверяет, является ли пользователь хозяином бота."""
@@ -266,8 +281,10 @@ class CLibrarian(prototype.CPrototype):
         print(f"> Librarian: Запрос на удаление цитаты от нелегитимного лица {puser_title}.")
         return False, f"У вас нет на это прав, {puser_title}."
 
+
     def librarian(self, pchat_title, puser_name: str, puser_title: str, pmessage_text: str) -> str:
         """Процедура разбора запроса пользователя."""
+
         assert pchat_title is not None, \
             "Assert: [librarian.librarian] " \
             "Пропущен параметр <pchat_title> !"
@@ -314,6 +331,7 @@ class CLibrarian(prototype.CPrototype):
 
                 answer = self.get_help(pchat_title)
             else:
+
                 # *** Получим код команды
                 command = get_command(word_list[0])
                 # *** Не, цитату
@@ -322,10 +340,11 @@ class CLibrarian(prototype.CPrototype):
             if answer:
 
                 print("> Librarian отвечает: ", answer[:func.OUT_MSG_LOG_LEN])
-
         return answer
+
 
     def reload(self):
         """Перезагружает библиотеку."""
+
         self.quotes = load_book_from_file(self.data_path + QUOTES_FILE_NAME)
         print(f"> Librarian успешно (пере)загрузил {len(self.quotes)} цитат(ы)")

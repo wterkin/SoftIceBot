@@ -441,8 +441,6 @@ class CSoftIceBot:
 
                         # *** ... потом игрок
                         answer = self.gambler.gambler(rec[cn.MCHAT_TITLE],
-                                                      rec[cn.MUSER_NAME],
-                                                      rec[cn.MUSER_TITLE],
                                                       rec[cn.MTEXT]).strip()
                         dbg.dout(f"*** gambler [{answer}]")
                     if not answer:

@@ -25,7 +25,7 @@ THUMBS_DOWN: str = "👎🏻"
 
 
 class CGambler(prototype.CPrototype):
-    """Класс библиотекаря."""
+    """Класс игрока."""
 
     def __init__(self, pconfig: dict):
 
@@ -34,7 +34,7 @@ class CGambler(prototype.CPrototype):
 
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
-        """Возвращает True, если библиотекарь может обработать эту команду."""
+        """Возвращает True, если игрок может обработать эту команду."""
 
         assert pchat_title is not None, \
             "Assert: [librarian.can_process] " \
@@ -58,7 +58,7 @@ class CGambler(prototype.CPrototype):
 
                     found = word_list[0] in command
             if not found:
-                print(command)
+
                 for command in THROW_COIN_COMMANDS:
 
                     found = word_list[0] in command
@@ -251,7 +251,7 @@ class CGambler(prototype.CPrototype):
         return answer
 
 
-    def gambler(self, pchat_title, puser_name: str, puser_title: str, pmessage_text: str):
+    def gambler(self, pchat_title, pmessage_text: str):
         """Основной метод класса."""
 
         answer: str = ""

@@ -1,15 +1,12 @@
-#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль мажордома."""
 
-# from pathlib import Path
 import random
 import prototype
 import functions as func
 
 UNIT_ID = "majordomo"
-
 COMMANDS: list = ["greet", "gr", "привет", "пт"]
 MAJORDOMO_PATH: str = "majordomo/greetings.txt"
 
@@ -26,6 +23,7 @@ class CMajordomo(prototype.CPrototype):
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если модуль может обработать команду."""
+
         found: bool = False
         if self.is_enabled(pchat_title):
 
@@ -38,30 +36,40 @@ class CMajordomo(prototype.CPrototype):
                     break
         return found
 
+
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
+
         return self.get_hint(pchat_title)
+
 
     def get_hint(self, pchat_title: str) -> str:
         """Возвращает команду верхнего уровня, в ответ на которую
            модуль возвращает полный список команд, доступных пользователю."""
+
         if self.is_enabled(pchat_title):
 
             return ", ".join(COMMANDS)
         return ""
 
+
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
+
         assert pchat_title is not None, \
             "Assert: [welcomer.is_enabled] Пропущен параметр <pchat_title> !"
         return UNIT_ID in self.config["chats"][pchat_title]
 
+
     def reload(self):
         """Вызывает перезагрузку внешних данных модуля."""
+
         self.greetings = func.load_from_file(self.data_path)
+
 
     def majordomo(self, pchat_title, pmessage_text):
         """Главная функция модуля."""
+
         answer: str = ""
         word_list: list = func.parse_input(pmessage_text)
         if self.can_process(pchat_title, pmessage_text):
