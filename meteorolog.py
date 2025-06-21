@@ -39,6 +39,7 @@ RUSSIAN_DATE_FORMAT: str = "%d.%m.%Y"
 
 def get_wind_direction(pdegree):
     """Возвращает направление ветра."""
+
     directions: list = ['сев. ', 'св', ' вост.', 'юв', 'юг ', 'юз', ' зап.', 'сз']
     result: str = ""
     for i in range(0, 8):
@@ -47,8 +48,10 @@ def get_wind_direction(pdegree):
         min_degree = i * step - 45 / 2.
         max_degree = i * step + 45 / 2.
         if i == 0 and pdegree > 360 - 45 / 2.:
+
             pdegree = pdegree - 360
         if min_degree <= pdegree <= max_degree:
+
             result = directions[i]
             break
     return result
@@ -56,6 +59,7 @@ def get_wind_direction(pdegree):
 
 def parse_weather(pdata, preq_date):
     """Парсит данные погоды и формирует строку погоды."""
+
     min_temperature: int = 100
     max_temperature: int = 0
     min_pressure: int = 10000
@@ -129,10 +133,12 @@ class CMeteorolog(prototype.CPrototype):
         super().__init__()
         self.config = pconfig
 
+
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если метеоролог может обработать эту команду"""
 
         if self.is_enabled(pchat_title):
+
             word_list: list = func.parse_input(pmessage_text)
             return word_list[0] in WEATHER_COMMANDS or word_list[0] in HINT
         return False
@@ -140,6 +146,7 @@ class CMeteorolog(prototype.CPrototype):
     # Проверка наличия в базе информации о нужном населенном пункте
     def get_city_id(self, pcity_name: str, plang: str = "ru"):
         """Возвращает ID города"""
+
         city_id: int = 0
         try:
 
@@ -154,42 +161,53 @@ class CMeteorolog(prototype.CPrototype):
                 if len(data['list']) > 0:
 
                     city_id = data['list'][0]['id']
-        # except Exception as ex:
         except requests.TooManyRedirects as ex:
+
             print("Exception (find):", ex)
         except requests.Timeout as ex:
+
             print("Exception (find):", ex)
         except requests.HTTPError as ex:
+
             print("Exception (find):", ex)
         except requests.ConnectionError as ex:
+
             print("Exception (find):", ex)
         assert isinstance(city_id, int)
         return city_id
 
+
     def get_help(self, pchat_title: str) -> str:  # noqa
         """Пользователь запросил список команд."""
+
         if self.is_enabled(pchat_title):
+
             command_list: str = ", ".join(WEATHER_COMMANDS)
             command_list += "\n"
             return command_list
         return ""
 
+
     def get_hint(self, pchat_title: str) -> str:  # [arguments-differ]
         """Возвращает список команд, поддерживаемых модулем.  """
+
         assert pchat_title is not None, \
             "Assert: [meteorolog.get_hint] " \
             "No <pchat_title> parameter specified!"
-
         if self.is_enabled(pchat_title):
+
             return ", ".join(HINT)
         return ""
 
+
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если метеоролог разрешен на этом канале."""
+
         if pchat_title in self.config["chats"]:
 
             return UNIT_ID in self.config["chats"][pchat_title]
         return False
+
 
     def meteorolog(self, pchat_title: str, pmessage_text: str) -> str:
         """Процедура разбора запроса пользователя."""
@@ -232,10 +250,7 @@ class CMeteorolog(prototype.CPrototype):
                             # *** Вполне еще можно
                             date_str = now.strftime(RUSSIAN_DATE_FORMAT)
                             weather_str = self.request_weather(city_id, now)
-                    # print(f"***** {weather_str}")
                     # *** Если еще не поздно, то выдадим погоду, иначе дадим знать юзеру
-                    # answer = f"{city_name} : {date_str} : {weather_str}" if now.hour < 21 else
-                    #    answer = "Поздно уже, какая тебе погода??!"
                     if now.hour < 21:
 
                         answer = f"{city_name} : {date_str} : {weather_str}"
@@ -250,11 +265,15 @@ class CMeteorolog(prototype.CPrototype):
                 answer = "А в каком городе погода нужна?"
         return answer
 
+
     def reload(self):
+
         pass
+
 
     def request_weather(self, pcity_id, prequest_date: pdate.datetime, plang: str = "ru"):
         """Запрос погоды на завтра."""
+
         answer: str = ""
         try:
 
@@ -264,13 +283,16 @@ class CMeteorolog(prototype.CPrototype):
                                         'lang': plang, 'APPID': self.config["api_key"]},
                                timeout=READ_TIMEOUT).json()
             answer = parse_weather(data, prequest_date.date())
-
         except requests.TooManyRedirects as ex:
+
             print("Exception (find):", ex)
         except requests.Timeout as ex:
+
             print("Exception (find):", ex)
         except requests.HTTPError as ex:
+
             print("Exception (find):", ex)
         except requests.ConnectionError as ex:
+
             print("Exception (find):", ex)
         return answer
