@@ -172,7 +172,7 @@ class CSoftIceBot:
 
             self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
         # *** Открываем БД
-        print(self.data_path)
+        # print(self.data_path)
         self.database: database.CDataBase = database.CDataBase(self.config, self.data_path)
         if not self.database.exists():
 
@@ -226,8 +226,6 @@ class CSoftIceBot:
 
                     # *** Сообщение не протухло?
                     if self.is_message_actual():
-
-#                         print(f"{pmessage.from_user.id} : {pmessage.from_user.username.strip()}")
 
                         # *** Если это текстовое сообщение - обрабатываем в этой ветке.
                         if self.event[cn.MCONTENT_TYPE] == "text" and \
@@ -292,7 +290,7 @@ class CSoftIceBot:
         """Проверяет, есть ли ли этот чат в списке разрешенных."""
 
         answer: str = ""
-        print(self.config[ALLOWED_CHATS_KEY])
+        # print(self.config[ALLOWED_CHATS_KEY])
         # *** Если это не приват...
         chat_title: str = pevent.get(cn.MCHAT_TITLE)
         if chat_title is not None:
