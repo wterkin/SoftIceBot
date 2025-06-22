@@ -5,6 +5,8 @@
 from datetime import date, timedelta, datetime
 import prototype
 import functions as func
+import locale
+locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
 NEW_STYLE_OFFSET: int = 13
 EASTER_CMD_INDEX: int = 0
@@ -68,42 +70,45 @@ class CStarGazer(prototype.CPrototype):
 
         easter_date: date = calculate_easter(pnow_date.year).date()
         peter_paul_date: date = date(pnow_date.year, 7, 12)
-        pnow_date = date(pnow_date.year, 7, 1)
-        jul_greg_delta = timedelta(hours=JUL_GREG_CALENDAR_DIFF)
-        jul_now_date: date = pnow_date - jul_greg_delta
-        answer: str = "Сегодня " + pnow_date.strftime("%d %B")
+        # pnow_date = date(pnow_date.year, 7, 1)
+        jul_greg_delta = timedelta(days=JUL_GREG_CALENDAR_DIFF)
+        print(jul_greg_delta)
+        jul_now_date: date = (pnow_date - jul_greg_delta)
+        answer: str = "Сегодня " + pnow_date.strftime("%d %B %Y") + \
+        ", по старому стилю " + jul_now_date.strftime("%d %B %Y") + " "
         # print(easter_date)
-        # print(pnow_date)
-        # print(easter_date == pnow_date)
+        a= (pnow_date - easter_date)
+        print(a)
+        # print(pnow_date-jul_greg_delta)
         if easter_date > pnow_date:
 
             if pnow_date < datetime(pnow_date.year, 1, 7).date():
 
-                answer = "Рождественский пост."
+                answer += "Рождественский пост."
             elif pnow_date == datetime(pnow_date.year, 1, 7).date():
 
-                answer = "Рождество."
+                answer += "Рождество."
             elif datetime(pnow_date.year, 1, 7).date() < pnow_date < datetime(pnow_date.year, 1, 18).date():
 
-                answer = "Святки."
+                answer += "Святки."
             elif timedelta(days=56) <= (easter_date - pnow_date) <= timedelta(days=62):
 
-                answer = "Сырная седмица."
+                answer += "Сырная седмица."
             elif timedelta(days=7) <= (easter_date - pnow_date) <= timedelta(days=55):
 
-                answer = "Великий пост."
+                answer += "Великий пост."
             elif timedelta(days=1) <= (easter_date - pnow_date) <= timedelta(days=7):
 
-                answer = "Страстная седмица."
+                answer += "Страстная седмица."
         elif pnow_date == easter_date:
 
-            answer = "Пасха."
+            answer += "Пасха."
         elif (pnow_date - easter_date)  < timedelta(days=7):
                 
-            answer = "Светлая седмица."
-        elif pnow_date < peter_paul_date and (pnow_date - easter_date) < timedelta(days=57):
+            answer += "Светлая седмица."
+        elif pnow_date < peter_paul_date and (pnow_date - easter_date) > timedelta(days=57):
 	    
-            answer = "Петров пост"
+            answer += "Петров пост"
         return answer
 
 

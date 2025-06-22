@@ -2,6 +2,7 @@
     "proxy" : "",
     "master" : "Pet_Rovich",
     "master_name" : "Петрович",
+    "master_id" : "271228548",
     "alchemy_echo" : "0",
     "windows_data_folder" : "data/",
     "linux_data_folder" : "data/",

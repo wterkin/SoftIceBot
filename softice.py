@@ -294,7 +294,9 @@ class CSoftIceBot:
         answer: str = ""
         print(self.config[ALLOWED_CHATS_KEY])
         # *** Если это не приват...
-        if pevent[cn.MCHAT_TITLE] is not None:
+        chat_title: str = pevent.get(cn.MCHAT_TITLE)
+        if chat_title is not None:
+#         if pevent[cn.MCHAT_TITLE] is not None:
 
             # *** Если чата нет в списке разрешенных...
             if pevent[cn.MCHAT_TITLE] not in self.config[ALLOWED_CHATS_KEY]:
