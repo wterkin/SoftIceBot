@@ -13,22 +13,27 @@ class CPrototype:
     def __init__(self):
         pass
 
+
     @abstractmethod
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если модуль может обработать команду."""
 
+
     @abstractmethod
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
+
 
     @abstractmethod
     def get_hint(self, pchat_title: str) -> str:
         """Возвращает команду верхнего уровня, в ответ на которую
            модуль возвращает полный список команд, доступных пользователю."""
 
+
     @abstractmethod
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
+
 
     @abstractmethod
     def reload(self):

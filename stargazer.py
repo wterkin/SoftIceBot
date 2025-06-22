@@ -1,4 +1,3 @@
-#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль прототипа классов модулей бота."""
@@ -15,7 +14,6 @@ COMMANDS: tuple = (("пасха", "easter"),
                    ("дата", "date"),
                    ("день", "day"))
 HINTS: tuple = ("календарь", "кл", "calendar", "cl")
-# ENABLED_IN_CHATS_KEY: str = "stargazer_chats"
 UNIT_ID = "stargazer"
 RUSSIAN_DATE_FORMAT = "%d.%m.%Y"
 STARGAZER_FOLDER: str = "stargazer/"
@@ -23,10 +21,12 @@ LOW_MARGIN: int = 1899
 HIGH_MARGIN: int = 2100
 CHURCH_CALENDAR: str = "calendar.txt"
 CIVILIAN_CALENDAR: str = "dates.txt"
+JUL_GREG_CALENDAR_DIFF: int = 13
 
 
 def calculate_easter(pyear):
     """Вычисляет дату пасхи на заданный год."""
+
     first_value: int = (19 * (pyear % 19) + 15) % 30
     second_value: int = (2 * (pyear % 4) + 4 * (pyear % 7) + 6 * first_value + 6) % 7
     month: int
@@ -37,6 +37,7 @@ def calculate_easter(pyear):
         month = 4
         day = (first_value + second_value) - 9 + NEW_STYLE_OFFSET
         if day > 30:
+
             month += 1
             day = day - 30
     else:
@@ -45,39 +46,32 @@ def calculate_easter(pyear):
         month = 3
         day = first_value + second_value + 22 + NEW_STYLE_OFFSET
         if day > 31:
+
             month += 1
             day = day - 31
     return datetime(pyear, month, day)
 
 
-# def gather_day_and_month():
-#     """Возвращает текущий день и месяц в формате DD/MM"""
-#     now_date: date = date.today()
-#     # day: int = now_date.day
-#     # day_str = str(day)
-#     day: str = f"{now_date.day:02}/{now_date.month:02}"
-#     month: int = date.today().month
-#     month_str = str(month)
-#     if month < 10:
-#         month_str = "0" + month_str
-#     today: str = day_str + "/" + month_str
-#     return today
-#
-
 class CStarGazer(prototype.CPrototype):
     """Класс модуля звездочёта."""
 
+
     def __init__(self, pconfig, pdata_path):
+
         super().__init__()
         self.config = pconfig
         self.data_path = pdata_path + STARGAZER_FOLDER
 
+
     def additional_info(self, pnow_date):
         """Возвращает дополнительные сведения об указанном дне."""
-        answer: str = ""
+
         easter_date: date = calculate_easter(pnow_date.year).date()
-        peter_paul_date: date = datetime(pnow_date.year, 7, 12)
-        pnow_date = datetime(pnow_date.year, 7, 1)
+        peter_paul_date: date = date(pnow_date.year, 7, 12)
+        pnow_date = date(pnow_date.year, 7, 1)
+        jul_greg_delta = timedelta(hours=JUL_GREG_CALENDAR_DIFF)
+        jul_now_date: date = pnow_date - jul_greg_delta
+        answer: str = "Сегодня " + pnow_date.strftime("%d %B")
         # print(easter_date)
         # print(pnow_date)
         # print(easter_date == pnow_date)
@@ -112,6 +106,7 @@ class CStarGazer(prototype.CPrototype):
             answer = "Петров пост"
         return answer
 
+
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если модуль может обработать команду."""
         assert pchat_title is not None, \
@@ -137,6 +132,7 @@ class CStarGazer(prototype.CPrototype):
 
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
+
         assert pchat_title is not None, \
             "Assert: [stargazer.get_help] " \
             "No <pchat_title> parameter specified!"
@@ -180,9 +176,11 @@ class CStarGazer(prototype.CPrototype):
         year: int
         now_date: date = date.today()
         today: str
+        print("*1")
         if self.can_process(pchat_title, pmessage_text):
 
             # *** Возможно, запросили меню.
+            print("*2")
             if word_list[0] in HINTS:
 
                 answer = self.get_help(pchat_title)
@@ -215,6 +213,7 @@ class CStarGazer(prototype.CPrototype):
             # *** Запросили церковные праздники
             elif word_list[0] in COMMANDS[DAY_CMD_INDEX]:
 
+                print("*3")
                 today = f"{now_date.day:02}/{now_date.month:02}"
                 answer = self.search_in_calendar(CHURCH_CALENDAR, today)
                 answer += self.additional_info(now_date)

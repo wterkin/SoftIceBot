@@ -156,7 +156,9 @@ class CSoftIceBot:
         if os.path.exists(self.running_flag):
 
             print("* Перезапуск после падения либо по требованию.")
+            self.robot.send_message(self.config["master_id"], "Я внезапно упал. Вот несчастье.")
         else:
+            # 91.240.87.48
 
             with open(self.running_flag, 'tw', encoding='utf-8'):
 
@@ -224,6 +226,8 @@ class CSoftIceBot:
 
                     # *** Сообщение не протухло?
                     if self.is_message_actual():
+
+#                         print(f"{pmessage.from_user.id} : {pmessage.from_user.username.strip()}")
 
                         # *** Если это текстовое сообщение - обрабатываем в этой ветке.
                         if self.event[cn.MCONTENT_TYPE] == "text" and \
