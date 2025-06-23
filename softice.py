@@ -156,14 +156,13 @@ class CSoftIceBot:
         if os.path.exists(self.running_flag):
 
             print("* Перезапуск после падения либо по требованию.")
-            self.robot.send_message(self.config["master_id"], "Я внезапно упал. Вот несчастье.")
         else:
             # 91.240.87.48
 
             with open(self.running_flag, 'tw', encoding='utf-8'):
 
-                # ***  ничего не делаем, просто создаём файл
-                pass
+                # ***  оповещаем хозяина
+                self.robot.send_message(self.config["master_id"], "Я внезапно упал. Вот несчастье.")
         # *** Где у нас данные лежат?
         if platform in ("linux", "linux2"):
 
