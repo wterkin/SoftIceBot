@@ -11,14 +11,10 @@ import functions as func
 import prototype
 
 # *** Путь к файлам Библии
-# BIBLE_PATH: str = "data/bible/"
 THEOLOG_FOLDER: str = "theolog/"
 # *** Константы частей сообщения
 COMMAND_ARG: int = 0
 LINE_ARG: int = 1
-
-# *** Основные команды X
-# MAIN_COMMANDS: list = ["книги", "books", "вз", "нз"]
 
 # *** Список книг Библии
 BIBLE_BOOKS: list = [["бытие", "быт", "Книга Бытия"],
@@ -89,7 +85,6 @@ BIBLE_BOOKS: list = [["бытие", "быт", "Книга Бытия"],
                      ["откровение", "откр", "Откровение Иоанна Богослова"]]
 
 # *** Ключ для списка доступных каналов в словаре конфига
-# CHANNEL_LIST_KEY: str = "theolog_chats"
 UNIT_ID = "theolog"
 
 # *** Команды поиска текста по книгам Библии
@@ -110,6 +105,7 @@ FULL_OUTPUT = "-f"
 
 def search_in_book(pbook_file: str, pbook_title: str, pphrase: str):
     """Ищет заданную строку в заданном файле."""
+
     result_list: list = []
     with open(pbook_file, "r", encoding="utf-8") as book_file:
 
@@ -135,12 +131,15 @@ class CTheolog(prototype.CPrototype):
 
     def __init__(self, pconfig: dict, pdata_path):
         """"Конструктор."""
+
         super().__init__()
         self.config: dict = pconfig
         self.data_path: str = pdata_path + THEOLOG_FOLDER
 
+
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если теолог может обработать эту команду."""
+
         assert pchat_title is not None, \
             "Assert: [theolog.can_process] No <pchat_title> parameter specified!"
         assert pmessage_text is not None, \
@@ -150,38 +149,20 @@ class CTheolog(prototype.CPrototype):
             word_list: list = func.parse_input(pmessage_text)
             if word_list[0].lower() in THEOLOG_HINT:
 
-                # print(word_list[0].lower(), THEOLOG_HINT)
                 return True
 
             for book in BIBLE_BOOKS:
 
                 if word_list[0].lower() in book:
+
                     return True
         return False
 
-    # def execute_quote(self, pbook_idx: int, pbook_name: str, pverse: str,
-    # poutput_count: int) -> str:  # noqa
-    #     """Выполняет поиск заданной главы в Библии."""
-    #     assert pbook_name is not None, \
-    #         "Assert: [theolog.execute_quote] No <pbook_name> parameter specified!"
-    #     message: str = ""
-    #     # for book_idx, book in enumerate(BIBLE_BOOKS):
-    #
-    #     # if pbook_name.lower() in book:
-    #
-    #     message = self.find_in_book(pbook_idx, pbook_name, pverse, poutput_count)
-    #     # if message:
-    #     #
-    #     #     break
-    #     if not message:
-    #
-    #         message = "Нет такой главы и/или стиха в этой книге."
-    #
-    #     return message
 
     def find_in_book(self, pbook_idx: int, pbook_name: str, pchapter: str, pverse: str,
                      poutput_count: int) -> str:  # noqa
         """Ищет заданную строку в файле."""
+
         assert pbook_idx is not None, \
             "Assert: [theolog.find_in_book] No <pbook_idx> parameter specified!"
         assert pverse is not None, \
@@ -222,6 +203,7 @@ class CTheolog(prototype.CPrototype):
                         break
         return answer
 
+
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд, поддерживаемых модулем."""
 
@@ -238,8 +220,10 @@ class CTheolog(prototype.CPrototype):
                     books += f"{book[0]}({book[1]}), "
         return books
 
+
     def get_hint(self, pchat_title: str) -> str:  # [arguments-differ]
         """Возвращает список команд, поддерживаемых модулем."""
+
         assert pchat_title is not None, \
             "Assert: [theolog.get_hint] " \
             "No <pchat_title> parameter specified!"
@@ -253,9 +237,11 @@ class CTheolog(prototype.CPrototype):
             return ", ".join(hint)
         return ""
 
+
     def global_search(self, ptestament: str, pphrase: str,
                       pfull_output: bool = False, poutput_count: int = 0) -> str:  # noqa
         """Ищет заданную строку по всем книгам заданного завета"""
+
         assert ptestament is not None, \
             "Assert: [theolog.global_search] No <ptestament> parameter specified!"
         assert pphrase is not None, \
@@ -263,12 +249,12 @@ class CTheolog(prototype.CPrototype):
         result_list: list = []
         parsed_line: list
         answer: str = ""
-        # book_name: str = ""
         search_range = OLD_TESTAMENT_BOOKS
         if ptestament == NEW_TESTAMENT:
 
             search_range = NEW_TESTAMENT_BOOKS
         for book in search_range:
+
             book_title: str = BIBLE_BOOKS[book-1][2]
             book_name = f"{self.data_path}{book}.txt"
             with open(book_name, "r", encoding="utf-8") as book_file:
@@ -297,25 +283,26 @@ class CTheolog(prototype.CPrototype):
                 answer = random.choice(result_list)
         return answer
 
+
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если бармен разрешен на этом канале."""
+
         assert pchat_title is not None, \
             "Assert: [theolog.is_enabled] No <pchat_title> parameter specified!"
         return UNIT_ID in self.config["chats"][pchat_title]
-        # return pchat_title in self.config[CHANNEL_LIST_KEY]
+
 
     def reload(self):
         pass
 
+
     def theolog(self, pchat_title: str, pmessage_text: str) -> str:
         """Обрабатывает запросы теолога."""
+
         assert pchat_title is not None, \
             "Assert: [theolog.theolog] No <pchat_title> parameter specified!"
         answer: str = ""
-        # pmessage_text
-        # print(pmessage_text)
         word_list: list = func.parse_input(pmessage_text.replace(":", " "))
-        # print(word_list)
         verse: str = ""
         param_count = len(word_list)
         book_name: str
@@ -339,7 +326,6 @@ class CTheolog(prototype.CPrototype):
                     # *** ..получим команду.
                     testament = word_list[0]
 
-                    # phrase = " ".join(word_list[1:]).lower()
                     # *** Нет ли там параметров выдачи?
                     for word in word_list:
 
@@ -375,18 +361,13 @@ class CTheolog(prototype.CPrototype):
                 else:
 
                     # *** Книгу и главу
-                    # print("word_list ",word_list)
                     book_name = word_list[0].lower()
-                    # print("book_name ", book_name)
                     book_idx: int = 0
-                    # chapter = word_list[1]
                     # *** Переберем всё
                     for idx, book in enumerate(BIBLE_BOOKS):
 
-                        # print("book ", book)
-                        # print("bookname ", book_name)
                         if book_name in book:
-                            print("-------------------")
+
                             book_idx = idx
                             book_name = book[2]
                             break
