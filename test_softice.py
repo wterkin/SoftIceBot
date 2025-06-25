@@ -3,12 +3,22 @@ import softice
 
 
 class CTestSoftIceBot(TestCase):
+
     def setUp(self) -> None:
+
         print("-"*40)
         print("* Creating bot instance")
         self.bot = softice.CSoftIceBot()
         print("* Loading demo config")
-        self.bot.load_config("config.sample.json")
+        self.bot.load_config("unittest_config.json")
+
+    def test_is_foreign_command(self):
+
+        # TrueMafiaBot
+        print("+ test_is_foreign_command:TrueMafiaBot, ok")
+        self.assertEqual(self.is_foreign_command ("TrueMafiaBot"), True)
+        print("+ test_is_foreign_command:SuperPuperBot, ok")
+        self.assertEqual(self.is_foreign_command ("SuperPuperBot"), True)
 
     def test_is_master(self):
         print("+ test_is_master:username, ok")

@@ -44,7 +44,10 @@ WINDOWS_DATA_FOLDER_KEY: str = "windows_data_folder"
 TOKEN_KEY: str = "token"
 
 CONFIG_FILE_NAME: str = "config.json"
-TEST_CONFIG_FILE_NAME: str = "test_config.json"
+TRY_CONFIG_FILE_NAME: str = "try_config.json"
+TRY_RUN_FLAG: str = "try.flg"
+UNITTEST_CONFIG_NAME: str = "unittest_config.json"
+UNITTEST_RUN_FLAG: str = "unittest.flg"
 COMMAND_SIGN: str = "!"
 HELP_MESSAGE: str = "В настоящий момент я понимаю только следующие группы команд: \n"
 EVENTS: list = ["text", "sticker", "photo", "audio", "video", "video_note", "voice"]
@@ -65,7 +68,6 @@ RESTART_BY_DEMAND: int = 2
 BOT_STATUS: int = CONTINUE_RUNNING
 RUNNING_FLAG: str = "running.flg"
 LEGAL_EXITING_FLAG: str = "exiting.flg"
-TEST_RUN_FLAG: str = "test.flg"
 SLEEP_BEFORE_EXIT_BY_ERROR: int = 10
 ANSWERS_LOG: str = "logs/answers.log"
 
@@ -130,10 +132,14 @@ class CSoftIceBot:
         self.event: dict = {}
         self.config: dict = {}
         self.config_is_correct: bool = False
-        if os.path.exists(os.getcwd() + "/flags/" + TEST_RUN_FLAG):
+        if os.path.exists(os.getcwd() + "/flags/" + UNITTEST_RUN_FLAG):
 
-            self.config_is_correct = self.load_config(TEST_CONFIG_FILE_NAME)
-            print("** Using test config")
+            self.config_is_correct = self.load_config(UNITTEST_CONFIG_NAME)
+            print("** Using unittest config")
+        elif os.path.exists(os.getcwd() + "/flags/" + TRY_RUN_FLAG):
+
+            self.config_is_correct = self.load_config(TRY_CONFIG_FILE_NAME)
+            print("** Using try config")
         else:
 
             self.config_is_correct = self.load_config(CONFIG_FILE_NAME)
