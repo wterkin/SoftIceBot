@@ -9,8 +9,8 @@ class CTestSoftIceBot(TestCase):
         print("-"*40)
         print("* Creating bot instance")
         self.bot = softice.CSoftIceBot()
-        print("* Loading demo config")
-        self.bot.load_config("unittest_config.json")
+        # print("* Loading demo config")
+        # self.bot.load_config("unittest_config.json")
 
     def test_is_foreign_command(self):
 

@@ -4,7 +4,7 @@
     "master_name":"usertitle",
     "windows_data_folder":"test_data/",
     "linux_data_folder":"test_data/",
-    "token":"here must be your telegram token",
+    "token":"heremustbe:yourtelegramtoken",
     "api_key": "here must be your openweathermap api key", 
     "babbler_period":"1",
     "allowed_chats":   ["superchat","megachat"],
