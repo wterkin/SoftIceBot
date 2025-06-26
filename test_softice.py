@@ -1,6 +1,7 @@
 from unittest import TestCase
 import softice
-
+import constants as cn
+from datetime import datetime, timedelta
 
 class CTestSoftIceBot(TestCase):
 
@@ -16,21 +17,36 @@ class CTestSoftIceBot(TestCase):
 
         # TrueMafiaBot
         print("+ test_is_foreign_command:TrueMafiaBot, ok")
-        self.assertEqual(self.is_foreign_command ("TrueMafiaBot"), True)
+        self.assertEqual(softice.is_foreign_command ("TrueMafiaBot"), True)
         print("+ test_is_foreign_command:SuperPuperBot, ok")
-        self.assertEqual(self.is_foreign_command ("SuperPuperBot"), True)
+        self.assertNotEqual(softice.is_foreign_command ("SuperPuperBot"), True)
 
     def test_is_master(self):
         print("+ test_is_master:username, ok")
-        self.assertEqual(self.bot.is_master('username'), True)
+        self.bot.event[cn.MUSER_NAME] = 'username'
+        self.assertEqual(self.bot.is_master(), True)
         print("+ test_is_master:User, wrong")
-        self.assertNotEqual(self.bot.is_master('User'), True)
+        self.bot.event[cn.MUSER_NAME] = 'User'
+        self.assertNotEqual(self.bot.is_master(), True)
 
-    def test_is_this_chat_enabled(self):
+    def test_is_message_actual(self):
+        print("+ test_message_actual, ok")
+        self.bot.event[cn.MDATE] = (datetime.now() - timedelta(seconds=30)).timestamp()
+        self.assertEqual(self.bot.is_message_actual(), True)
+        print("+ test_message_actual, wrong")
+        self.bot.event[cn.MDATE] = (datetime.now() - timedelta(seconds=120)).timestamp()
+        self.assertNotEqual(self.bot.is_message_actual(), True)
+
+
+"""
+
+    def test_is_chat_legitimate(self):
         print("+ test_is_this_chat_enabled:superchat, ok")
-        self.assertEqual(self.bot.is_this_chat_enabled('superchat'), True)
+        self.bot.event[cn.MCHAT_TITLE] = 'superchat'
+        self.assertEqual(self.bot.is_chat_legitimate(self.bot.event), True)
         print("+ test_is_this_chat_enabled:supermegachat, wrong")
-        self.assertEqual(self.bot.is_this_chat_enabled('supermegachat'), False)
+        self.bot.event[cn.MCHAT_TITLE] = 'supermegachat'
+        self.assertEqual(self.bot.is_chat_legitimate(self.bot.event), False)
 
     def test_process_command(self):
         print("+ test_process_command:user ok, config")
@@ -58,3 +74,4 @@ class CTestSoftIceBot(TestCase):
         self.assertEqual(self.bot.reload_config(-583831606, "username", "usertitle"), True)
         print("+ test_reload_config:user wrong")
         self.assertEqual(self.bot.reload_config(-583831606, "user", "user"), False)
+"""

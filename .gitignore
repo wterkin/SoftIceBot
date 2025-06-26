@@ -10,9 +10,11 @@ __pycache__/*
 trash/*
 .idea/*
 config.json
+config.json.*
 config.main.json
 unittest_config.json
 try_config.json
+*.db
 GPL-3
 .Xauthority
 .bash*

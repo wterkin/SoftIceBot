@@ -161,6 +161,8 @@ class CSoftIceBot:
         self.legal_exiting_flag: str = os.getcwd() + "/flags/" + LEGAL_EXITING_FLAG
         if os.path.exists(self.running_flag):
 
+
+
             print("* Перезапуск после падения либо по требованию.")
         else:
             # 91.240.87.48
@@ -182,7 +184,7 @@ class CSoftIceBot:
         if not self.database.exists():
 
             # *** А нету ещё БД, создавать нужно.
-            database.create()
+            self.database.create()
         # *** Включаем логирование
         log_name: str = './logs/softice.log'
         print(f"* Создаём файл журнала {log_name} с уровнем {self.config[LOGGING_KEY]}")
@@ -287,6 +289,7 @@ class CSoftIceBot:
 
             self.msg_rec[cn.MUSER_LASTNAME] = ""
         self.msg_rec[cn.MDATE] = pmessage.date
+        # print(f"!!!!!!!!! {pmessage.date}")
         self.msg_rec[cn.MCONTENT_TYPE] = pmessage.content_type
         self.msg_rec[cn.MMESSAGE_ID] = pmessage.message_id
 
@@ -295,14 +298,12 @@ class CSoftIceBot:
         """Проверяет, есть ли ли этот чат в списке разрешенных."""
 
         answer: str = ""
-        # print(self.config[ALLOWED_CHATS_KEY])
         # *** Если это не приват...
         chat_title: str = pevent.get(cn.MCHAT_TITLE)
         if chat_title is not None:
-#         if pevent[cn.MCHAT_TITLE] is not None:
 
             # *** Если чата нет в списке разрешенных...
-            if pevent[cn.MCHAT_TITLE] not in self.config[ALLOWED_CHATS_KEY]:
+            if chat_title not in self.config[ALLOWED_CHATS_KEY]:
 
                 # *** Бота привели на чужой канал. Выходим.
                 self.robot.send_message(pevent[cn.MCHAT_ID],
@@ -312,6 +313,7 @@ class CSoftIceBot:
                       f"бота в чате {pevent[cn.MCHAT_TITLE]}.")
                 self.logger.warning("Попытка нелегитимного использования бота в чате %s.",
                                     pevent[cn.MCHAT_TITLE])
+
         else:
             answer = "Приваты с ботом запрещены."
 
@@ -332,6 +334,8 @@ class CSoftIceBot:
 
         date_time: datetime = datetime.fromtimestamp(self.event[cn.MDATE])
         return (datetime.now() - date_time).total_seconds() < 60
+
+
 
 
     def load_config(self, pconfig_name: str):

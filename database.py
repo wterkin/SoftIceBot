@@ -213,11 +213,6 @@ class CRights(CAncestor):
                    Is admin:{self.fadmin}"""
 
 
-def create():
-    """Создает или изменяет БД в соответствии с описанной в классах структурой."""
-
-    Base.metadata.create_all()
-
 
 class CDataBase:
     """Класс."""
@@ -268,6 +263,13 @@ class CDataBase:
         session.configure(bind=self.engine)
         self.session = session()
         Base.metadata.bind = self.engine
+
+
+    def create(self):
+        """Создает или изменяет БД в соответствии с описанной в классах структурой."""
+
+        Base.metadata.create_all(self.engine)
+
 
     def disconnect(self):
 
