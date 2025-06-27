@@ -70,6 +70,8 @@ RUNNING_FLAG: str = "running.flg"
 LEGAL_EXITING_FLAG: str = "exiting.flg"
 SLEEP_BEFORE_EXIT_BY_ERROR: int = 10
 ANSWERS_LOG: str = "logs/answers.log"
+PRIVATE_IS_DISABLED_MSG: str = "Приваты с ботом запрещены."
+NON_LEGITIMATE_CHAT_MSG: str = "Запрещено."
 
 class CQuitByDemand(Exception):
     """Исключение выхода."""
@@ -148,10 +150,15 @@ class CSoftIceBot:
 
             self.lock: bool = False
             self.silent: bool = False
+
 	    # *** Нужно ли работать через прокси?
         if self.config["proxy"]:
 
             apihelper.proxy = {'https': self.config["proxy"]}
+        if int(self.config["debugging"]) == 1:
+
+            global debug_state
+            dbg.debug_state = True
 	    # *** Создаём собственно бота.
         self.robot: telebot.TeleBot = telebot.TeleBot(self.config[TOKEN_KEY])
         self.bot_status: int = CONTINUE_RUNNING
@@ -160,8 +167,6 @@ class CSoftIceBot:
         # *** Определим флаг выхода по требованию
         self.legal_exiting_flag: str = os.getcwd() + "/flags/" + LEGAL_EXITING_FLAG
         if os.path.exists(self.running_flag):
-
-
 
             print("* Перезапуск после падения либо по требованию.")
         else:
@@ -223,11 +228,12 @@ class CSoftIceBot:
             # *** Вытаскиваем из сообщения нужные поля
             self.decode_message(pmessage)
             # if not self.msg_rec[cn.MPROCESSED]:
-
+            dbg.dout(f"si:pm:{self.msg_rec[cn.MCHAT_ID]}")
             if not self.lock:
 
                 self.event = copy.deepcopy(self.msg_rec)
                 # *** Проверим, легитимный ли этот чат
+                dbg.dout("si:pm:2")
                 answer = self.is_chat_legitimate(self.event).strip()
                 if not answer:
 
@@ -299,7 +305,10 @@ class CSoftIceBot:
 
         answer: str = ""
         # *** Если это не приват...
+
+        # print("***** ", pevent[cn.MCHAT_ID])
         chat_title: str = pevent.get(cn.MCHAT_TITLE)
+        dbg.dout(f"si:icl:{chat_title=}, {self.config[ALLOWED_CHATS_KEY]=}")
         if chat_title is not None:
 
             # *** Если чата нет в списке разрешенных...
@@ -313,9 +322,9 @@ class CSoftIceBot:
                       f"бота в чате {pevent[cn.MCHAT_TITLE]}.")
                 self.logger.warning("Попытка нелегитимного использования бота в чате %s.",
                                     pevent[cn.MCHAT_TITLE])
-
+                answer = NON_LEGITIMATE_CHAT_MSG
         else:
-            answer = "Приваты с ботом запрещены."
+            answer = PRIVATE_IS_DISABLED_MSG
 
         return answer
 

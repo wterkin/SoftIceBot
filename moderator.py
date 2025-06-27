@@ -6,6 +6,7 @@ from pathlib import Path
 import functions as func
 import prototype
 import constants as cn
+import debug as dbg
 
 RELOAD_BAD_WORDS: list = ["bwreload", "bwrl"]
 HINT = ["адм", "adm"]
@@ -125,7 +126,7 @@ class CModerator(prototype.CPrototype):
 
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
-
+        # dbg.dout(f"mdr:isen:{self.config['chats']}")
         return UNIT_ID in self.config["chats"][pchat_title]
 
 
