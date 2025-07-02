@@ -2,7 +2,7 @@ from unittest import TestCase
 import softice
 import constants as cn
 from datetime import datetime, timedelta
-
+from telebot import types as bt
 class CTestSoftIceBot(TestCase):
 
 
@@ -12,6 +12,14 @@ class CTestSoftIceBot(TestCase):
         print("* Creating bot instance")
         self.bot = softice.CSoftIceBot()
 
+    def test_decode_message(self):
+
+        message: bt.Message = bt.Message(1,1)
+        message.text = 'привет'
+        softice.decode_message(message)
+        self.assertNotEqual(self.msg_rec[cn.MTEXT], "")
+        # 'message_id', 'from_user', 'date', 'chat', 'content_type',
+        #'options', and 'json_string'
 
     def test_is_foreign_command(self):
 

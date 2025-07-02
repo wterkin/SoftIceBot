@@ -268,12 +268,16 @@ class CSoftIceBot:
     def decode_message(self, pmessage):
         """Декодирует нужные поля сообщения в словарь."""
 
+        # *** Сбрасываем флаг обработанности сообщения
         self.msg_rec[cn.MPROCESSED] = False
+        # Если текст сообщения не пустой - обрабатываем
         if pmessage.text:
 
             text: str = pmessage.text.strip()
             self.msg_rec[cn.MCOMMAND] = text[1:]
-            self.msg_rec[cn.MTEXT] = pmessage.text.strip()
+            # self.msg_rec[cn.MTEXT] = pmessage.text.strip()
+            self.msg_rec[cn.MTEXT] = text
+
         else:
 
             self.msg_rec[cn.MCOMMAND] = ""
@@ -324,7 +328,6 @@ class CSoftIceBot:
                       f"бота в чате {self.event[cn.MCHAT_TITLE]}.")
                 self.logger.warning("Попытка нелегитимного использования бота в чате %s.",
                                     self.event[cn.MCHAT_TITLE])
-                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 answer = NON_LEGITIMATE_CHAT_MSG
         else:
             answer = PRIVATE_IS_DISABLED_MSG
