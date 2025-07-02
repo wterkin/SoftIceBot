@@ -149,7 +149,7 @@ class CSoftIceBot:
         if self.config_is_correct:
 
             self.lock: bool = False
-            self.silent: bool = False
+        self.silent: bool = False
 
 	    # *** Нужно ли работать через прокси?
         if self.config["proxy"]:
@@ -157,8 +157,15 @@ class CSoftIceBot:
             apihelper.proxy = {'https': self.config["proxy"]}
         if int(self.config["debugging"]) == 1:
 
-            global debug_state
+            # global debug_state
             dbg.debug_state = True
+
+        # *** Проверяем, не тестирование ли это
+        self.testing: bool = False
+        testing = self.config.get("testing")
+        if testing is not None:
+
+            self.testing = int(testing) == 1
 	    # *** Создаём собственно бота.
         self.robot: telebot.TeleBot = telebot.TeleBot(self.config[TOKEN_KEY])
         self.bot_status: int = CONTINUE_RUNNING
@@ -234,7 +241,7 @@ class CSoftIceBot:
                 self.event = copy.deepcopy(self.msg_rec)
                 # *** Проверим, легитимный ли этот чат
                 dbg.dout("si:pm:2")
-                answer = self.is_chat_legitimate(self.event).strip()
+                answer = self.is_chat_legitimate().strip()
                 if not answer:
 
                     # *** Сообщение не протухло?
@@ -300,14 +307,14 @@ class CSoftIceBot:
         self.msg_rec[cn.MMESSAGE_ID] = pmessage.message_id
 
 
-    def is_chat_legitimate(self, pevent) -> str:
+    def is_chat_legitimate(self) -> str:
         """Проверяет, есть ли ли этот чат в списке разрешенных."""
 
         answer: str = ""
         # *** Если это не приват...
 
         # print("***** ", pevent[cn.MCHAT_ID])
-        chat_title: str = pevent.get(cn.MCHAT_TITLE)
+        chat_title: str = self.event.get(cn.MCHAT_TITLE)
         dbg.dout(f"si:icl:{chat_title=}, {self.config[ALLOWED_CHATS_KEY]=}")
         if chat_title is not None:
 
@@ -315,13 +322,12 @@ class CSoftIceBot:
             if chat_title not in self.config[ALLOWED_CHATS_KEY]:
 
                 # *** Бота привели на чужой канал. Выходим.
-                self.robot.send_message(pevent[cn.MCHAT_ID],
-                                        "Вашего чата нет в списке разрешённых. Чао!")
-                self.robot.leave_chat(pevent[cn.MCHAT_ID])
+                self.say("Вашего чата нет в списке разрешённых. Чао!")
+                self.robot.leave_chat(self.event[cn.MCHAT_ID])
                 print("* Попытка нелегитимного использования "
-                      f"бота в чате {pevent[cn.MCHAT_TITLE]}.")
+                      f"бота в чате {self.event[cn.MCHAT_TITLE]}.")
                 self.logger.warning("Попытка нелегитимного использования бота в чате %s.",
-                                    pevent[cn.MCHAT_TITLE])
+                                    self.event[cn.MCHAT_TITLE])
                 answer = NON_LEGITIMATE_CHAT_MSG
         else:
             answer = PRIVATE_IS_DISABLED_MSG
@@ -345,6 +351,12 @@ class CSoftIceBot:
         return (datetime.now() - date_time).total_seconds() < 60
 
 
+    def leave_chat(self, pchat_id):
+        """Покидает указанный чат."""
+
+        if not self.testing:
+
+            self.robot.leave_chat(pchat_id)
 
 
     def load_config(self, pconfig_name: str):
@@ -385,7 +397,7 @@ class CSoftIceBot:
             answer: str = self.send_help()
             if answer:
 
-                self.robot.send_message(self.event[cn.MCHAT_ID], answer)
+                self.say(answer)
             result = True
         # *** Нет. Запросили рестарт?
         elif self.event[cn.MCOMMAND] in RESTART_COMMAND:
@@ -396,18 +408,18 @@ class CSoftIceBot:
 
             if self.is_master():
 
-                silent = True
+                self.silent = True
             else:
 
-                self.robot.send_message(self.event[cn.MCHAT_ID], "Да щаз, так я и заткнулся.")
+                self.say("Да щаз, так я и заткнулся.")
         elif self.event[cn.MCOMMAND] in UNMUTE_COMMAND:
 
             if self.is_master():
 
-                silent = False
+                self.silent = False
             else:
 
-                self.robot.send_message(self.event[cn.MCHAT_ID], "Как хозяин решит.")
+                self.say("Как хозяин решит.")
         return result
 
 
@@ -554,17 +566,24 @@ class CSoftIceBot:
         # *** Такое запрашивать может только хозяин
         if self.is_master():
 
-            self.robot.send_message(self.event[cn.MCHAT_ID], "Обновляю конфигурацию.")
+            self.say("Обновляю конфигурацию.")
             self.load_config(CONFIG_FILE_NAME)
-            self.robot.send_message(self.event[cn.MCHAT_ID], "Конфигурация обновлена.")
+            self.say("Конфигурация обновлена.")
             return True
         print(f"* Запрос на перезагрузку конфига "
               f"от нелегитимного лица {self.event[cn.MUSER_TITLE]}.")
         self.logger.warning("Запрос на перезагрузку конфига от нелегитимного лица %s.",
                             self.event[cn.MUSER_TITLE])
-        self.robot.send_message(self.event[cn.MCHAT_ID],
-                                f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")
+        self.say(f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")
         return False
+
+
+    def say(self, pmessage: str, pparse_mode: str=""):
+        """Выводит сообщение в указанный чат."""
+
+        if not self.testing:
+
+            self.robot.send_message(self.event[cn.MCHAT_ID], pmessage, pparse_mode)
 
     def send_answer(self, panswer, pfile_name: str = ""):
         """Выбирает форматированный или неформатированный вывод"""
@@ -581,8 +600,7 @@ class CSoftIceBot:
         if pfile_name:
 
             self.send_gif(pfile_name, self.event[cn.MCHAT_ID], answer)
-        self.robot.send_message(self.event[cn.MCHAT_ID], answer,
-                                    parse_mode="MarkdownV2")
+        self.say(answer, pparse_mode="MarkdownV2")
 
 
     def send_gif(self, pfilename: str, pchat_id: int, panswer: str):
@@ -648,24 +666,24 @@ class CSoftIceBot:
 
             if hasattr(self, 'robot'):
 
-                self.robot.send_message(self.event[cn.MCHAT_ID], "Добби свободен!")
+                self.say("Добби свободен!")
             with open(self.legal_exiting_flag, 'tw', encoding='utf-8'):
 
                 pass
             os.remove(self.running_flag)
             raise CQuitByDemand()
-        self.robot.send_message(self.event[cn.MCHAT_ID],
-                                        f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")
+        self.say(f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")
+
 
     def restart(self):
         """Проверка, вдруг была команда рестарта."""
 
         if self.is_master():
 
-            self.robot.send_message(self.event[cn.MCHAT_ID], "Щасвирнус.")
+            self.say("Щасвирнус.")
             raise CRestartByDemand()
-        self.robot.send_message(self.event[cn.MCHAT_ID],
-                                f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")
+        self.say(f"У вас нет на это прав, {self.event[cn.MUSER_TITLE]}.")
+
 
     def poll_forever(self):
         """Функция опроса ботом телеграмма."""
