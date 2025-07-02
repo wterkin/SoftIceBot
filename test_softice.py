@@ -11,49 +11,49 @@ class CTestSoftIceBot(TestCase):
         print("-"*40)
         print("* Creating bot instance")
         self.bot = softice.CSoftIceBot()
-        # print("* Loading demo config")
-        # self.bot.load_config("unittest_config.json")
 
 
     def test_is_foreign_command(self):
 
         # TrueMafiaBot
-        print("+ test_is_foreign_command:TrueMafiaBot, ok")
+        print("+ test_is_foreign_command:TrueMafiaBot")
         self.assertEqual(softice.is_foreign_command ("TrueMafiaBot"), True)
-        print("+ test_is_foreign_command:SuperPuperBot, ok")
+        print("+ test_is_foreign_command:SuperPuperBot")
         self.assertNotEqual(softice.is_foreign_command ("SuperPuperBot"), True)
 
 
+    def test_is_chat_legitimate(self):
+        print("+ test_is_chat_legitimate:TestPlace")
+        self.bot.event[cn.MCHAT_TITLE] = 'TestPlace'
+        self.bot.event[cn.MCHAT_ID] = -1002089030820
+        self.assertEqual(self.bot.is_chat_legitimate(), "")
+        print("+ test_is_chat_legitimate:megachat")
+        self.bot.event[cn.MCHAT_TITLE] = 'megachat'
+        self.bot.event[cn.MCHAT_ID] = -1002287597239
+        self.assertEqual(self.bot.is_chat_legitimate(), softice.NON_LEGITIMATE_CHAT_MSG)
+        print("+ test_is_chat_legitimate:private")
+        self.bot.event[cn.MCHAT_TITLE] = None
+        self.assertEqual(self.bot.is_chat_legitimate(), softice.PRIVATE_IS_DISABLED_MSG)
+
+
     def test_is_master(self):
-        print("+ test_is_master:username, ok")
+        print("+ test_is_master:username")
         self.bot.event[cn.MUSER_NAME] = 'username'
         self.assertEqual(self.bot.is_master(), True)
-        print("+ test_is_master:User, wrong")
+        print("+ test_is_master:User")
         self.bot.event[cn.MUSER_NAME] = 'User'
         self.assertNotEqual(self.bot.is_master(), True)
 
 
     def test_is_message_actual(self):
-        print("+ test_message_actual, ok")
+        print("+ test_message_actual")
         self.bot.event[cn.MDATE] = (datetime.now() - timedelta(seconds=30)).timestamp()
         self.assertEqual(self.bot.is_message_actual(), True)
-        print("+ test_message_actual, wrong")
+        print("+ test_message_actual")
         self.bot.event[cn.MDATE] = (datetime.now() - timedelta(seconds=120)).timestamp()
         self.assertNotEqual(self.bot.is_message_actual(), True)
 
 
-    def test_is_chat_legitimate(self):
-        print("+ test_is_chat_legitimate:superchat, ok")
-        self.bot.event[cn.MCHAT_TITLE] = 'TestPlace'
-        self.bot.event[cn.MCHAT_ID] = -1002089030820
-        self.assertEqual(self.bot.is_chat_legitimate(self.bot.event), "")
-        print("+ test_is_chat_legitimate:superchat, wrong")
-        self.bot.event[cn.MCHAT_TITLE] = 'superchat'
-        self.bot.event[cn.MCHAT_ID] = -1002287597239
-        self.assertEqual(self.bot.is_chat_legitimate(self.bot.event), softice.NON_LEGITIMATE_CHAT_MSG)
-        print("+ test_is_chat_legitimate:\'\', wrong")
-        self.bot.event[cn.MCHAT_TITLE] = None
-        self.assertEqual(self.bot.is_chat_legitimate(self.bot.event), softice.PRIVATE_IS_DISABLED_MSG)
 
 """
     def test_process_command(self):

@@ -302,7 +302,6 @@ class CSoftIceBot:
 
             self.msg_rec[cn.MUSER_LASTNAME] = ""
         self.msg_rec[cn.MDATE] = pmessage.date
-        # print(f"!!!!!!!!! {pmessage.date}")
         self.msg_rec[cn.MCONTENT_TYPE] = pmessage.content_type
         self.msg_rec[cn.MMESSAGE_ID] = pmessage.message_id
 
@@ -312,10 +311,7 @@ class CSoftIceBot:
 
         answer: str = ""
         # *** Если это не приват...
-
-        # print("***** ", pevent[cn.MCHAT_ID])
         chat_title: str = self.event.get(cn.MCHAT_TITLE)
-        dbg.dout(f"si:icl:{chat_title=}, {self.config[ALLOWED_CHATS_KEY]=}")
         if chat_title is not None:
 
             # *** Если чата нет в списке разрешенных...
@@ -323,11 +319,12 @@ class CSoftIceBot:
 
                 # *** Бота привели на чужой канал. Выходим.
                 self.say("Вашего чата нет в списке разрешённых. Чао!")
-                self.robot.leave_chat(self.event[cn.MCHAT_ID])
+                self.leave_chat()
                 print("* Попытка нелегитимного использования "
                       f"бота в чате {self.event[cn.MCHAT_TITLE]}.")
                 self.logger.warning("Попытка нелегитимного использования бота в чате %s.",
                                     self.event[cn.MCHAT_TITLE])
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 answer = NON_LEGITIMATE_CHAT_MSG
         else:
             answer = PRIVATE_IS_DISABLED_MSG
@@ -351,12 +348,12 @@ class CSoftIceBot:
         return (datetime.now() - date_time).total_seconds() < 60
 
 
-    def leave_chat(self, pchat_id):
+    def leave_chat(self):
         """Покидает указанный чат."""
 
         if not self.testing:
 
-            self.robot.leave_chat(pchat_id)
+            self.robot.leave_chat(self.event[cn.MCHAT_ID])
 
 
     def load_config(self, pconfig_name: str):
