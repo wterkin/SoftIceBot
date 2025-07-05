@@ -3,6 +3,12 @@ import softice
 import constants as cn
 from datetime import datetime, timedelta
 from telebot import types as bt
+
+TESTPLACE_CHAT_ID: int = -1002287597239
+TESTPLACE_CHAT_NAME : str = 'TestPlace'
+BOTOVKA_CHAT_ID: int = -1002089030820
+
+
 class CTestSoftIceBot(TestCase):
 
 
@@ -14,10 +20,14 @@ class CTestSoftIceBot(TestCase):
 
     def test_decode_message(self):
 
-        message: bt.Message = bt.Message(1,1)
+        chat: bt.ChatFullInfo = bt.ChatFullInfo(TESTPLACE_CHAT_ID, type="group")
+        user: bt.User = bt.User(self.bot.config["master_id"], False, self.bot.config["master_name"])
+        message: bt.Message = bt.Message(1, user,
+                                         datetime.now(), chat,
+                                         "text", {}, "")
         message.text = 'привет'
-        softice.decode_message(message)
-        self.assertNotEqual(self.msg_rec[cn.MTEXT], "")
+        self.bot.decode_message(message)
+        self.assertNotEqual(self.bot.msg_rec[cn.MTEXT], "")
         # 'message_id', 'from_user', 'date', 'chat', 'content_type',
         #'options', and 'json_string'
 
@@ -33,11 +43,11 @@ class CTestSoftIceBot(TestCase):
     def test_is_chat_legitimate(self):
         print("+ test_is_chat_legitimate:TestPlace")
         self.bot.event[cn.MCHAT_TITLE] = 'TestPlace'
-        self.bot.event[cn.MCHAT_ID] = -1002089030820
+        self.bot.event[cn.MCHAT_ID] = BOTOVKA_CHAT_ID
         self.assertEqual(self.bot.is_chat_legitimate(), "")
         print("+ test_is_chat_legitimate:megachat")
         self.bot.event[cn.MCHAT_TITLE] = 'megachat'
-        self.bot.event[cn.MCHAT_ID] = -1002287597239
+        self.bot.event[cn.MCHAT_ID] = TESTPLACE_CHAT_ID
         self.assertEqual(self.bot.is_chat_legitimate(), softice.NON_LEGITIMATE_CHAT_MSG)
         print("+ test_is_chat_legitimate:private")
         self.bot.event[cn.MCHAT_TITLE] = None
@@ -45,8 +55,8 @@ class CTestSoftIceBot(TestCase):
 
 
     def test_is_master(self):
-        print("+ test_is_master:username")
-        self.bot.event[cn.MUSER_NAME] = 'username'
+        print("+ test_is_master:Петрович")
+        self.bot.event[cn.MUSER_NAME] = 'Pet_Rovich'
         self.assertEqual(self.bot.is_master(), True)
         print("+ test_is_master:User")
         self.bot.event[cn.MUSER_NAME] = 'User'

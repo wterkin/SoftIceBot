@@ -287,6 +287,7 @@ class CSoftIceBot:
         else:
 
             self.msg_rec[cn.MCAPTION] = ""
+        dbg.dout(f"*** si:dm {pmessage.chat}")
         self.msg_rec[cn.MCHAT_ID] = pmessage.chat.id
         if pmessage.chat.title:
 
