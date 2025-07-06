@@ -16,7 +16,7 @@ PERS_COMMAND = [3, 7]
 HINT = ["стат", "stat"]
 COMMANDS = ["топ10", "топ25", "топ50", "перс", "top10", "top25", "top50", "pers"]
 UNIT_ID = "statistic"
-BOTS = ("TrueMafiaBot", "MafiaWarBot", "glagolitic_bot", "combot", "chgk_bot")
+# BOTS = ("TrueMafiaBot", "MafiaWarBot", "glagolitic_bot", "combot", "chgk_bot")
 FOREIGN_BOTS = "foreign_bots"
 SORTED_BY: tuple = ("фраз", "слов", "стикеров", "картинок",
                     "звуковых сообщений", "видео сообщений")

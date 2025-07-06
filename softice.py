@@ -109,19 +109,6 @@ class CRestartByDemand(Exception):
 # write_access_allowed=None, has_media_spoiler=None, user_shared=None,
 # chat_shared=None, *, api_kwargs=None
 
-def is_foreign_command(pcommand: str) -> bool:
-    """Возвращает True, если в команде присутствует имя другого бота."""
-
-    result: bool = False
-    for bot in statistic.BOTS:
-
-        result = bot in pcommand
-        if result:
-
-            break
-    return result
-
-
 # int: disable=too-many-instance-attributes # а что еще делать???
 class CSoftIceBot:
     """Универсальный бот для Телеграмма."""
@@ -333,6 +320,20 @@ class CSoftIceBot:
             answer = PRIVATE_IS_DISABLED_MSG
 
         return answer
+
+
+    def is_foreign_command(self, pcommand: str) -> bool:
+        """Возвращает True, если в команде присутствует имя другого бота."""
+
+        result: bool = False
+        # dbg.dout(f"sice:ifc: {}")
+        for bot in self.config[statistic.FOREIGN_BOTS]:
+
+            result = bot in pcommand
+            if result:
+
+                break
+        return result
 
 
     def is_master(self) -> bool:

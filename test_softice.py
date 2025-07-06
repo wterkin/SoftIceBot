@@ -18,6 +18,7 @@ class CTestSoftIceBot(TestCase):
         print("* Creating bot instance")
         self.bot = softice.CSoftIceBot()
 
+
     def test_decode_message(self):
 
         chat: bt.ChatFullInfo = bt.ChatFullInfo(TESTPLACE_CHAT_ID, type="group")
@@ -30,6 +31,8 @@ class CTestSoftIceBot(TestCase):
         self.bot.decode_message(message)
         self.assertEqual(self.bot.msg_rec[cn.MTEXT], "привет")
         message.text = ""
+        self.bot.decode_message(message)
+        self.assertEqual(self.bot.msg_rec[cn.MTEXT], "привет")
 
         # *** Caption
         message.caption = "картинка"
@@ -58,15 +61,6 @@ class CTestSoftIceBot(TestCase):
         self.assertEqual(self.bot.msg_rec[cn.MUSER_NAME], self.bot.config["master"])
         message.from_user.username = ""
 
-    def test_is_foreign_command(self):
-
-        # TrueMafiaBot
-        print("+ test_is_foreign_command:TrueMafiaBot")
-        self.assertEqual(softice.is_foreign_command ("TrueMafiaBot"), True)
-        print("+ test_is_foreign_command:SuperPuperBot")
-        self.assertNotEqual(softice.is_foreign_command ("SuperPuperBot"), True)
-
-
     def test_is_chat_legitimate(self):
         print("+ test_is_chat_legitimate:TestPlace")
         self.bot.event[cn.MCHAT_TITLE] = 'TestPlace'
@@ -79,6 +73,13 @@ class CTestSoftIceBot(TestCase):
         print("+ test_is_chat_legitimate:private")
         self.bot.event[cn.MCHAT_TITLE] = None
         self.assertEqual(self.bot.is_chat_legitimate(), softice.PRIVATE_IS_DISABLED_MSG)
+
+    def test_is_foreign_command(self):
+
+        # *** Пробуем бота Mafioso
+        self.assertEqual(self.bot.is_foreign_command ("Mafioso"), True)
+        # *** Пробуем бота SuperPuperBot
+        self.assertNotEqual(self.bot.is_foreign_command ("SuperPuperBot"), True)
 
 
     def test_is_master(self):
