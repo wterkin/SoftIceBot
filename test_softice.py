@@ -25,11 +25,38 @@ class CTestSoftIceBot(TestCase):
         message: bt.Message = bt.Message(1, user,
                                          datetime.now(), chat,
                                          "text", {}, "")
-        message.text = 'привет'
+        # *** Text
+        message.text = "привет"
         self.bot.decode_message(message)
-        self.assertNotEqual(self.bot.msg_rec[cn.MTEXT], "")
-        # 'message_id', 'from_user', 'date', 'chat', 'content_type',
-        #'options', and 'json_string'
+        self.assertEqual(self.bot.msg_rec[cn.MTEXT], "привет")
+        message.text = ""
+
+        # *** Caption
+        message.caption = "картинка"
+        self.bot.decode_message(message)
+        self.assertEqual(self.bot.msg_rec[cn.MCAPTION], "картинка")
+        message.caption = ""
+
+        # *** Chat ID
+        self.assertEqual(self.bot.msg_rec[cn.MCHAT_ID], TESTPLACE_CHAT_ID)
+
+        # *** Chat Title
+        message.chat.title = TESTPLACE_CHAT_NAME
+        self.bot.decode_message(message)
+        self.assertEqual(self.bot.msg_rec[cn.MCHAT_TITLE], TESTPLACE_CHAT_NAME)
+        message.chat.title = ""
+
+        # *** User ID
+        message.from_user.id = self.bot.config["master_id"]
+        self.bot.decode_message(message)
+        self.assertEqual(self.bot.msg_rec[cn.MUSER_ID], self.bot.config["master_id"])
+        message.from_user.id = None
+
+        # *** User Name
+        message.from_user.username = self.bot.config["master"]
+        self.bot.decode_message(message)
+        self.assertEqual(self.bot.msg_rec[cn.MUSER_NAME], self.bot.config["master"])
+        message.from_user.username = ""
 
     def test_is_foreign_command(self):
 

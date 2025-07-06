@@ -275,7 +275,6 @@ class CSoftIceBot:
 
             text: str = pmessage.text.strip()
             self.msg_rec[cn.MCOMMAND] = text[1:]
-            # self.msg_rec[cn.MTEXT] = pmessage.text.strip()
             self.msg_rec[cn.MTEXT] = text
 
         else:
@@ -287,7 +286,7 @@ class CSoftIceBot:
         else:
 
             self.msg_rec[cn.MCAPTION] = ""
-        dbg.dout(f"*** si:dm {pmessage.chat}")
+        #dbg.dout(f"*** si:dm {pmessage.chat}")
         self.msg_rec[cn.MCHAT_ID] = pmessage.chat.id
         if pmessage.chat.title:
 
