@@ -118,21 +118,23 @@ class CTestSoftIceBot(TestCase):
         self.assertFalse(self.bot.load_config("unittest_bad_config.json"))
 
 
+    def test_process_command(self):
+
+        # *** Перезагрузка конфига
+        self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
+        self.bot.event[cn.MUSER_TITLE] = self.bot.config["master_name"]
+        self.bot.event[cn.MCOMMAND] = "config"
+        self.assertTrue(self.bot.process_command())
+        self.bot.event[cn.MUSER_NAME] = "User"
+        self.bot.event[cn.MUSER_TITLE] = "User"
+        self.assertFalse(self.bot.process_command())
+
+        # self.assertEqual(self.bot.process_command(), False)
+        # self.assertEqual(self.bot.process_command(), True)
+        # self.assertNotEqual(self.bot.process_command(), True)
+
 
 """
-    def test_process_command(self):
-        print("+ test_process_command:user ok, config")
-        self.assertEqual(self.bot.process_command("config", -583831606, "superchat",
-                                                  {"name": "username", "title": "usertitle"}), True)
-        print("+ test_process_command:user wrong, config")
-        self.assertEqual(self.bot.process_command("config", -583831606, "superchat",
-                                                  {"name": "MegaUser", "title": "Юзер"}), False)
-        print("+ test_process_command:user ok, help")
-        self.assertEqual(self.bot.process_command("help", -583831606, "superchat",
-                                                  {"name": "username", "title": "usertitle"}), True)
-        print("+ test_process_command:user wrong, unknown command")
-        self.assertNotEqual(self.bot.process_command("вон!", -583831606, "superchat",
-                                                     {"name": "username", "title": "usertitle"}), True)
 
 #    def test_process_modules(self):
 #        self.bot.message_text = "!Экспекто патронум"
