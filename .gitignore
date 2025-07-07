@@ -13,6 +13,7 @@ config.json
 config.json.*
 config.main.json
 unittest_config.json
+unittest_bad_config.json
 try_config.json
 *.db
 GPL-3

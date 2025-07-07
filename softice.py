@@ -136,6 +136,9 @@ class CSoftIceBot:
         if self.config_is_correct:
 
             self.lock: bool = False
+        else:
+
+            sys.exit(0)
         self.silent: bool = False
 
 	    # *** Нужно ли работать через прокси?
@@ -372,11 +375,11 @@ class CSoftIceBot:
         except FileNotFoundError:
 
             print(f"* Файл конфигурации {pconfig_name} отсутствует.")
-            sys.exit(0)
+            return False
         except ValueError:
 
-            print(f"* Ошибка в процессе парсинге файла конфигурации {pconfig_name}")
-            sys.exit(0)
+            print(f"* Ошибка в процессе парсинга файла конфигурации {pconfig_name}")
+            return False
 
 
     def process_command(self) -> bool:
