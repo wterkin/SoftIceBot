@@ -470,6 +470,7 @@ class CSoftIceBot:
                         dbg.dout(f"*** barmen [{answer}]")
                     if not answer:
 
+
                         # *** ... потом звонарь
                         answer = self.bellringer.bellringer(rec[cn.MCHAT_TITLE],
                                                             rec[cn.MUSER_NAME],

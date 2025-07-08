@@ -128,7 +128,12 @@ class CTestSoftIceBot(TestCase):
         self.bot.event[cn.MUSER_NAME] = "User"
         self.bot.event[cn.MUSER_TITLE] = "User"
         self.assertFalse(self.bot.process_command())
-
+        # *** Выход
+        # EXIT_COMMANDS
+        self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
+        self.bot.event[cn.MUSER_TITLE] = self.bot.config["master_name"]
+        self.bot.event[cn.MCOMMAND] = "носок"
+        self.assertRaises(softice.CQuitByDemand, self.bot.process_command)
         # self.assertEqual(self.bot.process_command(), False)
         # self.assertEqual(self.bot.process_command(), True)
         # self.assertNotEqual(self.bot.process_command(), True)
