@@ -12,9 +12,13 @@ NEW_STYLE_OFFSET: int = 13
 EASTER_CMD_INDEX: int = 0
 DATE_CMD_INDEX: int = 1
 DAY_CMD_INDEX: int = 2
+NEW_YEAR_INDEX: int = 3
+NEW_YEAR_SHORTS_INDEX: int = 4
 COMMANDS: tuple = (("пасха", "easter"),
                    ("дата", "date"),
-                   ("день", "day"))
+                   ("день", "day"),
+                   ("новыйгод", "newyear"),
+                   ("нг", "ny"))
 HINTS: tuple = ("календарь", "кл", "calendar", "cl")
 UNIT_ID = "stargazer"
 RUSSIAN_DATE_FORMAT = "%d.%m.%Y"
@@ -24,7 +28,8 @@ HIGH_MARGIN: int = 2100
 CHURCH_CALENDAR: str = "calendar.txt"
 CIVILIAN_CALENDAR: str = "dates.txt"
 JUL_GREG_CALENDAR_DIFF: int = 13
-
+YEAR_DAYS: int = 365
+LEAP_YEAR_DAYS: int = 366
 
 def calculate_easter(pyear):
     """Вычисляет дату пасхи на заданный год."""
@@ -134,7 +139,24 @@ class CStarGazer(prototype.CPrototype):
                 else:
 
                     break
+
         return found
+
+    """
+       def check_command(self, commands, pmessage_text: str):
+           ""Проверяет команду на попадание в заданный диапазон.""
+
+            found: bool = False
+            word_list: list = func.parse_input(pmessage_text)
+            for command in commands:
+
+                found = word_list[0] in command
+
+                if found:
+
+                    break
+        return found
+    """
 
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
@@ -225,6 +247,14 @@ class CStarGazer(prototype.CPrototype):
 
                 answer += self.search_in_calendar(CHURCH_CALENDAR, today)
                 answer += " " + self.additional_info(now_date)
+            elif word_list[0] in COMMANDS[NEW_YEAR_INDEX] or \
+                 word_list[0] in COMMANDS[NEW_YEAR_SHORTS_INDEX]:
+                today: date = date.today()
+                newyear: date = date(today.year, 12, 31)
+                delta: timedelta = (newyear - today)
+                print(delta.days + 1)
+                answer = f"До Нового года осталось {delta.days+1} дней."
+
         if answer:
 
             print(f"Stargazer answers: {answer[:func.OUT_MSG_LOG_LEN]}")

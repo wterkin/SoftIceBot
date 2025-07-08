@@ -242,7 +242,7 @@ class CSoftIceBot:
                                 self.event[cn.MTEXT] is not None:
 
                             # *** Если сообщение адресовано другому боту - пропускаем
-                            if not is_foreign_command(self.event[cn.MCOMMAND]):
+                            if not self.is_foreign_command(self.event[cn.MCOMMAND]):
 
                                 answer, file_name = self.process_modules()
                         self.statistic.save_all_type_of_messages(self.event)
