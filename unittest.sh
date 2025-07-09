@@ -6,4 +6,4 @@ touch flags/unittest.flg
 # rm flags/unittest.flg
 # cat unittest2.log
 #cat unittest.log
-read
+read 5
