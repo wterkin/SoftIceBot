@@ -172,7 +172,9 @@ class CSoftIceBot:
             with open(self.running_flag, 'tw', encoding='utf-8'):
 
                 # ***  оповещаем хозяина
-                self.robot.send_message(self.config["master_id"], "Я внезапно упал. Вот несчастье.")
+                if not self.testing:
+
+                    self.robot.send_message(self.config["master_id"], "Я внезапно упал. Вот несчастье.")
         # *** Где у нас данные лежат?
         if platform in ("linux", "linux2"):
 
@@ -458,7 +460,9 @@ class CSoftIceBot:
                 if not answer:
 
                     # *** Болтуну есть что ответить?
-                    answer, file_name = self.babbler.talk(self.event)
+                    if not self.silent:
+
+                        answer, file_name = self.babbler.talk(self.event)
                 # # *** Теперь очередь статистика...
                 self.statistic.save_all_type_of_messages(self.event)
             else:
@@ -544,8 +548,10 @@ class CSoftIceBot:
                     if not answer:
 
                         # *** ... потом болтун
-                        answer = self.babbler.babbler(rec).strip()
-                        dbg.dout(f"*** si:procmod:babbler [{answer}]")
+                        if not self.silent:
+
+                            answer = self.babbler.babbler(rec).strip()
+                            dbg.dout(f"*** si:procmod:babbler [{answer}]")
                     if not answer:
 
                         # *** Незнакомая команда.
@@ -559,19 +565,19 @@ class CSoftIceBot:
 
                     answer = self.collector.collector(answer)
 
-                if os.path.exists(ANSWERS_LOG):
+                # if os.path.exists(ANSWERS_LOG):
 
-                    access = "a"
-                else:
+                #    access = "a"
+                # else:
 
-                    access = "w"
-                with open(ANSWERS_LOG, access, encoding='utf-8') as file:
-                    file.write(rec[cn.MCHAT_TITLE])
-                    file.write("\n")
-                    file.write(rec[cn.MTEXT])
-                    file.write("\n")
-                    file.write(answer)
-                    file.write("\n\n")
+                #    access = "w"
+                # with open(ANSWERS_LOG, access, encoding='utf-8') as file:
+                #     file.write(rec[cn.MCHAT_TITLE])
+                #     file.write("\n")
+                #     file.write(rec[cn.MTEXT])
+                #     file.write("\n")
+                #     file.write(answer)
+                #     file.write("\n\n")
             self.lock = False
         return answer, file_name
 

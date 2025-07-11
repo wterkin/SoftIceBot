@@ -22,7 +22,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_decode_message(self):
 
-        dbg.dout("***** test_decode_message")
+        # dbg.dout("***** test_decode_message")
         chat: bt.ChatFullInfo = bt.ChatFullInfo(TESTPLACE_CHAT_ID, type="group")
         user: bt.User = bt.User(self.bot.config["master_id"], False, self.bot.config["master_name"])
         message: bt.Message = bt.Message(1, user,
@@ -66,7 +66,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_chat_legitimate(self):
 
-        dbg.dout("***** test_is_chat_legitimate")
+        # dbg.dout("***** test_is_chat_legitimate")
         # *** TestPlace
         self.bot.event[cn.MCHAT_TITLE] = 'TestPlace'
         self.bot.event[cn.MCHAT_ID] = TESTPLACE_CHAT_ID
@@ -82,7 +82,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_foreign_command(self):
 
-        dbg.dout("***** test_is_foreign_command")
+        # dbg.dout("***** test_is_foreign_command")
         # *** Пробуем бота Mafioso
         self.assertEqual(self.bot.is_foreign_command ("Mafioso"), True)
         # *** Пробуем бота SuperPuperBot
@@ -91,7 +91,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_master(self):
 
-        dbg.dout("***** test_is_master")
+        # dbg.dout("***** test_is_master")
         # *** Try master name
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
         self.assertTrue(self.bot.is_master())
@@ -102,7 +102,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_message_actual(self):
 
-        dbg.dout("***** test_is_message_actual")
+        # dbg.dout("***** test_is_message_actual")
         # *** Actual message
         self.bot.event[cn.MDATE] = (datetime.now() - timedelta(seconds=30)).timestamp()
         self.assertTrue (self.bot.is_message_actual())
@@ -113,7 +113,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_load_config(self):
 
-        dbg.dout("***** test_load_config")
+        # dbg.dout("***** test_load_config")
         self.assertTrue(self.bot.load_config(softice.UNITTEST_CONFIG_NAME))
         self.assertFalse(self.bot.load_config("unittest_bad_config.json"))
 
@@ -148,31 +148,43 @@ class CTestSoftIceBot(TestCase):
         self.bot.event[cn.MTEXT] = "!mute"
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
         self.bot.event[cn.MCOMMAND] = "mute"
-        self.bot.silence = False
+        self.bot.silent = False
         self.bot.process_command()
         self.assertTrue(self.bot.silent)
         self.bot.event.clear()
-        self.bot.silence = False
+        self.bot.silent = False
         self.bot.event[cn.MTEXT] = "!mute"
         self.bot.event[cn.MUSER_NAME] = "User"
         self.bot.event[cn.MCOMMAND] = "mute"
         self.bot.process_command()
-        self.assertFalse(self.bot.silence)
+        self.assertFalse(self.bot.silent)
         # *** UnMute
         self.bot.event.clear()
         self.bot.event[cn.MTEXT] = "!talk"
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
         self.bot.event[cn.MCOMMAND] = "talk"
-        self.bot.silence = True
+        self.bot.silent = True
         self.bot.process_command()
         self.assertFalse(self.bot.silent)
         self.bot.event.clear()
         self.bot.event[cn.MTEXT] = "!talk"
         self.bot.event[cn.MUSER_NAME] = "User"
         self.bot.event[cn.MCOMMAND] = "talk"
-        self.bot.silence = True
+        self.bot.silent = True
         self.bot.process_command()
-        self.assertTrue(self.bot.silence)
+        self.assertTrue(self.bot.silent)
+
+
+    def test_reload_config(self):
+        # pchat_id: int, puser_name: str, puser_title: str
+        # *** Master
+        self.bot.event[cn.MUSER_TITLE] = self.bot.config["master_name"]
+        self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
+        self.assertEqual(self.bot.reload_config(), True)
+        # *** User
+        self.bot.event[cn.MUSER_TITLE] = "User"
+        self.bot.event[cn.MUSER_NAME] = "User"
+        self.assertEqual(self.bot.reload_config(), False)
 
 """
 
@@ -182,10 +194,4 @@ class CTestSoftIceBot(TestCase):
 #        self.assertEqual(self.bot.process_modules(-583831606, "Ботовка", "Pet_Rovich", "Петрович"),
 #                         ("", False))
 
-    def test_reload_config(self):
-        # pchat_id: int, puser_name: str, puser_title: str
-        print("+ test_reload_config:user ok")
-        self.assertEqual(self.bot.reload_config(-583831606, "username", "usertitle"), True)
-        print("+ test_reload_config:user wrong")
-        self.assertEqual(self.bot.reload_config(-583831606, "user", "user"), False)
 """
