@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+        # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль констант """
 MCHAT_TITLE: str = "chat_title"

@@ -225,7 +225,7 @@ class CSoftIceBot:
             # *** Вытаскиваем из сообщения нужные поля
             self.decode_message(pmessage)
             # if not self.msg_rec[cn.MPROCESSED]:
-            dbg.dout(f"si:pm:{self.msg_rec[cn.MCHAT_ID]}")
+            # dbg.dout(f"si:pm:{self.msg_rec[cn.MCHAT_ID]}")
             if not self.lock:
 
                 self.event = copy.deepcopy(self.msg_rec)
@@ -253,6 +253,8 @@ class CSoftIceBot:
                     if not self.silent:
 
                         self.send_answer(answer.strip(), file_name)
+
+
 
 
     def decode_message(self, pmessage):
@@ -412,10 +414,14 @@ class CSoftIceBot:
 
             if self.is_master():
 
+                #print("************ Ok")
+                dbg.dout("*** si:proccom: ********* Ok")
                 self.silent = True
             else:
 
+                dbg.dout("*** si:proccom: !!!!!!!!!!!!!!!!!! No")
                 self.say("Да щаз, так я и заткнулся.")
+            result = True
         elif self.event[cn.MCOMMAND] in UNMUTE_COMMAND:
 
             if self.is_master():
@@ -424,6 +430,7 @@ class CSoftIceBot:
             else:
 
                 self.say("Как хозяин решит.")
+            result = True
         return result
 
 
@@ -433,6 +440,7 @@ class CSoftIceBot:
         # *** Проверим, не запросил ли пользователь что-то у бармена...
         answer: str = ""
         file_name: str = ""
+        dbg.dout(f"*** si:procmod: 001 {self.event[cn.MTEXT]}")
         if not self.lock:
 
             self.lock = True
@@ -441,6 +449,7 @@ class CSoftIceBot:
             # ***  Боту дали команду?
             if self.event[cn.MTEXT][0:1] != COMMAND_SIGN:
 
+                dbg.dout("*** si:procmod: 002")
                 # *** Нет, просто текст
                 # *** Когда-нибудь я допишу супервайзера
                 # !!! answer = self.supervisor.supervisor(pmessage)
@@ -454,12 +463,14 @@ class CSoftIceBot:
                 self.statistic.save_all_type_of_messages(self.event)
             else:
 
+                dbg.dout("*** si:procmod: 003")
                 # *** Если команда не обработана обработчиком системных команд...
                 if not self.process_command():
 
+                    dbg.dout("*** si:procmod: 004")
                     # *** Сначала модератор
                     answer = self.moderator.moderator(rec)
-                    dbg.dout(f"*** moderator [{answer}]")
+                    dbg.dout(f"*** si:procmod:moderator [{answer}]")
                     if not answer:
 
                         # *** ... потом бармен
@@ -467,7 +478,7 @@ class CSoftIceBot:
                                                          rec[cn.MUSER_NAME],
                                                          rec[cn.MUSER_TITLE],
                                                          rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** barmen [{answer}]")
+                        dbg.dout(f"*** si:procmod:barmen [{answer}]")
                     if not answer:
 
 
@@ -475,13 +486,13 @@ class CSoftIceBot:
                         answer = self.bellringer.bellringer(rec[cn.MCHAT_TITLE],
                                                             rec[cn.MUSER_NAME],
                                                             rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** bellringer [{answer}]")
+                        dbg.dout(f"*** si:procmod:bellringer [{answer}]")
                     if not answer:
 
                         # *** ... потом игрок
                         answer = self.gambler.gambler(rec[cn.MCHAT_TITLE],
                                                       rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** gambler [{answer}]")
+                        dbg.dout(f"*** si:procmod:gambler [{answer}]")
                     if not answer:
 
                         # *** ... потом хайдзин
@@ -489,7 +500,7 @@ class CSoftIceBot:
                                                     rec[cn.MUSER_NAME],
                                                     rec[cn.MUSER_TITLE],
                                                     rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** haijin [{answer}]")
+                        dbg.dout(f"*** si:procmod:haijin [{answer}]")
                     if not answer:
 
                         # *** ... потом библиотекарь
@@ -497,19 +508,19 @@ class CSoftIceBot:
                                                           rec[cn.MUSER_NAME],
                                                           rec[cn.MUSER_TITLE],
                                                           rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** librarian [{answer}]")
+                        dbg.dout(f"*** si:procmod:librarian [{answer}]")
                     if not answer:
 
                         # *** ... потом мажордом
                         answer = self.majordomo.majordomo(rec[cn.MCHAT_TITLE],
                                                           rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** majordomo [{answer}]")
+                        dbg.dout(f"*** si:procmod:majordomo [{answer}]")
                     if not answer:
 
                         # *** ... потом метеоролог
                         answer = self.meteorolog.meteorolog(rec[cn.MCHAT_TITLE],
                                                             rec[cn.MTEXT]).strip()
-                        print(f"*** meteorolog [{answer}]")
+                        print(f"*** si:procmod:meteorolog [{answer}]")
                     if not answer:
 
                         # *** ... потом статистик
@@ -517,28 +528,28 @@ class CSoftIceBot:
                                                           rec[cn.MCHAT_TITLE],
                                                           rec[cn.MUSER_TITLE],
                                                           rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** statistic [{answer}]")
+                        dbg.dout(f"*** si:procmod:statistic [{answer}]")
                     if not answer:
 
                         # *** ... потом звездочёт
                         answer = self.stargazer.stargazer(rec[cn.MCHAT_TITLE],
                                                           rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** stargazer [{answer}]")
+                        dbg.dout(f"*** si:procmod:stargazer [{answer}]")
                     if not answer:
 
                         # *** ... потом теолог
                         answer = self.theolog.theolog(rec[cn.MCHAT_TITLE],
                                                       rec[cn.MTEXT]).strip()
-                        dbg.dout(f"*** theolog [{answer}]")
+                        dbg.dout(f"*** si:procmod:theolog [{answer}]")
                     if not answer:
 
                         # *** ... потом болтун
                         answer = self.babbler.babbler(rec).strip()
-                        dbg.dout(f"*** babbler [{answer}]")
+                        dbg.dout(f"*** si:procmod:babbler [{answer}]")
                     if not answer:
 
                         # *** Незнакомая команда.
-                        print(f"* Запрошена неподдерживаемая команда {rec[cn.MTEXT]}.")
+                        dbg.dout(f"*** si:procmod: Запрошена неподдерживаемая команда {rec[cn.MTEXT]}.")
                         self.logger.info("* Запрошена неподдерживаемая команда %s"
                                          " в чате %s.", rec[cn.MTEXT], rec[cn.MCHAT_TITLE])
             answer = answer.strip()

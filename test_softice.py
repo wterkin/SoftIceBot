@@ -121,26 +121,58 @@ class CTestSoftIceBot(TestCase):
     def test_process_command(self):
 
         # *** Перезагрузка конфига
+        self.bot.event.clear()
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
         self.bot.event[cn.MUSER_TITLE] = self.bot.config["master_name"]
         self.bot.event[cn.MCOMMAND] = "config"
         self.assertTrue(self.bot.process_command())
+        self.bot.event.clear()
         self.bot.event[cn.MUSER_NAME] = "User"
         self.bot.event[cn.MUSER_TITLE] = "User"
+        self.bot.event[cn.MCOMMAND] = "config"
         self.assertFalse(self.bot.process_command())
         # *** Выход
+        self.bot.event.clear()
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
         self.bot.event[cn.MUSER_TITLE] = self.bot.config["master_name"]
         self.bot.event[cn.MCOMMAND] = "носок"
         self.assertRaises(softice.CQuitByDemand, self.bot.process_command)
         # help
         # *** Restart
+        self.bot.event.clear()
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
         self.bot.event[cn.MCOMMAND] = "restart"
         self.assertRaises(softice.CRestartByDemand, self.bot.process_command)
-        # self.assertEqual(self.bot.process_command(), True)
-        # self.assertNotEqual(self.bot.process_command(), True)
-
+        # *** Mute
+        self.bot.event.clear()
+        self.bot.event[cn.MTEXT] = "!mute"
+        self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
+        self.bot.event[cn.MCOMMAND] = "mute"
+        self.bot.silence = False
+        self.bot.process_command()
+        self.assertTrue(self.bot.silent)
+        self.bot.event.clear()
+        self.bot.silence = False
+        self.bot.event[cn.MTEXT] = "!mute"
+        self.bot.event[cn.MUSER_NAME] = "User"
+        self.bot.event[cn.MCOMMAND] = "mute"
+        self.bot.process_command()
+        self.assertFalse(self.bot.silence)
+        # *** UnMute
+        self.bot.event.clear()
+        self.bot.event[cn.MTEXT] = "!talk"
+        self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
+        self.bot.event[cn.MCOMMAND] = "talk"
+        self.bot.silence = True
+        self.bot.process_command()
+        self.assertFalse(self.bot.silent)
+        self.bot.event.clear()
+        self.bot.event[cn.MTEXT] = "!talk"
+        self.bot.event[cn.MUSER_NAME] = "User"
+        self.bot.event[cn.MCOMMAND] = "talk"
+        self.bot.silence = True
+        self.bot.process_command()
+        self.assertTrue(self.bot.silence)
 
 """
 
