@@ -196,7 +196,7 @@ class CBabbler(prototype.CPrototype):
 
                             file_name, answer = answer.split(DELIMIGHTER)
                             file_name = f"{str(reactions_path)}/{file_name}"
-                            print(file_name)
+                            # print(file_name)
                         sleep(1)
                         break
 

@@ -186,12 +186,3 @@ class CTestSoftIceBot(TestCase):
         self.bot.event[cn.MUSER_NAME] = "User"
         self.assertEqual(self.bot.reload_config(), False)
 
-"""
-
-#    def test_process_modules(self):
-#        self.bot.message_text = "!Экспекто патронум"
-#        print("+ test_process_modules:??")
-#        self.assertEqual(self.bot.process_modules(-583831606, "Ботовка", "Pet_Rovich", "Петрович"),
-#                         ("", False))
-
-"""

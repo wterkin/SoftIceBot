@@ -15,6 +15,7 @@ import telebot
 from telebot import apihelper
 from requests import ReadTimeout, ConnectTimeout
 import urllib3.exceptions
+import pathlib
 
 # *** Собственные модули
 import functions as func
@@ -72,6 +73,8 @@ SLEEP_BEFORE_EXIT_BY_ERROR: int = 10
 ANSWERS_LOG: str = "logs/answers.log"
 PRIVATE_IS_DISABLED_MSG: str = "Приваты с ботом запрещены."
 NON_LEGITIMATE_CHAT_MSG: str = "Запрещено."
+ANIMATIONS: tuple = (".gif", ".mp4", ".avi", ".mpg", ".wmv", ".flv")
+
 
 class CQuitByDemand(Exception):
     """Исключение выхода."""
@@ -617,20 +620,28 @@ class CSoftIceBot:
             answer = func.screen_text(panswer)
         else:
 
-
             answer = panswer[1:]
         if pfile_name:
 
-            self.send_gif(pfile_name, self.event[cn.MCHAT_ID], answer)
-        self.say(answer, pparse_mode="MarkdownV2")
+            dbg.dout(f"*** sice:sndans: {pfile_name}")
+            self.say(answer, pparse_mode="MarkdownV2")
+            self.send_img(pfile_name, self.event[cn.MCHAT_ID], answer)
 
 
-    def send_gif(self, pfilename: str, pchat_id: int, panswer: str):
-        """Отправляет в чат gif """
+    def send_img(self, pfilename: str, pchat_id: int, panswer: str):
+        """Отправляет в чат картинку."""
 
-        with open(pfilename, 'rb') as gif:
 
-            self.robot.send_animation(pchat_id, gif, None, panswer)
+        with open(pfilename, 'rb') as image:
+
+            # dbg.dout(f"*** sice:sndgif: {pchat_id}, {panswer}")
+            extension = pathlib.Path(pfilename).suffix
+            if extension in ANIMATIONS:
+
+                self.robot.send_animation(pchat_id, image, None, panswer)
+            else:
+
+                self.robot.send_photo(pchat_id, image)
 
 
     def send_help(self) -> str:
