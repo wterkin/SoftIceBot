@@ -158,7 +158,7 @@ class CSoftIceBot:
         testing = self.config.get("testing")
         if testing is not None:
 
-            self.testing = int(testing) == 1
+            self.testing = (int(testing) == 1)
 	    # *** Создаём собственно бота.
         self.robot: telebot.TeleBot = telebot.TeleBot(self.config[TOKEN_KEY])
         self.bot_status: int = CONTINUE_RUNNING
@@ -624,8 +624,8 @@ class CSoftIceBot:
         if pfile_name:
 
             dbg.dout(f"*** sice:sndans: {pfile_name}")
-            self.say(answer, pparse_mode="MarkdownV2")
             self.send_img(pfile_name, self.event[cn.MCHAT_ID], answer)
+        self.say(answer, pparse_mode="MarkdownV2")
 
 
     def send_img(self, pfilename: str, pchat_id: int, panswer: str):
