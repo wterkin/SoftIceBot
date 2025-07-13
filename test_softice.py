@@ -174,6 +174,7 @@ class CTestSoftIceBot(TestCase):
         self.bot.process_command()
         self.assertTrue(self.bot.silent)
 
+    # process_modules
 
     def test_reload_config(self):
         # pchat_id: int, puser_name: str, puser_title: str
@@ -186,3 +187,19 @@ class CTestSoftIceBot(TestCase):
         self.bot.event[cn.MUSER_NAME] = "User"
         self.assertEqual(self.bot.reload_config(), False)
 
+    # say
+    # send_answer
+    # send_img
+    # send_help
+
+    def test_stop_working(self):
+
+        self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
+        self.assertRaises(softice.CQuitByDemand, self.bot.stop_working)
+
+    def test_restart(self):
+
+        self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
+        self.assertRaises(softice.CRestartByDemand, self.bot.restart)
+
+    # poll_forever

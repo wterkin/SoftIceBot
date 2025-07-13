@@ -527,7 +527,7 @@ class CSoftIceBot:
                         # *** ... потом метеоролог
                         answer = self.meteorolog.meteorolog(rec[cn.MCHAT_TITLE],
                                                             rec[cn.MTEXT]).strip()
-                        print(f"*** si:procmod:meteorolog [{answer}]")
+                        dbg.dout(f"*** si:procmod:meteorolog [{answer}]")
                     if not answer:
 
                         # *** ... потом статистик
@@ -567,20 +567,6 @@ class CSoftIceBot:
                 if self.collector.is_enabled(rec[cn.MCHAT_TITLE]):
 
                     answer = self.collector.collector(answer)
-
-                # if os.path.exists(ANSWERS_LOG):
-
-                #    access = "a"
-                # else:
-
-                #    access = "w"
-                # with open(ANSWERS_LOG, access, encoding='utf-8') as file:
-                #     file.write(rec[cn.MCHAT_TITLE])
-                #     file.write("\n")
-                #     file.write(rec[cn.MTEXT])
-                #     file.write("\n")
-                #     file.write(answer)
-                #     file.write("\n\n")
             self.lock = False
         return answer, file_name
 
@@ -631,7 +617,6 @@ class CSoftIceBot:
     def send_img(self, pfilename: str, pchat_id: int, panswer: str):
         """Отправляет в чат картинку."""
 
-
         with open(pfilename, 'rb') as image:
 
             # dbg.dout(f"*** sice:sndgif: {pchat_id}, {panswer}")
@@ -652,39 +637,39 @@ class CSoftIceBot:
         result: str = self.barman.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.bellringer.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.haijin.get_hint(self.event[cn.MCHAT_TITLE])[1:]
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.librarian.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.majordomo.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.meteorolog.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.statistic.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.stargazer.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         result = self.theolog.get_hint(self.event[cn.MCHAT_TITLE])
         if result:
 
-            answer = answer + result + "\n"
+            answer += result + "\n"
         # *** Если ответы есть, отвечаем на запрос
         if answer:
 
