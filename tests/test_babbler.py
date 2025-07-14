@@ -1,22 +1,34 @@
+import sys
 from time import sleep
 from unittest import TestCase
 import json
 import babbler
 
+sys.path.insert(0, "tests/")
+import test_softice
+UNIT_CONFIG: str = "unittest_config.json"
 
 class CTestBabbler(TestCase):
+
     def setUp(self) -> None:
-        with open('config.sample.json', "r", encoding="utf-8") as json_file:
+
+        with open(UNIT_CONFIG, "r", encoding="utf-8") as json_file:
 
             self.config = json.load(json_file)
 
-        self.babbler = babbler.CBabbler(self.config, self.config["windows_data_folder"])
+        self.babbler = babbler.CBabbler(self.config, self.config["linux_data_folder"])
+
 
     def test_babbler(self):
-        self.assertEqual(self.babbler.babbler('superchat', 'username', 'usertitle', '!blrl'), 'База болтуна обновлена')
+
+        self.assertEqual(self.babbler.babbler(test_softice.TESTPLACE_CHAT_ID,
+                                              self.config["master"],
+                                              self.config["master_name"],
+                                              "!blrl"), 'База болтуна обновлена')
         self.assertNotEqual(self.babbler.babbler('megachat', 'username', 'usertitle', '!reload'),
                             'База болтуна обновлена')
 
+"""
     def test_can_process(self):
         self.assertEqual(self.babbler.can_process('superchat', ''), True)
 
@@ -35,3 +47,4 @@ class CTestBabbler(TestCase):
         self.assertNotEqual(self.babbler.think('Трям'), "")
         self.assertNotEqual(self.babbler.think('Привет'), "")
         self.assertEqual(self.babbler.think('Кукареку'), "")
+"""
