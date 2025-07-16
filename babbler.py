@@ -71,8 +71,17 @@ class CBabbler(prototype.CPrototype):
             "Assert: [babbler.can_process] Пропущен параметр <pchat_title> !"
         assert pmessage_text is not None, \
             "Assert: [babbler.can_process] Пропущен параметр <pmessage_text> !"
+        found: bool = False
+        if self.is_enabled(pchat_title):
 
-        return self.is_enabled(pchat_title)
+            word_list: list = func.parse_input(pmessage_text)
+            for command in BABBLER_RELOAD:
+
+                found = (word_list[0] == command)
+                if found:
+
+                    break
+        return found
 
 
     def get_help(self, pchat_title: str):

@@ -4,6 +4,8 @@ from unittest import TestCase
 import json
 import babbler
 
+
+import constants as cn
 sys.path.insert(0, "tests/")
 import test_softice
 UNIT_CONFIG: str = "unittest_config.json"
@@ -21,21 +23,28 @@ class CTestBabbler(TestCase):
 
     def test_babbler(self):
 
-        self.assertEqual(self.babbler.babbler(test_softice.TESTPLACE_CHAT_ID,
-                                              self.config["master"],
-                                              self.config["master_name"],
-                                              "!blrl"), 'База болтуна обновлена')
-        self.assertNotEqual(self.babbler.babbler('megachat', 'username', 'usertitle', '!reload'),
-                            'База болтуна обновлена')
+        event: dict = {}
+        event[cn.MTEXT] = "!blreload"
+        event[cn.MCHAT_TITLE] = test_softice.TESTPLACE_CHAT_NAME
+        event[cn.MUSER_NAME] = self.config["master"]
+        event[cn.MUSER_TITLE] = self.config["master_name"]
+        self.assertEqual(self.babbler.babbler(event), "База болтуна обновлена")
+        event[cn.MCHAT_TITLE] = "superchat"
+        event[cn.MUSER_NAME] = "username"
+        event[cn.MUSER_TITLE] = "usertitle"
+        self.assertNotEqual(self.babbler.babbler(event), "База болтуна обновлена")
+
+    def test_can_process(self):
+
+        self.assertTrue(self.babbler.can_process(test_softice.TESTPLACE_CHAT_NAME, "!blreload"))
+        self.assertFalse(self.babbler.can_process(test_softice.TESTPLACE_CHAT_NAME, "!day"))
+        self.assertFalse(self.babbler.can_process("superchat", ""))
+    def test_is_enabled(self):
+
+        self.assertTrue(self.babbler.is_enabled(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertFalse(self.babbler.is_enabled("superchat"))
 
 """
-    def test_can_process(self):
-        self.assertEqual(self.babbler.can_process('superchat', ''), True)
-
-    def test_is_enabled(self):
-        self.assertEqual(self.babbler.is_enabled('superchat'), True)
-        # self.assertNotEqual(self.babbler.is_enabled('gigachat'), True)
-
     def test_reload(self):
         self.assertEqual(self.babbler.reload(), True)
 
