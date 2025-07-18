@@ -64,11 +64,13 @@ class CTestBabbler(TestCase):
     def test_talk(self):
 
         sleep(int(self.babbler.config[babbler.BABBLER_PERIOD_KEY]))
-        # pmsg_rec[cn.MCHAT_TITLE]
+        event: dict = {}
         event: dict = {}
         event[cn.MCHAT_TITLE] = test_softice.TESTPLACE_CHAT_NAME
-        self.assertEqual(self.babbler.talk('superchat', 'трям'), "Здорово!")
-
+        event[cn.MTEXT] = 'Привет'
+        self.assertEqual(self.babbler.talk(event), ("Здорово!", ""))
+        event[cn.MTEXT] = 'Хай'
+        self.assertEqual(self.babbler.talk(event), ("", ""))
 
 """
 

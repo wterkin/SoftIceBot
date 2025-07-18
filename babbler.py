@@ -80,7 +80,7 @@ class CBabbler(prototype.CPrototype):
             word_list: list = func.parse_input(pmessage_text)
             for command in BABBLER_RELOAD:
 
-                found = (word_list[0] == command)
+                found = word_list[0] == command
                 if found:
 
                     break
@@ -123,7 +123,7 @@ class CBabbler(prototype.CPrototype):
         assert triggers_path.is_dir(), f"{TRIGGERS_FOLDER} must be folder"
         reactions_path = Path(self.data_path) / REACTIONS_FOLDER
         assert reactions_path.is_dir(), f"{REACTIONS_FOLDER} must be folder"
-        dbg.dout(f"*** bbl:rl:1 {str(triggers_path)}")
+        # dbg.dout(f"*** bbl:rl:1 {str(triggers_path)}")
         self.mind.clear()
         for trigger in triggers_path.iterdir():
 
@@ -138,7 +138,7 @@ class CBabbler(prototype.CPrototype):
                     reaction_content: list = func.load_from_file(str(reaction))
                     block.append(reaction_content)
                     self.mind.append(block)
-                    dbg.dout("*** bbl:rl:2")
+                    # dbg.dout("*** bbl:rl:2")
                     result = True
         if self.mind:
 
@@ -147,15 +147,15 @@ class CBabbler(prototype.CPrototype):
 
     def is_personal(self, pword_list: list) -> bool:
 
-       personal: bool = False
-       for nick in NICKNAMES:
+        personal: bool = False
+        for nick in NICKNAMES:
 
 
             personal = nick in pword_list
             if personal:
 
                 break
-       return personal
+        return personal
 
 
     def talk(self, pmsg_rec: dict) -> str:
@@ -187,8 +187,9 @@ class CBabbler(prototype.CPrototype):
         file_name: str = ""
         # *** Если в сообщении указано имя бота..
         personal_appeal: bool = self.is_personal(pmsg_rec[cn.MTEXT].lower().split(" "))
-        dbg.dout(f"*** bbl:ispers:{personal_appeal}")
+        # dbg.dout(f"*** bbl:ispers:{personal_appeal}")
         # *** Перебираем сообщение по словам
+        # dbg.dout(f"*** bbl:think:000")
         for word in word_list:
 
             # *** Убираем из слова знаки пунктуации и пробелы,
@@ -197,6 +198,7 @@ class CBabbler(prototype.CPrototype):
             # *** Если что-то осталось, двигаемся дальше.
             if len(clean_word) > 1:
 
+                # dbg.dout(f"*** bbl:think:001")
                 # *** Перебираем блоки памяти бота
                 for block in self.mind:
 
@@ -206,24 +208,23 @@ class CBabbler(prototype.CPrototype):
                     if (clean_word in triggers) or ((AT_CHAR + clean_word) in triggers):
                     # if clean_word in triggers:
 
-                        dbg.dout("*** bbl:think:001")
+                        # dbg.dout("*** bbl:think:011")
                         # if AT_CHAR in "".join(triggers) or personal_appeal:
                         # *** Если в триггере указано запрошенное слово с
                         #     собачкой "@" впереди...
                         if AT_CHAR in "".join(triggers):
 
                             # *** Если в сообщении есть имя бота...
-                            dbg.dout("*** bbl:think:AT_CHAR")
+                            # dbg.dout("*** bbl:think:012")
                             if personal_appeal:
 
-                                dbg.dout(f"*** bbl:think:{personal_appeal}")
                                 # *** Выводим ответ
                                 answer = f"{random.choice(block[REACTIONS_INDEX])}"
                                 sleep(1)
                                 break
                         else:
 
-                            dbg.dout("*** bbl:think:003")
+                            # dbg.dout("*** bbl:think:002")
                             answer = f"{random.choice(block[REACTIONS_INDEX])}"
                         # *** Если в ответе есть разделитель...
                         if DELIMIGHTER in answer:

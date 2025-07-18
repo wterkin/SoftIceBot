@@ -235,7 +235,7 @@ class CSoftIceBot:
 
                 self.event = copy.deepcopy(self.msg_rec)
                 # *** Проверим, легитимный ли этот чат
-                dbg.dout("si:pm:2")
+                # dbg.dout("si:pm:2")
                 answer = self.is_chat_legitimate().strip()
                 if not answer:
 
@@ -283,7 +283,7 @@ class CSoftIceBot:
         else:
 
             self.msg_rec[cn.MCAPTION] = ""
-        #dbg.dout(f"*** si:dm {pmessage.chat}")
+        # dbg.dout(f"*** si:dm {pmessage.chat}")
         self.msg_rec[cn.MCHAT_ID] = pmessage.chat.id
         if pmessage.chat.title:
 
@@ -420,11 +420,11 @@ class CSoftIceBot:
             if self.is_master():
 
                 #print("************ Ok")
-                dbg.dout("*** si:proccom: ********* Ok")
+                # dbg.dout("*** si:proccom: ********* Ok")
                 self.silent = True
             else:
 
-                dbg.dout("*** si:proccom: !!!!!!!!!!!!!!!!!! No")
+                # dbg.dout("*** si:proccom: !!!!!!!!!!!!!!!!!! No")
                 self.say("Да щаз, так я и заткнулся.")
             result = True
         elif self.event[cn.MCOMMAND] in UNMUTE_COMMAND:
@@ -445,7 +445,7 @@ class CSoftIceBot:
         # *** Проверим, не запросил ли пользователь что-то у бармена...
         answer: str = ""
         file_name: str = ""
-        dbg.dout(f"*** si:procmod: 001 {self.event[cn.MTEXT]}")
+        # dbg.dout(f"*** si:procmod: 001 {self.event[cn.MTEXT]}")
         if not self.lock:
 
             self.lock = True
@@ -454,7 +454,7 @@ class CSoftIceBot:
             # ***  Боту дали команду?
             if self.event[cn.MTEXT][0:1] != COMMAND_SIGN:
 
-                dbg.dout("*** si:procmod: 002")
+                # dbg.dout("*** si:procmod: 002")
                 # *** Нет, просто текст
                 # *** Когда-нибудь я допишу супервайзера
                 # !!! answer = self.supervisor.supervisor(pmessage)
@@ -470,14 +470,14 @@ class CSoftIceBot:
                 self.statistic.save_all_type_of_messages(self.event)
             else:
 
-                dbg.dout("*** si:procmod: 003")
+                # dbg.dout("*** si:procmod: 003")
                 # *** Если команда не обработана обработчиком системных команд...
                 if not self.process_command():
 
-                    dbg.dout("*** si:procmod: 004")
+                    # dbg.dout("*** si:procmod: 004")
                     # *** Сначала модератор
                     answer = self.moderator.moderator(rec)
-                    dbg.dout(f"*** si:procmod:moderator [{answer}]")
+                    # dbg.dout(f"*** si:procmod:moderator [{answer}]")
                     if not answer:
 
                         # *** ... потом бармен
@@ -609,7 +609,7 @@ class CSoftIceBot:
             answer = panswer[1:]
         if pfile_name:
 
-            dbg.dout(f"*** sice:sndans: {pfile_name}")
+            # dbg.dout(f"*** sice:sndans: {pfile_name}")
             self.send_img(pfile_name, self.event[cn.MCHAT_ID], answer)
         self.say(answer, pparse_mode="MarkdownV2")
 
