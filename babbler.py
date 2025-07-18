@@ -11,6 +11,7 @@ from pathlib import Path
 import functions as func
 import constants as cn
 import prototype
+import debug as dbg
 
 # *** Команда перегрузки текстов
 BABBLER_RELOAD: list = ["blreload", "blrl"]
@@ -23,9 +24,11 @@ TRIGGERS_INDEX: int = 0
 REACTIONS_FOLDER: str = "reactions"
 REACTIONS_INDEX: int = 1
 BABBLER_EMODJI: list = ["😎", "😊", "☺", "😊", "😋"]
-NICKNAMES: list = ["softice", "софтик", "софтайсик", "ботик", "бот"]
+NICKNAMES: list = ["softicebot","softice", "софтик", "софтайсик", "ботик", "бот"]
 AT_CHAR: str = "@"
 DELIMIGHTER: str = "//"
+
+
 
 
 class CBabbler(prototype.CPrototype):
@@ -114,12 +117,13 @@ class CBabbler(prototype.CPrototype):
     def reload(self):
         """Загружает тексты болтуна."""
 
+        result: bool = False
         # *** Собираем пути
         triggers_path = Path(self.data_path) / TRIGGERS_FOLDER
         assert triggers_path.is_dir(), f"{TRIGGERS_FOLDER} must be folder"
         reactions_path = Path(self.data_path) / REACTIONS_FOLDER
         assert reactions_path.is_dir(), f"{REACTIONS_FOLDER} must be folder"
-        result: bool = False
+        dbg.dout(f"*** bbl:rl:1 {str(triggers_path)}")
         self.mind.clear()
         for trigger in triggers_path.iterdir():
 
@@ -134,11 +138,24 @@ class CBabbler(prototype.CPrototype):
                     reaction_content: list = func.load_from_file(str(reaction))
                     block.append(reaction_content)
                     self.mind.append(block)
+                    dbg.dout("*** bbl:rl:2")
                     result = True
         if self.mind:
 
             print(f"\n> Babbler успешно (пере)загрузил {len(self.mind)} реакций.")
         return result
+
+    def is_personal(self, pword_list: list) -> bool:
+
+       personal: bool = False
+       for nick in NICKNAMES:
+
+
+            personal = nick in pword_list
+            if personal:
+
+                break
+       return personal
 
 
     def talk(self, pmsg_rec: dict) -> str:
@@ -164,48 +181,55 @@ class CBabbler(prototype.CPrototype):
     def think(self, pmsg_rec: dict):
         """Процесс принятия решений =)"""
 
-        reactions_path = Path(self.data_path) / REACTIONS_FOLDER
+        reactions_path: Path = Path(self.data_path) / REACTIONS_FOLDER
         word_list: list = pmsg_rec[cn.MTEXT].split(" ")
         answer: str = ""
         file_name: str = ""
-        personal: bool = False
-        # *** Переберем все слова в сообщении
-        for nick in NICKNAMES:
-
-            personal = nick in word_list
-            if personal:
-
-                break
-
-        # *** Снова перебираем сообщение по словам (как-то неоптимально выходит)
+        # *** Если в сообщении указано имя бота..
+        personal_appeal: bool = self.is_personal(pmsg_rec[cn.MTEXT].lower().split(" "))
+        dbg.dout(f"*** bbl:ispers:{personal_appeal}")
+        # *** Перебираем сообщение по словам
         for word in word_list:
 
             # *** Убираем из слова знаки пунктуации и пробелы,
             #     переводим в нижний регистр
-            clean_word = word.rstrip(string.punctuation).lower().strip()
+            clean_word: str = word.rstrip(string.punctuation).lower().strip()
             # *** Если что-то осталось, двигаемся дальше.
             if len(clean_word) > 1:
 
-                # print(f"%%% ! {clean_word}")
                 # *** Перебираем блоки памяти бота
                 for block in self.mind:
 
-                    triggers: list = block[0]
+                    # *** Получим список триггеров текущего блока
+                    triggers: list = block[TRIGGERS_INDEX]
                     # *** Если в списке триггеров есть такое слово
-                    if clean_word in triggers or AT_CHAR + clean_word in triggers:
+                    if (clean_word in triggers) or ((AT_CHAR + clean_word) in triggers):
+                    # if clean_word in triggers:
 
-                        # *** если в строке есть обращение к боту
-                        if AT_CHAR in "".join(triggers) and personal:
+                        dbg.dout("*** bbl:think:001")
+                        # if AT_CHAR in "".join(triggers) or personal_appeal:
+                        # *** Если в триггере указано запрошенное слово с
+                        #     собачкой "@" впереди...
+                        if AT_CHAR in "".join(triggers):
 
+                            # *** Если в сообщении есть имя бота...
+                            dbg.dout("*** bbl:think:AT_CHAR")
+                            if personal_appeal:
+
+                                dbg.dout(f"*** bbl:think:{personal_appeal}")
+                                # *** Выводим ответ
+                                answer = f"{random.choice(block[REACTIONS_INDEX])}"
+                                sleep(1)
+                                break
+                        else:
+
+                            dbg.dout("*** bbl:think:003")
                             answer = f"{random.choice(block[REACTIONS_INDEX])}"
-                            sleep(1)
-                            break
-                        answer = f"{random.choice(block[REACTIONS_INDEX])}"
+                        # *** Если в ответе есть разделитель...
                         if DELIMIGHTER in answer:
 
                             file_name, answer = answer.split(DELIMIGHTER)
                             file_name = f"{str(reactions_path)}/{file_name}"
-                            # print(file_name)
                         sleep(1)
                         break
 
