@@ -187,9 +187,7 @@ class CBabbler(prototype.CPrototype):
         file_name: str = ""
         # *** Если в сообщении указано имя бота..
         personal_appeal: bool = self.is_personal(pmsg_rec[cn.MTEXT].lower().split(" "))
-        # dbg.dout(f"*** bbl:ispers:{personal_appeal}")
         # *** Перебираем сообщение по словам
-        # dbg.dout(f"*** bbl:think:000")
         for word in word_list:
 
             # *** Убираем из слова знаки пунктуации и пробелы,
@@ -198,7 +196,6 @@ class CBabbler(prototype.CPrototype):
             # *** Если что-то осталось, двигаемся дальше.
             if len(clean_word) > 1:
 
-                # dbg.dout(f"*** bbl:think:001")
                 # *** Перебираем блоки памяти бота
                 for block in self.mind:
 
@@ -206,16 +203,12 @@ class CBabbler(prototype.CPrototype):
                     triggers: list = block[TRIGGERS_INDEX]
                     # *** Если в списке триггеров есть такое слово
                     if (clean_word in triggers) or ((AT_CHAR + clean_word) in triggers):
-                    # if clean_word in triggers:
 
-                        # dbg.dout("*** bbl:think:011")
-                        # if AT_CHAR in "".join(triggers) or personal_appeal:
                         # *** Если в триггере указано запрошенное слово с
                         #     собачкой "@" впереди...
                         if AT_CHAR in "".join(triggers):
 
                             # *** Если в сообщении есть имя бота...
-                            # dbg.dout("*** bbl:think:012")
                             if personal_appeal:
 
                                 # *** Выводим ответ
@@ -224,7 +217,6 @@ class CBabbler(prototype.CPrototype):
                                 break
                         else:
 
-                            # dbg.dout("*** bbl:think:002")
                             answer = f"{random.choice(block[REACTIONS_INDEX])}"
                         # *** Если в ответе есть разделитель...
                         if DELIMIGHTER in answer:

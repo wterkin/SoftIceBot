@@ -65,18 +65,21 @@ class CTestBabbler(TestCase):
 
         sleep(int(self.babbler.config[babbler.BABBLER_PERIOD_KEY]))
         event: dict = {}
-        event: dict = {}
         event[cn.MCHAT_TITLE] = test_softice.TESTPLACE_CHAT_NAME
         event[cn.MTEXT] = 'Привет'
         self.assertEqual(self.babbler.talk(event), ("Здорово!", ""))
         event[cn.MTEXT] = 'Хай'
         self.assertEqual(self.babbler.talk(event), ("", ""))
 
-"""
-
 
     def test_think(self):
-        self.assertNotEqual(self.babbler.think('Трям'), "")
-        self.assertNotEqual(self.babbler.think('Привет'), "")
-        self.assertEqual(self.babbler.think('Кукареку'), "")
-"""
+
+        event: dict = {}
+        event[cn.MCHAT_TITLE] = test_softice.TESTPLACE_CHAT_NAME
+        event[cn.MTEXT] = 'Спасибо, бот'
+        self.assertEqual(self.babbler.think(event), ("Пожалуйста.", ""))
+        event[cn.MTEXT] = 'Спасибо'
+        self.assertEqual(self.babbler.think(event), ("", ""))
+        # self.assertNotEqual(self.babbler.think('Привет'), "")
+        # self.assertEqual(self.babbler.think('Кукареку'), "")
+
