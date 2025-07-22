@@ -76,10 +76,12 @@ class CTestBabbler(TestCase):
 
         event: dict = {}
         event[cn.MCHAT_TITLE] = test_softice.TESTPLACE_CHAT_NAME
-        event[cn.MTEXT] = 'Спасибо, бот'
+        event[cn.MTEXT] = "Спасибо, бот"
         self.assertEqual(self.babbler.think(event), ("Пожалуйста.", ""))
-        event[cn.MTEXT] = 'Спасибо'
+        event[cn.MTEXT] = "Спасибо"
         self.assertEqual(self.babbler.think(event), ("", ""))
-        # self.assertNotEqual(self.babbler.think('Привет'), "")
-        # self.assertEqual(self.babbler.think('Кукареку'), "")
+        event[cn.MTEXT] = "чаю"
+        self.assertEqual(self.babbler.think(event), ("Обязательно!", "test_data/babbler/reactions/images/tea.jpg"))
+        event[cn.MTEXT] = 'Привет'
+        self.assertEqual(self.babbler.talk(event), ("Здорово!", ""))
 

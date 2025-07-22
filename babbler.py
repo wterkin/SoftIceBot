@@ -11,7 +11,7 @@ from pathlib import Path
 import functions as func
 import constants as cn
 import prototype
-import debug as dbg
+# import debug as dbg
 
 # *** Команда перегрузки текстов
 BABBLER_RELOAD: list = ["blreload", "blrl"]
@@ -27,8 +27,6 @@ BABBLER_EMODJI: list = ["😎", "😊", "☺", "😊", "😋"]
 NICKNAMES: list = ["softicebot","softice", "софтик", "софтайсик", "ботик", "бот"]
 AT_CHAR: str = "@"
 DELIMIGHTER: str = "//"
-
-
 
 
 class CBabbler(prototype.CPrototype):
@@ -69,11 +67,11 @@ class CBabbler(prototype.CPrototype):
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Болтун всегда может обработать эту команду."""
-
         assert pchat_title is not None, \
             "Assert: [babbler.can_process] Пропущен параметр <pchat_title> !"
         assert pmessage_text is not None, \
             "Assert: [babbler.can_process] Пропущен параметр <pmessage_text> !"
+
         found: bool = False
         if self.is_enabled(pchat_title):
 
@@ -123,7 +121,6 @@ class CBabbler(prototype.CPrototype):
         assert triggers_path.is_dir(), f"{TRIGGERS_FOLDER} must be folder"
         reactions_path = Path(self.data_path) / REACTIONS_FOLDER
         assert reactions_path.is_dir(), f"{REACTIONS_FOLDER} must be folder"
-        # dbg.dout(f"*** bbl:rl:1 {str(triggers_path)}")
         self.mind.clear()
         for trigger in triggers_path.iterdir():
 
@@ -138,14 +135,15 @@ class CBabbler(prototype.CPrototype):
                     reaction_content: list = func.load_from_file(str(reaction))
                     block.append(reaction_content)
                     self.mind.append(block)
-                    # dbg.dout("*** bbl:rl:2")
                     result = True
         if self.mind:
 
             print(f"\n> Babbler успешно (пере)загрузил {len(self.mind)} реакций.")
         return result
 
+
     def is_personal(self, pword_list: list) -> bool:
+        """Определяет, есть ли во входном сообщении имя бота."""
 
         personal: bool = False
         for nick in NICKNAMES:

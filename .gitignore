@@ -9,6 +9,7 @@ logs/*
 __pycache__/*
 trash/*
 .idea/*
+tests/__pycache__/*
 config.json
 config.json.*
 config.main.json
