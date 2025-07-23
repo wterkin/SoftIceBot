@@ -2,19 +2,33 @@ from unittest import TestCase
 import barman
 import json
 
+import test_softice
 
 class CTestBarman(TestCase):
+
     def setUp(self) -> None:
-        with open('config.sample.json', "r", encoding="utf-8") as json_file:
+
+        with open("unittest_config.json", "r", encoding="utf-8") as json_file:
 
             self.config = json.load(json_file)
-        self.barman: barman.CBarman = barman.CBarman(self.config, self.config["windows_data_folder"])
+        if platform in ("linux", "linux2"):
+
+            self.data_path: str = self.config[LINUX_DATA_FOLDER_KEY]
+        else:
+
+            self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
+
+        self.barman: barman.CBarman = barman.CBarman(self.config, self.data_path)
         self.barman.reload()
 
+
     def test_barman(self):
+
         # def barman(self, pchat_title: str, puser_name: str, puser_title: str,
-        #            pmessage_text: str) -> str:
-        self.assertNotEqual(self.barman.barman('superchat', 'user', 'Юзер', '!пиво'), '')
+        #       pmessage_text: str) -> str:
+        self.assertNotEqual(self.barman.barman(TESTPLACE_CHAT_NAME, self.config["master"],
+                                               self.bot.config["master_name"], "!пиво"), '')
+        """
         self.assertNotEqual(self.barman.barman('megachat', 'user', 'Юзер', '!beer'), '')
         self.assertEqual(self.barman.barman('gigachat', 'user', 'Юзер', '!beer'), '')
 
@@ -62,3 +76,4 @@ class CTestBarman(TestCase):
         self.assertNotEqual(self.barman.serve_client('Юзер', 'пиво'), "")
         self.assertNotEqual(self.barman.serve_client('Юзер', 'beer'), "")
         self.assertEqual(self.barman.serve_client('Юзер', 'кузинатра'), "")
+"""

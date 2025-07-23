@@ -17,8 +17,13 @@ class CTestBabbler(TestCase):
         with open(UNIT_CONFIG, "r", encoding="utf-8") as json_file:
 
             self.config = json.load(json_file)
+        if platform in ("linux", "linux2"):
 
-        self.babbler = babbler.CBabbler(self.config, self.config["linux_data_folder"])
+            self.data_path: str = self.config[LINUX_DATA_FOLDER_KEY]
+        else:
+
+            self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
+        self.babbler = babbler.CBabbler(self.config, self.data_path)
 
 
     def test_babbler(self):
