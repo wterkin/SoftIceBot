@@ -18,6 +18,7 @@ COMMANDS: list = [["пиво", "beer", "пв", "br"],
                   ["шоколад", "chocolate", "шк", "ch"],
                   ["мороженое", "icecream", "мр", "ic"],
                   ["булочка", "bun", "бч", "bn"],
+                  ["шампанское", "champagne", "шмп", "chm"],
                   ]
 
 # *** Идентификаторы, они же индексы, напитков, их ключи и эмодзи
@@ -42,6 +43,8 @@ COOKIE_ID: int = 6
 CHOCOLATE_ID: int = 7
 ICECREAM_ID: int = 8
 BUN_ID: int = 9
+CHAMPAGNE_ID: int = 10
+
 
 ASSORTMENT: tuple = ({ID_KEY: BEER_ID,
                       EMODJI_KEY: "🍺",
@@ -119,13 +122,22 @@ ASSORTMENT: tuple = ({ID_KEY: BEER_ID,
                       PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
                       TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
                      {ID_KEY: BUN_ID,
-                      EMODJI_KEY: "🥯",
+                      EMODJI_KEY: "🥨🥯🥯🥯🥯",
                       COMMAND_KEY: COMMANDS[BUN_ID],
                       SOURCES_KEY: "bun_sources.txt",
                       MARKS_KEY: "bun_marks.txt",
                       TRANSFER_KEY: "bun_transfer.txt",
                       PROPERTIES_KEY: (SOURCES_KEY, MARKS_KEY, TRANSFER_KEY),
-                      TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"}
+                      TEMPLATE_KEY: "Softice {0} {1} {2} {3} {4}"},
+                      {ID_KEY: CHAMPAGNE_ID,
+                      EMODJI_KEY: "🍾",
+                      COMMAND_KEY: COMMANDS[CHAMPAGNE_ID],
+                      SOURCES_KEY: "drink_sources.txt",
+                      CANS_KEY: "champ_cans.txt",
+                      MARKS_KEY: "champ_marks.txt",
+                      TRANSFER_KEY: "drink_transfer.txt",
+                      PROPERTIES_KEY: (SOURCES_KEY, CANS_KEY, MARKS_KEY, TRANSFER_KEY),
+                      TEMPLATE_KEY: "Softice {0} {1} шампанского \"{2}\" {3} {4} {5}"},
                      )
 
 # *** Команда перегрузки текстов
@@ -147,9 +159,9 @@ class CBarman(prototype.CPrototype):
         self.bar_content: dict = {}
         self.load_assortment()
 
+
     def barman(self, pchat_title: str, puser_name: str, puser_title: str,
                pmessage_text: str) -> str:
-
         """Процедура разбора запроса пользователя."""
         assert pchat_title is not None, \
             "Assert: [barman.barman] Пропущен параметр <pchat_title> !"
@@ -157,6 +169,7 @@ class CBarman(prototype.CPrototype):
             "Assert: [barman.barman] Пропущен параметр <puser_title> !"
         assert pmessage_text is not None, \
             "Assert: [barman.barman] Пропущен параметр <pmessage_text> !"
+
         answer: str = ""
         word_list: list = func.parse_input(pmessage_text)
         if self.can_process(pchat_title, pmessage_text):
@@ -190,15 +203,16 @@ class CBarman(prototype.CPrototype):
             print(f"> Barman отвечает: {answer[:func.OUT_MSG_LOG_LEN]}")
         return answer.strip()
 
+
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если бармен может обработать эту команду"""
-
         assert pchat_title is not None, \
             "Assert: [barman.can_process] " \
             "Пропущен параметр <pchat_title> !"
         assert pmessage_text is not None, \
             "Assert: [barman.can_process] " \
             "Пропущен параметр <pmessage_text> !"
+
         found: bool = False
         if self.is_enabled(pchat_title):
 
@@ -217,11 +231,13 @@ class CBarman(prototype.CPrototype):
                     found = word_list[0] in BAR_RELOAD
         return found
 
+
     def get_help(self, pchat_title: str) -> str:  # noqa
         """Пользователь запросил список команд."""
         assert pchat_title is not None, \
             "Assert: [barman.get_help] " \
             "Пропущен параметр <pchat_title> !"
+
         command_list: str = ""
         if self.is_enabled(pchat_title):
 
@@ -230,22 +246,25 @@ class CBarman(prototype.CPrototype):
                 command_list += ", ".join(command) + "\n"
         return command_list
 
+
     def get_hint(self, pchat_title: str) -> str:  # [arguments-differ]
         """Возвращает список команд, поддерживаемых модулем.  """
         assert pchat_title is not None, \
             "Assert: [barman.get_hint] " \
             "Пропущен параметр <pchat_title> !"
+
         if self.is_enabled(pchat_title):
 
             return ", ".join(BAR_HINT)
         return ""
 
+
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если бармен разрешен на этом канале."""
-
         assert pchat_title is not None, \
             "Assert: [barman.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
+
         return UNIT_ID in self.config["chats"][pchat_title]
 
 
@@ -256,6 +275,7 @@ class CBarman(prototype.CPrototype):
 
     def load_assortment(self):
         """Загружает ассортимент бара."""
+
         for item in ASSORTMENT:
 
             self.load_item(item)
@@ -263,28 +283,29 @@ class CBarman(prototype.CPrototype):
 
     def load_item(self, pitem: dict):
         """Загружает одно наименование ассортимента бара."""
-
         assert pitem is not None, \
             "Assert: [barman.load_item] " \
             "Пропущен параметр <pitem> !"
+
         storage: dict = {}
         for key in pitem[PROPERTIES_KEY]:
 
             storage[key] = func.load_from_file(self.data_path + pitem[key])
-
         self.bar_content[pitem[ID_KEY]] = storage
+
 
     def reload(self):  # , pchat_id: int, puser_name: str, puser_title):
         """Перегружает все содержимое бара."""
+
         self.load_assortment()
 
     def serve_client(self, puser_name: str, pcommand: str):
         """Обслуживает клиентов."""
-
         assert puser_name is not None, \
             "Assert: [barman.serve_client] Пропущен параметр <puser_name> !"
         assert pcommand is not None, \
             "Assert: [barman.serve_client] Пропущен параметр <pcommand> !"
+
         answer: str = ""
         for item in ASSORTMENT:
 
