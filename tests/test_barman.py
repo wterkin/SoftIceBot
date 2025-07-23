@@ -1,7 +1,9 @@
 from unittest import TestCase
 import barman
 import json
+from sys import platform
 
+import softice
 import test_softice
 
 class CTestBarman(TestCase):
@@ -13,10 +15,10 @@ class CTestBarman(TestCase):
             self.config = json.load(json_file)
         if platform in ("linux", "linux2"):
 
-            self.data_path: str = self.config[LINUX_DATA_FOLDER_KEY]
+            self.data_path: str = self.config[softice.LINUX_DATA_FOLDER_KEY]
         else:
 
-            self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
+            self.data_path: str = self.config[softice.WINDOWS_DATA_FOLDER_KEY]
 
         self.barman: barman.CBarman = barman.CBarman(self.config, self.data_path)
         self.barman.reload()
@@ -26,8 +28,12 @@ class CTestBarman(TestCase):
 
         # def barman(self, pchat_title: str, puser_name: str, puser_title: str,
         #       pmessage_text: str) -> str:
-        self.assertNotEqual(self.barman.barman(TESTPLACE_CHAT_NAME, self.config["master"],
-                                               self.bot.config["master_name"], "!пиво"), '')
+        self.assertNotEqual(self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
+                                               self.config["master_name"], "!пиво"), "")
+        self.assertEqual(self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
+                                            self.config["master_name"], "!виски"), "")
+        self.assertIn("Сегодня в баре", self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
+                                                           self.config["master_name"], "!bar"))
         """
         self.assertNotEqual(self.barman.barman('megachat', 'user', 'Юзер', '!beer'), '')
         self.assertEqual(self.barman.barman('gigachat', 'user', 'Юзер', '!beer'), '')

@@ -4,9 +4,11 @@ from unittest import TestCase
 import json
 import babbler
 import uuid
+from sys import platform
 
 import constants as cn
 sys.path.insert(0, "tests/")
+import softice
 import test_softice
 UNIT_CONFIG: str = "unittest_config.json"
 
@@ -19,10 +21,10 @@ class CTestBabbler(TestCase):
             self.config = json.load(json_file)
         if platform in ("linux", "linux2"):
 
-            self.data_path: str = self.config[LINUX_DATA_FOLDER_KEY]
+            self.data_path: str = self.config[softice.LINUX_DATA_FOLDER_KEY]
         else:
 
-            self.data_path: str = self.config[WINDOWS_DATA_FOLDER_KEY]
+            self.data_path: str = self.config[softice.WINDOWS_DATA_FOLDER_KEY]
         self.babbler = babbler.CBabbler(self.config, self.data_path)
 
 
