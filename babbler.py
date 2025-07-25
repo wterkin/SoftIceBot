@@ -102,9 +102,10 @@ class CBabbler(prototype.CPrototype):
         """Возвращает True, если болтун разрешен на этом канале."""
         assert pchat_title is not None, \
             "Assert: [babbler.is_enabled] Пропущен параметр <pchat_title> !"
+        if pchat_title in self.config["chats"]:
 
-        return UNIT_ID in self.config["chats"][pchat_title]
-
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
     def is_master(self, puser_name: str) -> bool:
         """Проверяет, хозяин ли отдал команду."""

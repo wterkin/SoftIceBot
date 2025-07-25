@@ -265,13 +265,17 @@ class CBarman(prototype.CPrototype):
             "Assert: [barman.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
 
-        return UNIT_ID in self.config["chats"][pchat_title]
+        if pchat_title in self.config["chats"]:
+
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
 
     def is_master(self, puser_name: str) -> bool:
         """Проверяет, хозяин ли отдал команду."""
 
         return puser_name == self.config["master"]
+
 
     def load_assortment(self):
         """Загружает ассортимент бара."""
@@ -280,6 +284,7 @@ class CBarman(prototype.CPrototype):
 
             self.load_item(item)
         print(f"> Barman успешно (пере)загрузил {len(ASSORTMENT)} типов товаров.")
+
 
     def load_item(self, pitem: dict):
         """Загружает одно наименование ассортимента бара."""
@@ -298,6 +303,7 @@ class CBarman(prototype.CPrototype):
         """Перегружает все содержимое бара."""
 
         self.load_assortment()
+
 
     def serve_client(self, puser_name: str, pcommand: str):
         """Обслуживает клиентов."""

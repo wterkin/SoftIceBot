@@ -30,56 +30,56 @@ class CTestBarman(TestCase):
         #       pmessage_text: str) -> str:
         self.assertNotEqual(self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
                                                self.config["master_name"], "!пиво"), "")
+        self.assertIn(self.config["master_name"], self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
+                                                  self.config["master_name"], "!пиво "+self.config["master_name"]))
         self.assertEqual(self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
                                             self.config["master_name"], "!виски"), "")
         self.assertIn("Сегодня в баре", self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
                                                            self.config["master_name"], "!bar"))
-        """
-        self.assertNotEqual(self.barman.barman('megachat', 'user', 'Юзер', '!beer'), '')
-        self.assertEqual(self.barman.barman('gigachat', 'user', 'Юзер', '!beer'), '')
+        self.assertEqual(self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
+                                            self.config["master_name"], "!brreload"), "Ассортимент бара обновлён.")
+        self.assertIn("У вас нет на это прав", self.barman.barman(test_softice.TESTPLACE_CHAT_NAME, "user", "User", "!brreload"))
 
-        self.assertNotEqual(self.barman.barman('superchat', 'user', 'Юзер', '!бар'), '')
-        self.assertNotEqual(self.barman.barman('megachat', 'user', 'Юзер', '!bar'), '')
-        self.assertEqual(self.barman.barman('gigachat', 'user', 'Юзер', '!bar'), '')
-
-        self.assertEqual(self.barman.barman('superchat', 'username', 'usertitle', '!brreload'),
-                         "Ассортимент бара обновлён.")
-        self.assertEqual(self.barman.barman('megachat', 'username', 'usertitle', '!brreload'),
-                         "Ассортимент бара обновлён.")
-        self.assertNotEqual(self.barman.barman('gigachat', 'username', 'usertitle', '!brrl'),
-                            "Ассортимент бара обновлён.")
-
-        self.assertEqual(self.barman.barman('gigachat', 'user', 'Юзер', '!кукабарра'), "")
-        self.assertEqual(self.barman.barman('megachat', 'user', 'Юзер', '!кузинатра'), "")
-        self.assertEqual(self.barman.barman('мяучат', 'user', 'Юзер', '!пиво'), "")
-        self.assertEqual(self.barman.barman('кукучат', 'user', 'Юзер', '!beer'), "")
 
     def test_can_process(self):
-        self.assertEqual(self.barman.can_process('superchat', '!beer'), True)
-        self.assertEqual(self.barman.can_process('megachat', '!пиво'), True)
-        self.assertEqual(self.barman.can_process('gigachat', '!кукабарра'), False)
+
+        self.assertFalse(self.barman.can_process("fakechat", "!пиво"))
+        self.assertFalse(self.barman.can_process("emptychat", "!beer"))
+        self.assertTrue(self.barman.can_process(test_softice.TESTPLACE_CHAT_NAME, "!beer"))
+        self.assertFalse(self.barman.can_process(test_softice.TESTPLACE_CHAT_NAME, "!кукабарра"))
+        self.assertTrue(self.barman.can_process(test_softice.TESTPLACE_CHAT_NAME,  "!bar"))
+        self.assertTrue(self.barman.can_process(test_softice.TESTPLACE_CHAT_NAME,  "!brreload"))
+
 
     def test_get_help(self):
-        self.assertNotEqual(self.barman.get_help('superchat'), "")
-        self.assertNotEqual(self.barman.get_help('megachat'), "")
-        self.assertEqual(self.barman.get_help('левочат'), "")
+
+        self.assertEqual(self.barman.get_help("fakechat"), "")
+        self.assertEqual(self.barman.get_help("emptychat"), "")
+        self.assertIn("чай, tea, чй, te", self.barman.get_help(test_softice.TESTPLACE_CHAT_NAME))
 
     def test_get_hint(self):
-        self.assertNotEqual(self.barman.get_hint('superchat'), "")
-        self.assertNotEqual(self.barman.get_hint('megachat'), "")
-        self.assertEqual(self.barman.get_hint('левочат'), "")
+
+        self.assertEqual(self.barman.get_hint("fakechat"), "")
+        self.assertEqual(self.barman.get_hint("emptychat"), "")
+        self.assertIn("бар, bar", self.barman.get_hint(test_softice.TESTPLACE_CHAT_NAME))
+
 
     def test_is_enabled(self):
-        self.assertEqual(self.barman.is_enabled('superchat'), True)
-        self.assertEqual(self.barman.is_enabled('megachat'), True)
-        self.assertEqual(self.barman.is_enabled('левочат'), False)
+
+
+        self.assertFalse(self.barman.is_enabled("fakechat"))
+        self.assertFalse(self.barman.is_enabled("emptychat"))
+        self.assertTrue(self.barman.is_enabled(test_softice.TESTPLACE_CHAT_NAME))
+
 
     def test_is_master(self):
-        self.assertEqual(self.barman.is_master('username'), True)
-        self.assertNotEqual(self.barman.is_master('User'), True)
+
+        self.assertFalse(self.barman.is_master("user"))
+        self.assertTrue(self.barman.is_master(self.config["master"]))
+
 
     def test_serve_client(self):
-        self.assertNotEqual(self.barman.serve_client('Юзер', 'пиво'), "")
-        self.assertNotEqual(self.barman.serve_client('Юзер', 'beer'), "")
-        self.assertEqual(self.barman.serve_client('Юзер', 'кузинатра'), "")
-"""
+
+        self.assertIn("Балтика", self.barman.serve_client(self.config["master_name"], "пиво"))
+        self.assertIn("Балтика", self.barman.serve_client("Юзер", "beer"))
+        self.assertEqual(self.barman.serve_client("Юзер", "кузинатра"), "")
