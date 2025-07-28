@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
-"""Модуль для бота."""
+"""Модуль звонаря."""
 
 import functions as func
 import prototype
@@ -37,15 +37,12 @@ class CBellRinger(prototype.CPrototype):
                 answer = self.get_help(pchat_title)
             else:
 
-                print(word_list[0], COMMANDS)
-                print(COMMANDS[ADD_PLAYER_CMDS_OFFSET:ADD_PLAYER_CMDS_OFFSET+2])
-                print(COMMANDS[DEL_PLAYER_CMDS_OFFSET:DEL_PLAYER_CMDS_OFFSET+2])
                 if word_list[0] in COMMANDS:
 
                     if word_list[0] in COMMANDS[ADD_PLAYER_CMDS_OFFSET:ADD_PLAYER_CMDS_OFFSET+2]:
 
                         # *** Пользователь хочет добавить игрока
-                        if is_master(puser_name):
+                        if self.is_master(puser_name):
 
                             file_name:str = self.data_path+"/"+pchat_title+".txt"
                             player_list = func.load_from_file(file_name)
@@ -61,7 +58,7 @@ class CBellRinger(prototype.CPrototype):
                     elif word_list[0] in COMMANDS[DEL_PLAYER_CMDS_OFFSET:DEL_PLAYER_CMDS_OFFSET+2]:
 
                         # *** Пользователь хочет удалить игрока
-                        if puser_name == self.config["master"]:
+                        if self.is_master(puser_name):
 
                             player_name: str = word_list[1]
                             file_name: str = self.data_path+"/"+pchat_title+".txt"
@@ -128,7 +125,10 @@ class CBellRinger(prototype.CPrototype):
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
 
-        return UNIT_ID in self.config["chats"][pchat_title]
+        if pchat_title in self.config["chats"]:
+
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
 
     def is_master(self, puser_name: str) -> bool:
