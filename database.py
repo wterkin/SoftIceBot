@@ -305,3 +305,26 @@ class CDataBase:
             # *** Разлочим базу
             self.busy = False
         return query
+
+class CSignal(CAncestor):
+    """Класс таблицы сигнальщика."""
+
+    __tablename__ = 'tbl_sygnal'
+    fuserid = Column(Integer, ForeignKey(CUser.id))
+    fword = Column(String)
+
+    def __init__(self, puserid: int, pword: str):
+        """Конструктор"""
+
+        super().__init__()
+        self.fuserid = puserid
+        self.fword = pword
+        
+
+    def __repr__(self):
+
+        ancestor_repr = super().__repr__()
+        return f"""{ancestor_repr},
+                   User id:{self.fuserid}
+                   Word:{self.fword}"""
+
