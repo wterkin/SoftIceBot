@@ -309,7 +309,7 @@ class CDataBase:
 class CSignal(CAncestor):
     """Класс таблицы сигнальщика."""
 
-    __tablename__ = 'tbl_sygnal'
+    __tablename__ = 'tbl_signal'
     fuserid = Column(Integer, ForeignKey(CUser.id))
     fword = Column(String)
 
