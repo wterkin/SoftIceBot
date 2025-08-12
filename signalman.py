@@ -4,17 +4,19 @@
 
 import threading
 import prototype
+import database as db
+import function as func
 
 # ToDo: Хорошо бы каждому юзеру давать возможность зарегать область
 
 MONITOR_URL: str = "https://dronemonitor.ru/"
 
 
-COMMANDS: list = ["рег", "reg", "разрег", "unreg"]
+COMMANDS: list = ["monitor", "mon", "монитор", "мон", "forget", "forg", "забыть", "заб"]
 HINT: list = ["сигнал", "signal"]
 UNIT_ID: str = "signalman"
-REGISTRATION: int = 1
-UNREGISTRATION: int = 3
+MONITOR: int = 0
+FORGET: int = 4
 
 """
 С помощью threading
@@ -32,7 +34,12 @@ timer.cancel() — останавливает работу таймера, ес�
 
 class CSignalMan(prototype.CPrototype):
 
-    def __init__(self, pconfig: dict):
+    def __init__(self, pconfig: dict,  pdatabase: db.CDataBase):
+
+        super().__init__()
+        self.config: dict = pconfig
+        self.database: db.CDataBase = pdatabase
+        
 
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
@@ -66,6 +73,18 @@ class CSignalMan(prototype.CPrototype):
         return ""
 
 
+    def get_user_id(self, ptg_user_id):
+        """Если пользователь уже есть в базе, возвращает его ID, если нет - None."""
+
+        query = self.database.query_data(db.CUser)
+        query = query.filter_by(ftguserid=ptg_user_id)
+        user = query.first()
+        if user is not None:
+
+            return user.id
+        return None
+
+
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
 
@@ -75,7 +94,7 @@ class CSignalMan(prototype.CPrototype):
         return False
 
 
-    def signalman(self, pchat_title: str, puser_name: str, pmessage_text: str):
+    def signalman(self, pchat_title: str, ptguser_id: int, pmessage_text: str):
         """Основная функция модуля."""
         answer: str = ""
         word_list: list = func.parse_input(pmessage_text)
@@ -85,37 +104,46 @@ class CSignalMan(prototype.CPrototype):
             if word_list[0] in HINT:
 
                 answer = self.get_help(pchat_title)
-            elif word_list[0] in [COMMANDS[0], COMMANDS[1]]:
+            elif word_list[0] in COMMANDS[:4]:
 
 
-                user_id: int = search_user_by_name(puser_name):
+                user_id: int = self.get_user_id(ptguser_id)
                 # *** Регистрация
                 if user_id > 0 and len(word_list) > 1:
 
     
                     self.register(user_id, word_list[1])
-            elif word_list[0] in [COMMANDS[1], COMMANDS[2]]:
+            elif word_list[0] in COMMANDS[FORGET:]:
                 
                # *** Разрегистрация
-                user_id: int = search_user_by_name(puser_name):
+                user_id: int = self.get_user_id(ptguser_id)
                 if user_id > 0 and len(word_list) > 1:
 
     
-                    self.unregister(user_id, word_list[1])
+                    self.forget(user_id, word_list[1])
 
                
-    def search_user_by_name(pusername: str):
-        """Функция поиска ID пользователя по имени."""
+    # def search_user_by_name(pusername: str):
+    #    """Функция поиска ID пользователя по имени."""
 
             
-    def register(puser_id: int, pword: str):
+    def monitor(self, puser_id: int, pword: str):
         """Функция регистрации темы пользователю."""
+
+        signal = db.CSignalMan(puser_id, pword)
+        self.database.commit_changes(signal)
         
 
-    def reload(self):
+    def reload(self, puser_id: int):
         """Вызывает перезагрузку внешних данных модуля."""
         
             
-    def unregister(puser_id: int, pword: str):
+    def forget(puser_id: int, pword: str):
         """Функция разрегистрации темы пользователю."""
+
+        query = self.database.query_data(db.CSignal)
+        query = query.filter_by(puser_id)
+        signal = query.first()
+        signal.fstatus = db.STATUS_INACTIVE
+        self.database.commit_changes(signal)
         
