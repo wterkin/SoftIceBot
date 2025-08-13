@@ -38,11 +38,13 @@ class CTestSignalman(TestCase):
         self.assertTrue(self.signalman.can_process(test_softice.TESTPLACE_CHAT_NAME,  "!signal"))
         self.assertTrue(self.signalman.can_process(test_softice.TESTPLACE_CHAT_NAME,  "!монитор"))
 
+
     def test_get_help(self):
 
         self.assertEqual(self.signalman.get_help("fakechat"), "")
         self.assertEqual(self.signalman.get_help("emptychat"), "")
         self.assertIn(", ".join(signalman.COMMANDS), self.signalman.get_help(test_softice.TESTPLACE_CHAT_NAME))
+
 
     def test_get_hint(self):
 
@@ -50,3 +52,26 @@ class CTestSignalman(TestCase):
         self.assertEqual(self.signalman.get_hint("emptychat"), "")
         self.assertIn("сигнал, signal", self.signalman.get_hint(test_softice.TESTPLACE_CHAT_NAME))
 
+
+    def test_signalman(self):
+
+        self.assertIn(", ".join(signalman.COMMANDS) + "\n", self.signalman.signalman(test_softice.TESTPLACE_CHAT_NAME,
+                      self.config["master_id"], "!signal"))
+        self.assertEqual(self.signalman.signalman(test_softice.TESTPLACE_CHAT_NAME, self.config["master_id"],
+                      "!monitor Смоленск"), signalman.MEMORIZE_MSG)
+        self.assertEqual(self.signalman.signalman(test_softice.TESTPLACE_CHAT_NAME, self.config["master_id"],
+                      "!забыть Смоленск"), signalman.FORGET_MSG)
+
+
+
+
+
+
+
+
+
+
+
+
+
+        

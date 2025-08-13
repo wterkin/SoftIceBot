@@ -17,6 +17,9 @@ HINT: list = ["сигнал", "signal"]
 UNIT_ID: str = "signalman"
 MONITOR: int = 0
 FORGET: int = 4
+MEMORIZE_MSG: str = "Запомнил."
+FORGET_MSG: str = "Забыл."
+
 
 """
 С помощью threading
@@ -34,12 +37,12 @@ timer.cancel() — останавливает работу таймера, ес�
 
 class CSignalMan(prototype.CPrototype):
 
+
     def __init__(self, pconfig: dict,  pdatabase: db.CDataBase):
 
         super().__init__()
         self.config: dict = pconfig
         self.database: db.CDataBase = pdatabase
-        
 
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
@@ -102,7 +105,7 @@ class CSignalMan(prototype.CPrototype):
 
     def signalman(self, pchat_title: str, ptguser_id: int, pmessage_text: str):
         """Основная функция модуля."""
-        answer: str = ""
+        answer: str = "Ошибка"
         word_list: list = func.parse_input(pmessage_text)
         if self.can_process(pchat_title, pmessage_text):
 
@@ -116,40 +119,62 @@ class CSignalMan(prototype.CPrototype):
                 user_id: int = self.get_user_id(ptguser_id)
                 # *** Регистрация
                 if user_id > 0 and len(word_list) > 1:
-
     
-                    self.register(user_id, word_list[1])
+                    if self.memorize(user_id, word_list[1]):
+
+                      answer = MEMORIZE_MSG
             elif word_list[0] in COMMANDS[FORGET:]:
                 
                # *** Разрегистрация
                 user_id: int = self.get_user_id(ptguser_id)
                 if user_id > 0 and len(word_list) > 1:
 
-    
-                    self.forget(user_id, word_list[1])
+                    print(f"** 1 {user_id}")
+                    if self.forget(user_id, word_list[1]):
 
-               
-    # def search_user_by_name(pusername: str):
-    #    """Функция поиска ID пользователя по имени."""
+                      answer = FORGET_MSG
+        return answer       
 
             
-    def monitor(self, puser_id: int, pword: str):
+    def memorize(self, puser_id: int, pword: str):
         """Функция регистрации темы пользователю."""
+        result: bool = False
+        try:
 
-        signal = db.CSignalMan(puser_id, pword)
-        self.database.commit_changes(signal)
+            signal = db.CSignal(puser_id, pword)
+            self.database.commit_changes(signal)
+            result = True
+        except SQLAlchemyError as e:
+
+            print(str(e.__dict__['orig']))
+        return result
         
 
     def reload(self, puser_id: int):
         """Вызывает перезагрузку внешних данных модуля."""
         
             
-    def forget(puser_id: int, pword: str):
+    def forget(self, puser_id: int, pword: str) -> bool:
         """Функция разрегистрации темы пользователю."""
 
-        query = self.database.query_data(db.CSignal)
-        query = query.filter_by(puser_id)
-        signal = query.first()
-        signal.fstatus = db.STATUS_INACTIVE
-        self.database.commit_changes(signal)
-        
+        result: bool = False
+        try:
+
+          print(f"** 21 {pword}")
+          query = self.database.query_data(db.CSignal)
+          query = query.filter_by(fuserid=puser_id)
+          query = query.filter_by(fword=pword)
+          query = query.filter_by(fstatus=db.STATUS_ACTIVE)
+          signal = query.first()
+          # print(f"** 22 {signal}")
+          if signal is not None:
+
+              
+              signal.fstatus = db.STATUS_INACTIVE
+              # print(f"** 22 {signal}")
+              self.database.commit_changes(signal)
+              result = True
+        except SQLAlchemyError as e:
+
+            print(str(e.__dict__['orig']))
+        return result  
