@@ -5,7 +5,7 @@
 import threading
 import prototype
 import database as db
-import function as func
+import functions as func
 
 # ToDo: Хорошо бы каждому юзеру давать возможность зарегать область
 
@@ -54,13 +54,19 @@ class CSignalMan(prototype.CPrototype):
                 if found:
 
                     break
+            if not found:
+
+                found = word_list[0] in HINT
         return found
 
 
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
 
-        return ", ".join(COMMANDS) + "\n"
+        if self.is_enabled(pchat_title):
+
+            return ", ".join(COMMANDS) + "\n"
+        return "" 
 
 
     def get_hint(self, pchat_title: str) -> str:
@@ -69,7 +75,7 @@ class CSignalMan(prototype.CPrototype):
 
         if self.is_enabled(pchat_title):
 
-            return ", ".join(BELLRINGER_HINT)
+            return ", ".join(HINT)
         return ""
 
 

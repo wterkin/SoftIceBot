@@ -42,11 +42,11 @@ class CTestSignalman(TestCase):
 
         self.assertEqual(self.signalman.get_help("fakechat"), "")
         self.assertEqual(self.signalman.get_help("emptychat"), "")
-        self.assertIn(", ".join(signalman.COMMANDS), self.barman.get_help(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertIn(", ".join(signalman.COMMANDS), self.signalman.get_help(test_softice.TESTPLACE_CHAT_NAME))
 
     def test_get_hint(self):
 
         self.assertEqual(self.signalman.get_hint("fakechat"), "")
         self.assertEqual(self.signalman.get_hint("emptychat"), "")
-        self.assertIn("сигнал, signal", self.barman.get_hint(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertIn("сигнал, signal", self.signalman.get_hint(test_softice.TESTPLACE_CHAT_NAME))
 
