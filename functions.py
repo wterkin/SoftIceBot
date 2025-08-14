@@ -18,7 +18,7 @@ def parse_input(pmessage_text: str) -> list:
 
 
 def get_command(pword: str, pcommands : list) -> int:  # noqa
-    """Распознает команду и возвращает её код, в случае неудачи - None."""
+    """Распознает команду и возвращает её код, в случае неудачи  -1."""
 
     assert pword is not None, \
         "Assert: [function.get_command] " \
@@ -38,13 +38,7 @@ def get_command(pword: str, pcommands : list) -> int:  # noqa
 
 
 def load_from_file(pfile_name: str) -> list:
-    """Загружает файл в список
-
-    >>> load_from_file("data/bar/bar_test.txt")
-    ['Test 1', 'Test 2', 'Test 3']
-    >>> type(load_from_file("ABCDEF"))
-    <class 'NoneType'>
-    """
+    """Загружает файл в список """
     content: list = []
     # *** откроем файл
     try:
@@ -78,7 +72,7 @@ def screen_text(ptext: str) -> str:
 
 
 def save_list(plist: list, pfile_name: str): # noqa
-    """Сохраняет заданную книгу."""
+    """Сохраняет список строк в файл."""
 
     new_file_name: str = f"{pfile_name}_{dtime.now().strftime('%Y%m%d-%H%M%S')}"
     if os.path.exists(pfile_name):

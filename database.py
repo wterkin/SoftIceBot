@@ -279,15 +279,21 @@ class CDataBase:
     def connect(self):
         """Устанавливает соединение с БД."""
 
-        alchemy_echo: bool = self.config["alchemy_echo"] == "1"
-        self.engine = create_engine('sqlite:///' + self.data_path + self.database_name,
-                                    echo=alchemy_echo,
-                                    connect_args={'check_same_thread': False})
-        session = sessionmaker()
-        session.configure(bind=self.engine)
-        self.session = session()
-        Base.metadata.bind = self.engine
+        result: bool = False
+        try:
+            alchemy_echo: bool = self.config["alchemy_echo"] == "1"
+            self.engine = create_engine('sqlite:///' + self.data_path + self.database_name,
+                                        echo=alchemy_echo,
+                                        connect_args={'check_same_thread': False})
+            session = sessionmaker()
+            session.configure(bind=self.engine)
+            self.session = session()
+            Base.metadata.bind = self.engine
+            result = True
+        except exc.SQLAlchemyError as ex:
 
+            print("Ошибка подключения к БД!")
+        return result
 
     def create(self):
         """Создает или изменяет БД в соответствии с описанной в классах структурой."""
