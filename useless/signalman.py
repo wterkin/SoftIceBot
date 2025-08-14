@@ -9,7 +9,7 @@ import functions as func
 
 # ToDo: Хорошо бы каждому юзеру давать возможность зарегать область
 
-MONITOR_URL: str = "https://dronemonitor.ru/"
+SITE_URL: str = "https://dronemonitor.ru/"
 
 
 COMMANDS: list = ["monitor", "mon", "монитор", "мон", "forget", "forg", "забыть", "заб"]
@@ -19,6 +19,15 @@ MONITOR: int = 0
 FORGET: int = 4
 MEMORIZE_MSG: str = "Запомнил."
 FORGET_MSG: str = "Забыл."
+USE_PROXY: bool = False
+HTTP_PROXY: str = ""
+
+if USE_PROXY:
+
+    import urllib3 as ul
+else:
+
+    import urllib.request
 
 
 """
@@ -62,6 +71,18 @@ class CSignalMan(prototype.CPrototype):
                 found = word_list[0] in HINT
         return found
 
+
+    def download_page() -> list:
+        """Скачивает страничку с сайта."""
+        if USE_PROXY:
+
+          proxy: object = ul.proxy_from_url(HTTP_PROXY, timeout=20.0)
+          request: object = proxy.request("GET", SITE_URL)
+          return request.data.decode('utf-8')
+        else:
+
+          return urllib.request.urlopen(SITE_URL).read().decode("UTF-8")
+      
 
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""

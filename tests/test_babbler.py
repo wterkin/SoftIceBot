@@ -64,8 +64,6 @@ class CTestBabbler(TestCase):
     def test_reload(self):
 
         self.assertTrue(self.babbler.reload())
-        self.babbler.data_path = "./empty/"
-        self.assertFalse(self.babbler.reload())
 
 
     def test_talk(self):

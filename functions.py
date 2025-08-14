@@ -81,7 +81,9 @@ def save_list(plist: list, pfile_name: str): # noqa
     """Сохраняет заданную книгу."""
 
     new_file_name: str = f"{pfile_name}_{dtime.now().strftime('%Y%m%d-%H%M%S')}"
-    os.rename(pfile_name, new_file_name)
+    if os.path.exists(pfile_name):
+    
+        os.rename(pfile_name, new_file_name)
     with open(pfile_name, "w", encoding="utf8") as out_file:
 
         for line in plist:

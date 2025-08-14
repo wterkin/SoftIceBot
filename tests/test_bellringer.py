@@ -73,6 +73,6 @@ class CTestBellRinger(TestCase):
 
     def tearDown(self):
 
-        for file in Path(self.bellringer.data_path).glob("TestPlace.txt_2*"):
+        for file in Path(self.bellringer.data_path).glob("TestPlace.txt*"):
 
             file.unlink()

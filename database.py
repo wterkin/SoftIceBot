@@ -242,13 +242,14 @@ class CDataBase:
     def __init__(self, pconfig, pdata_path, pdatabase_name=DATABASE_NAME):
         """Конструктор класса."""
         self.application_folder = Path.cwd()
-        self.config = pconfig
-        self.data_path = pdata_path
+        self.config: dict = pconfig
+        self.data_path: str = pdata_path
         self.session = None
         self.engine = None
         self.busy: bool = False
-        self.database_name = pdatabase_name
+        self.database_name: str = pdatabase_name
         self.connect()
+
 
     def commit_changes(self, obj):
         """Сохраняет изменения в БД."""
@@ -273,6 +274,7 @@ class CDataBase:
 
             # *** Разлочим базу
             self.busy = False
+
 
     def connect(self):
         """Устанавливает соединение с БД."""
@@ -299,15 +301,18 @@ class CDataBase:
         self.session.close()
         self.engine.dispose()
 
+
     def exists(self):
         """Проверяет наличие базы данных по пути в конфигурации."""
 
         return Path(self.data_path + self.database_name).exists()
 
+
     def get_session(self):
 
         """Возвращает экземпляр session."""
         return self.session
+
 
     def query_data(self, cls):
         """Возвращает выборку заданнного класса."""

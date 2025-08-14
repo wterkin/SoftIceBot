@@ -2,10 +2,7 @@
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль выпрашивания пожертвований ;) """
 
-# import string
 from datetime import datetime
-# from time import sleep
-# from pathlib import Path
 from random import randint
 
 import prototype
@@ -26,14 +23,12 @@ class CCollector(prototype.CPrototype):
         super().__init__()
         self.config: dict = pconfig
 
+
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Коллектор никакие команды не обрабатывает."""
 
-        assert pchat_title is not None, \
-            "Assert: [collector.can_process] Пропущен параметр <pchat_title> !"
-        assert pmessage_text is not None, \
-            "Assert: [collector.can_process] Пропущен параметр <pmessage_text> !"
         return False
+
 
     def get_help(self, pchat_title: str):
         """Возвращает список команд модуля, доступных пользователю."""
@@ -52,6 +47,7 @@ class CCollector(prototype.CPrototype):
         assert pchat_title is not None, \
             "Assert: [collector.is_enabled] Пропущен параметр <pchat_title> !"
         return UNIT_ID in self.config["chats"][pchat_title]
+
 
     def is_master(self, puser_name: str) -> bool:
         """Проверяет, хозяин ли отдал команду."""
@@ -72,8 +68,8 @@ class CCollector(prototype.CPrototype):
 
                 # *** Сформируем ответ
                 panswer = panswer + DONATE_MESSAGE
-
         return panswer
+
 
     def reload(self):
         """Вызывает перезагрузку внешних данных модуля."""

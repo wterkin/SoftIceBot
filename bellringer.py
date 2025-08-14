@@ -44,7 +44,7 @@ class CBellRinger(prototype.CPrototype):
                         # *** Пользователь хочет добавить игрока
                         if self.is_master(puser_name):
 
-                            file_name:str = self.data_path+"/"+pchat_title+".txt"
+                            file_name:str = self.data_path+pchat_title+".txt"
                             player_list = func.load_from_file(file_name)
                             player_name: str = word_list[1]
                             if player_name not in player_list:
@@ -63,11 +63,17 @@ class CBellRinger(prototype.CPrototype):
                             player_name: str = word_list[1]
                             file_name: str = self.data_path+"/"+pchat_title+".txt"
                             player_list = func.load_from_file(file_name)
+                            print(f"+++++++++ 1 {player_name} {player_list}")
                             if player_name in player_list:
 
-                                player_idx = player_list.index(player_name)
-                                if player_idx > 0:
+                                print("+++++++++ 2")
+                                try:
+                                    player_idx = player_list.index(player_name)
+                                except ValueError:
+                                    player_idx = -1
+                                if player_idx >= 0:
 
+                                    print(f"+++++++++ 3 {player_idx}")
                                     del player_list[player_idx]
                                     func.save_list(player_list, file_name)
                                     answer = f"Игрок {player_name} удален"

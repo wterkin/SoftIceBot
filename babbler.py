@@ -231,4 +231,4 @@ class CBabbler(prototype.CPrototype):
             if answer:
 
                 break
-        return answer, file_name
+        return answer, file_name.replace("\\", "/")
