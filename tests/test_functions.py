@@ -3,6 +3,7 @@ import functions as func
 import json
 # from sys import platform
 from pathlib import Path
+import os
 
 from sys import platform
 import softice
@@ -23,11 +24,6 @@ class CTestFunctions(TestCase):
             self.data_path: str = self.config[softice.WINDOWS_DATA_FOLDER_KEY]
 
 
-    def test_parse_input(self):
-
-        self.assertEqual(func.parse_input("!test softice"), ["test", "softice"])
-
-
     def test_get_command(self):
 
         self.assertEqual(func.get_command("test",["run", "test", "stop"]), 1)
@@ -40,6 +36,19 @@ class CTestFunctions(TestCase):
         func.save_list(lines, file_name)
         self.assertEqual(func.load_from_file(file_name), ["line1", "line2", "line3"])
         self.assertEqual(func.load_from_file(self.data_path+"ABCDEF"), [])
-        for file in Path(self.data_path).glob(file_name):
+        os.remove(file_name)
+        #for file in Path(self.data_path).glob(file_name):
 
-            file.unlink()
+        #    file.unlink()
+
+
+    def test_screen_text(self):
+
+        text: str = "123.456_789!987(654)+321=123-456"
+        new_text: str = func.screen_text(text)
+        self.assertEqual(new_text, "123\.456\_789\!987\(654\)\+321\=123\-456") 
+
+
+    def test_parse_input(self):
+
+        self.assertEqual(func.parse_input("!test softice"), ["test", "softice"])
