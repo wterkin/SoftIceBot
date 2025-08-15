@@ -642,6 +642,10 @@ class CSoftIceBot:
         if result:
 
             answer += result + "\n"
+        result = self.gambler.get_hint(self.event[cn.MCHAT_TITLE])
+        if result:
+
+            answer += result + "\n"
         result = self.haijin.get_hint(self.event[cn.MCHAT_TITLE])[1:]
         if result:
 

@@ -62,6 +62,7 @@ class CGambler(prototype.CPrototype):
                 for command in THROW_COIN_COMMANDS:
 
                     found = word_list[0] in command
+                    #print(f" {command} {word_list[0]} {found}")
             if not found:
 
                 found = word_list[0] in HINT
@@ -77,6 +78,9 @@ class CGambler(prototype.CPrototype):
         command_list: str = ""
         if self.is_enabled(pchat_title):
 
+            command_list += ", ".join(ROCKSCIPAPLIZSPOCK_COMMANDS)+"\n"
+            command_list += ", ".join(THROW_COIN_COMMANDS)
+            """
             for command in ROCKSCIPAPLIZSPOCK_COMMANDS:
 
                 command_list += ", ".join(command)
@@ -85,6 +89,7 @@ class CGambler(prototype.CPrototype):
 
                 command_list += ", ".join(command)
                 command_list += "\n"
+                """
         return command_list
 
 
@@ -107,7 +112,7 @@ class CGambler(prototype.CPrototype):
             "Assert: [librarian.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
         if pchat_title in self.config["chats"]:
-            
+
           return UNIT_ID in self.config["chats"][pchat_title]
         return False  
 
