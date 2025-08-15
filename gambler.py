@@ -106,17 +106,15 @@ class CGambler(prototype.CPrototype):
         assert pchat_title is not None, \
             "Assert: [librarian.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
-        return UNIT_ID in self.config["chats"][pchat_title]
+        if pchat_title in self.config["chats"]:
+            
+          return UNIT_ID in self.config["chats"][pchat_title]
+        return False  
 
 
     def is_master(self, puser_name, puser_title):
-        """Проверяет, является ли пользователь хозяином бота."""
+        """Пустая заглушка."""
 
-        if puser_name == self.config["master"]:
-
-            return True, ""
-        # *** Низзя
-        return False, f"У вас нет на это прав, {puser_title}."
 
     def reload(self):
         """Пустая заглушка."""
