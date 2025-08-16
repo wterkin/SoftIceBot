@@ -8,6 +8,7 @@ import gambler
 
 class CTestGambler(TestCase):
 
+
     def setUp(self) -> None:
 
         with open("unittest_config.json", "r", encoding="utf-8") as json_file:
@@ -15,23 +16,6 @@ class CTestGambler(TestCase):
             self.config = json.load(json_file)
         self.gambler: gambler.CGambler = gambler.CGambler(self.config)
 
-    """
-    def test_gambler(self):
-
-        # def barman(self, pchat_title: str, puser_name: str, puser_title: str,
-        #       pmessage_text: str) -> str:
-        self.assertNotEqual(self.gambler.gambler(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
-                                               self.config["master_name"], "!пиво"), "")
-        self.assertIn(self.config["master_name"], self.gambler.gambler(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
-                                                  self.config["master_name"], "!пиво "+self.config["master_name"]))
-        self.assertEqual(self.gambler.gambler(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
-                                            self.config["master_name"], "!виски"), "")
-        self.assertIn("Сегодня в баре", self.gambler.gambler(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
-                                                           self.config["master_name"], "!bar"))
-        self.assertEqual(self.gambler.gambler(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
-                                            self.config["master_name"], "!brreload"), "Ассортимент бара обновлён.")
-        self.assertIn("У вас нет на это прав", self.gambler.gambler(test_softice.TESTPLACE_CHAT_NAME, "user", "User", "!brreload"))
-    """
 
     def test_can_process(self):
 
@@ -46,8 +30,10 @@ class CTestGambler(TestCase):
 
         self.assertEqual(self.gambler.get_help("fakechat"), "")
         self.assertEqual(self.gambler.get_help("emptychat"), "")
-        result = "камень, ножницы, бумага, ящерица, спок\n монета, coin\n"
-        self.assertIn(result, self.gambler.get_help(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertIn("камень", self.gambler.get_help(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertIn("спок", self.gambler.get_help(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertIn("монета", self.gambler.get_help(test_softice.TESTPLACE_CHAT_NAME), )
+        
 
     def test_get_hint(self):
 

@@ -57,15 +57,23 @@ class CGambler(prototype.CPrototype):
                 for command in ROCKSCIPAPLIZSPOCK_SHORT_COMMANDS:
 
                     found = word_list[0] in command
+                    if found:
+
+                        break
             if not found:
 
                 for command in THROW_COIN_COMMANDS:
 
                     found = word_list[0] in command
+                    print(f"** gmb:cnprc: {word_list[0]=} {command=} {found=}")
                     #print(f" {command} {word_list[0]} {found}")
+                    if found:
+
+                        break
             if not found:
 
                 found = word_list[0] in HINT
+        print(f"** gmb:cnprc: {found=}")
         return found
 
 
