@@ -61,7 +61,11 @@ class CTestHaijin(TestCase):
                                             self.config["master_name"], "!hkrl"), "#Книга загружена")
         self.assertEqual(self.haijin.haijin(test_softice.TESTPLACE_CHAT_NAME, self.config["master"],
                                             self.config["master_name"], "!hksv"), "#Книга сохранена")
-        os.remove(self.haijin.data_path + "hokku.txt_*")
+        # os.remove(self.haijin.data_path + "hokku.txt_*")
+        for file in Path(self.haijin.data_path).glob("hokku.txt_*"):
+
+            file.unlink()
+        
         self.assertIn("хк, hk : получить случайное хокку, \n", self.haijin.get_help(test_softice.TESTPLACE_CHAT_NAME))
 
     def test_is_enabled(self):
@@ -82,4 +86,11 @@ class CTestHaijin(TestCase):
         #print(f"{self.haijin.hokku=}")
         result = "[1] Печальный мир. / Даже когда расцветают вишни.. / Даже тогда... (Исса)"
         self.assertIn(result, self.haijin.process_command(["hk"], self.config["master"], self.config["master_name"]))
-
+        # Утром / Тихонько упал на землю / С дерева лист. (Кобаяси Исса)
+        hokku = "Утром / Тихонько упал на землю / С дерева лист. (Кобаяси Исса)"
+        self.assertIn("Спасибо, Петрович, хокку добавлено под номером 2",
+                      self.haijin.process_command(["hk+", hokku],
+                                                     self.config["master"], self.config["master_name"]))
+        #Хокку {pcommand[1]} удалена.
+        self.assertIn("Хокку 2 удалена.", self.haijin.process_command(["hk-", "2"],self.config["master"], self.config["master_name"]))
+        # Запрос на удаление от нелегитимного лица

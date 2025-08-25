@@ -282,7 +282,6 @@ class CHaijin(prototype.CPrototype):
                           f"нелегитимного лица {puser_title}.")
                     answer = (f"Извини, {puser_title}, "
                               f"только {self.config['master_name']} может удалять хокку")
-        print(f"*** hj:prcm:02 {answer=}")
         return answer, unformatted_answer
 
 
