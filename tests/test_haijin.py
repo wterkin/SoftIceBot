@@ -38,6 +38,16 @@ class CTestHaijin(TestCase):
         self.assertFalse(self.haijin.can_process(test_softice.TESTPLACE_CHAT_NAME, "!кукабарра"))
 
 
+    def test_format_hokku(self):
+
+      text = "Печальный мир. / Даже когда расцветают вишни.. / Даже тогда..."
+      # result_text = 
+      result_text = f"{haijin.BOLD}{haijin.ITALIC}{func.screen_text(text)[:-1]}{haijin.ITALIC}{haijin.BOLD}{haijin.LF}" \
+                    f"{haijin.AUTHOR_INDENT}{func.screen_text('Исса')} {haijin.SPOILER}" + \
+                    f"{haijin.DELIMITER} 1 {haijin.DELIMITER} {len(text)} {haijin.SPOILER}"
+      self.assertEqual(haijin.format_hokku(text), result_text)
+
+
     def test_get_help(self):
 
         self.assertIn("хк, hk : получить случайное хокку, \n", self.haijin.get_help(test_softice.TESTPLACE_CHAT_NAME))
@@ -91,6 +101,8 @@ class CTestHaijin(TestCase):
         self.assertIn("Спасибо, Петрович, хокку добавлено под номером 2",
                       self.haijin.process_command(["hk+", hokku],
                                                      self.config["master"], self.config["master_name"]))
-        #Хокку {pcommand[1]} удалена.
         self.assertIn("Хокку 2 удалена.", self.haijin.process_command(["hk-", "2"],self.config["master"], self.config["master_name"]))
         # Запрос на удаление от нелегитимного лица
+        result = "Извини, User, только Петрович может удалять хокку"
+        self.assertIn(result, self.haijin.process_command(["hk-", "1"], "user", "User"))
+        
