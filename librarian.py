@@ -34,7 +34,7 @@ UNIT_ID = "librarian"
 
 
 def find_in_book(pbook: list, pword_list: list) -> str:
-    """Ищет хокку или цитату в книге по заданной строке"""
+    """Ищет цитату в книге по заданной строке"""
 
     assert pbook is not None, \
         "Assert: [librarian.find_in_book] " \
@@ -268,7 +268,10 @@ class CLibrarian(prototype.CPrototype):
         assert pchat_title is not None, \
             "Assert: [librarian.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
-        return UNIT_ID in self.config["chats"][pchat_title]
+        if pchat_title in self.config["chats"]:
+            
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False  
 
 
     def is_master(self, puser_name, puser_title):
