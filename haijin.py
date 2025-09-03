@@ -128,11 +128,9 @@ class CHaijin(prototype.CPrototype):
 
                     result_text += line.strip() + LF
                 result_text = func.screen_text(result_text)
-                print(f"!!!!!!!! {result_text=}")
                 result_text = f"{BOLD}{ITALIC}{result_text[:-1]}{ITALIC}{BOLD}{LF}" \
                               f"{AUTHOR_INDENT}{func.screen_text(author)} {SPOILER}" + \
                               f"{DELIMITER} {number} {DELIMITER} {len(self.hokku)} {SPOILER}"
-            print(f"!!!!!!!! {result_text=}")
             return result_text
         return ptext
 

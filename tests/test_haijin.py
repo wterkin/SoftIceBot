@@ -41,22 +41,14 @@ class CTestHaijin(TestCase):
 
     def test_format_hokku(self):
 
-        text = "Печальный мир. / Даже когда расцветают вишни.. / Даже тогда... (Исса)"
-        print(f"====== {text=}")
-        """
-        screened_text = func.screen_text(text)
-        print(f"====== {screened_text[:-1]=}")
-        result_text = f"{haijin.BOLD}{haijin.ITALIC}{screened_text[:-1]}" # {haijin.ITALIC}{haijin.BOLD}{haijin.LF}" # \
-        print(f"====== {result_text[:-1]=}")
-        #              #f"{haijin.AUTHOR_INDENT}{func.screen_text('Исса')} {haijin.SPOILER}" + \
-        #             #f"{haijin.DELIMITER} 1 {haijin.DELIMITER} {len(text)} {haijin.SPOILER}"
-        """
-        test_text: str = self.haijin.format_hokku(text)
-        print(f"--------------------- {test_text=}")
-
-        # self.assertEqual(self.haijin.format_hokku(text), result_text)
-
-
+        text: str = "[1] Печальный мир. \n Даже когда расцветают вишни..  Даже тогда...  (Исса) "
+        screened_text = func.screen_text(text[4:-8])
+        first_text: str = f"{haijin.BOLD}{haijin.ITALIC}{screened_text[:-1]}{haijin.ITALIC}{haijin.BOLD}{haijin.LF}" 
+        second_text: str = f"{haijin.AUTHOR_INDENT}{func.screen_text('Исса')} {haijin.SPOILER}"
+        third_text: str = f"{haijin.DELIMITER} 1 {haijin.DELIMITER} 1 {haijin.SPOILER}"
+        result_text: str = first_text + second_text + third_text
+        formatted_text: str = self.haijin.format_hokku(text)
+        self.assertEqual(formatted_text, result_text)
 
     def test_get_help(self):
 
