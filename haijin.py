@@ -2,10 +2,10 @@
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль - цитатник хокку. 俳人"""
 
-import functions as func
-import prototype
-import librarian
 import constants as cn
+import functions as func
+import librarian
+import prototype
 
 # *** Команды для цитатника хокку
 ASK_HOKKU_CMD: int = 0
@@ -193,7 +193,7 @@ class CHaijin(prototype.CPrototype):
                 can_reload, answer = self.is_master(puser_name, puser_title)
                 if can_reload:
 
-                    librarian.save_book(self.hokku, self.data_path + HAIJIN_FILE_NAME)
+                    func.save_list(self.hokku, self.data_path + HAIJIN_FILE_NAME)
                     answer = "Книга сохранена"
             elif word_list[0] in HINT:
 
@@ -288,5 +288,5 @@ class CHaijin(prototype.CPrototype):
     def reload(self):
         """Перезагружает библиотеку."""
 
-        self.hokku = librarian.load_book_from_file(self.data_path + HAIJIN_FILE_NAME)
+        self.hokku = func.load_from_file(self.data_path + HAIJIN_FILE_NAME)
         print(f"> Haijin успешно (пере)загрузил {len(self.hokku)} хокку.")

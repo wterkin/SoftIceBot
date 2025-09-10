@@ -77,25 +77,6 @@ def get_command(pword: str) -> int:
     return result
 
 
-def load_book_from_file(pfile_name: str) -> list:  # noqa
-    """Загружает файл в список"""
-
-    assert pfile_name is not None, \
-        "Assert: [librarian.load_book_from_file] " \
-        "Пропущен параметр <pfile_name> !"
-    content: list = []
-    # *** откроем файл
-    with open(pfile_name, encoding="utf8") as text_file:
-
-        # *** читаем в список
-        for line in text_file:
-
-            if line:
-
-                content.append(line.strip())
-    return content
-
-
 def quote(pbook: list, pword_list: list) -> str:
     """ Возвращает хокку или цитату с заданным номером, если номер не задан, то случайную."""
 
@@ -132,24 +113,6 @@ def quote(pbook: list, pword_list: list) -> str:
         answer = random.choice(pbook)
         answer = f"[{pbook.index(answer)+1}] {answer}"
     return answer
-
-
-def save_book(pbook: list, pbook_name: str): # noqa
-    """Сохраняет заданную книгу."""
-
-    assert pbook is not None, \
-        "Assert: [librarian.save_book] " \
-        "Пропущен параметр <pbook> !"
-    assert pbook_name is not None, \
-        "Assert: [librarian.save_book] " \
-        "Пропущен параметр <pbook_name> !"
-    new_file_name: str = f"{pbook_name}_{dtime.now().strftime('%Y%m%d-%H%M%S')}"
-    os.rename(pbook_name, new_file_name)
-    with open(pbook_name, "w", encoding="utf8") as out_file:
-
-        for line in pbook:
-
-            out_file.write(line + "\n")
 
 
 class CLibrarian(prototype.CPrototype):
@@ -321,7 +284,7 @@ class CLibrarian(prototype.CPrototype):
                 can_reload, answer = self.is_master(puser_name, puser_title)
                 if can_reload:
 
-                    save_book(self.quotes, self.data_path + QUOTES_FILE_NAME)
+                    func.save_list(self.quotes, self.data_path + QUOTES_FILE_NAME)
                     answer = "Книга сохранена"
                 else:
 
@@ -349,5 +312,5 @@ class CLibrarian(prototype.CPrototype):
     def reload(self):
         """Перезагружает библиотеку."""
 
-        self.quotes = load_book_from_file(self.data_path + QUOTES_FILE_NAME)
+        self.quotes = func.load_from_file(self.data_path + QUOTES_FILE_NAME)
         print(f"> Librarian успешно (пере)загрузил {len(self.quotes)} цитат(ы)")

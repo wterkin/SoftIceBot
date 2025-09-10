@@ -56,7 +56,6 @@ def load_from_file(pfile_name: str) -> list:
         return content
     return content
 
-
 def screen_text(ptext: str) -> str:
     """Экранирует текст перед выводом в телеграм."""
     result_text: str = ptext.replace(".", f"{BACKSLASH}.")
