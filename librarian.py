@@ -260,6 +260,7 @@ class CLibrarian(prototype.CPrototype):
         command: int
         answer: str = ""
         word_list: list = func.parse_input(pmessage_text)
+        
         if self.can_process(pchat_title, pmessage_text):
 
             # *** Возможно, запросили перезагрузку.
@@ -300,9 +301,10 @@ class CLibrarian(prototype.CPrototype):
 
                 # *** Получим код команды
                 command = get_command(word_list[0])
-                # *** Не, цитату
-                answer = self.execute_quotes_commands(puser_name, puser_title,
-                                                      word_list, command)
+                if command >= 0:
+                    
+                    answer = self.execute_quotes_commands(puser_name, puser_title,
+                                                          word_list, command)
             if answer:
 
                 print("> Librarian отвечает: ", answer[:func.OUT_MSG_LOG_LEN])
