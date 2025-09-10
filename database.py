@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Boolean, MetaData, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import exc
 
 # py lint: disable=C0301
 # py lint: disable=line-too-long

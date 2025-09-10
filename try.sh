@@ -1,5 +1,5 @@
 #!/bin/bash
 rm flags/unittest.flg
 touch flags/try.flg
-~/bin/env/bin/python3 softice.py
+/home/app/bin/python/tg_env/bin/python3 softice.py
 rm flags/try.flg
