@@ -41,8 +41,21 @@ class CTestModerator(TestCase):
     
         #def check_bad_words_ex(self, pmessage: str) -> str:
         self.assertEqual(self.moderator.check_bad_words_ex(""), "")
+        # .*\s*[6бмп]+л+[яR@]+(9|)*[дт]*[ьъb]*(?!м)(?!ж)
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex(" млять пофуй"))
+        self.assertNotEqual(self.moderator.check_bad_words_ex("Вразумляться"), moderator.CENSORED)
+        self.assertNotEqual(self.moderator.check_bad_words_ex("Римляныня"), moderator.CENSORED)
+        # \s*[по]*[хxпф][yу][ий(ясе)](?!ть)(?!тыня)
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("пофуй"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("фуясе"))
+        self.assertNotEqual(self.moderator.check_bad_words_ex("похулить"), moderator.CENSORED)
+        # .*\s*[xх]е[рp][а@]*(?!ить)\s*
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("ферачить"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("пофер"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("ниферасе"))
+        self.assertNotEqual(self.moderator.check_bad_words_ex("похерить"), moderator.CENSORED)
 
-
+        # парикмахерская
     def test_get_hint(self):
 
         self.assertIn(", ".join(moderator.HINT), self.moderator.get_hint(test_softice.TESTPLACE_CHAT_NAME))
