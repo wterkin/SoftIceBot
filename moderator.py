@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Модуль антимата для бота."""
+
 import re
 from pathlib import Path
 import functions as func
@@ -11,7 +12,6 @@ import debug as dbg
 RELOAD_BAD_WORDS: list = ["bwreload", "bwrl"]
 HINT = ["адм", "adm"]
 UNIT_ID = "moderator"
-
 DATA_FOLDER: str = "moderator"
 BAD_WORDS_FILE: str = "bad_words.txt"
 CENSOR_PREFIX = r"\[\*\*"
@@ -19,7 +19,7 @@ CENSOR_POSTFIX = r"\*\*\]"
 CENSORED: str = "*beep*"
 
 
-def replace_bad_words(bad_word, text):
+def replace_bad_words(bad_word: str, text: str) -> str:
     """Заменяет мат в строке на безобидное слово."""
 
     words: list = text.split(" ")
@@ -126,9 +126,11 @@ class CModerator(prototype.CPrototype):
 
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
-        # dbg.dout(f"mdr:isen:{self.config['chats']}")
-        return UNIT_ID in self.config["chats"][pchat_title]
 
+        if pchat_title in self.config["chats"]:
+       
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
     def is_master(self, puser_name, puser_title):
         """Проверяет, является ли пользователь хозяином бота."""
