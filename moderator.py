@@ -51,12 +51,13 @@ class CModerator(prototype.CPrototype):
         return self.is_enabled(pchat_title) and ((word_list[0] in RELOAD_BAD_WORDS)
                                                  or (word_list[0] in HINT))
 
+
     def check_bad_words_ex(self, pmessage: str) -> str:
         """Проверяет сообщение на наличие мата."""
 
         answer: str = ""
         detected: bool = False
-        if pmessage is not None:
+        if pmessage:
 
             text: str = pmessage.lower()
             for bad_word in self.bad_words:
@@ -68,7 +69,7 @@ class CModerator(prototype.CPrototype):
                     if result:
                         
 
-                        print("detected")
+                        print("bad word detected.")
                         detected = True
                         text = replace_bad_words(bad_word, text)
             if detected:
@@ -107,8 +108,8 @@ class CModerator(prototype.CPrototype):
         return answer
 
 
-    def delete_message(self, pmessage):
-        """Удаляет сообщение пользователя."""
+    # def delete_message(self, pmessage):
+    #    """Удаляет сообщение пользователя."""
 
 
     def get_help(self, pchat_title: str) -> str:

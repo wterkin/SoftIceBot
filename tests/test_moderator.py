@@ -35,3 +35,14 @@ class CTestModerator(TestCase):
         self.assertTrue(self.moderator.can_process(test_softice.TESTPLACE_CHAT_NAME, "!adm"))
         self.assertTrue(self.moderator.can_process(test_softice.TESTPLACE_CHAT_NAME, "!bwrl"))
         self.assertFalse(self.moderator.can_process(test_softice.TESTPLACE_CHAT_NAME, "!кукабарра"))
+
+    
+    def test_check_bad_words_ex(self):
+    
+        #def check_bad_words_ex(self, pmessage: str) -> str:
+        self.assertEqual(self.moderator.check_bad_words_ex(""), "")
+
+
+    def test_get_hint(self):
+
+        self.assertIn(", ".join(moderator.HINT), self.moderator.get_hint(test_softice.TESTPLACE_CHAT_NAME))
