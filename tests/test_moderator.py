@@ -42,6 +42,7 @@ class CTestModerator(TestCase):
         #def check_bad_words_ex(self, pmessage: str) -> str:
         self.assertEqual(self.moderator.check_bad_words_ex(""), "")
         # .*\s*[6бмп]+л+[яR@]+(9|)*[дт]*[ьъb]*(?!м)(?!ж)
+        # (?:^| )[6бмп]+л+([яR@]+|(9\|)|(еа))*[дт]*[ьъb]*(?!м)(?!ж)        
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex(" млять пофуй"))
         self.assertNotEqual(self.moderator.check_bad_words_ex("Вразумляться"), moderator.CENSORED)
         self.assertNotEqual(self.moderator.check_bad_words_ex("Римляныня"), moderator.CENSORED)
@@ -49,13 +50,22 @@ class CTestModerator(TestCase):
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("пофуй"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("фуясе"))
         self.assertNotEqual(self.moderator.check_bad_words_ex("похулить"), moderator.CENSORED)
-        # .*\s*[xх]е[рp][а@]*(?!ить)\s*
+        # (?:^| )((н[еe])|(п[оo])|(н[а@])|(н[иu]))*[фxх][еe][рp]((?!ить)|[а@]ч)
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("ферачить"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("пофер"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("ниферасе"))
         self.assertNotEqual(self.moderator.check_bad_words_ex("похерить"), moderator.CENSORED)
-
-        # парикмахерская
+        self.assertNotEqual(self.moderator.check_bad_words_ex("парикмахерская"), moderator.CENSORED)
+        # \s*п[еeиu][сcз3][дтT][аaиuеe]+(ть)*
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("писта"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("пистеть"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("писти"))
+        self.assertNotEqual(self.moderator.check_bad_words_ex("пистон"), moderator.CENSORED)
+        # \s*[пp][ие]*[сзz]+[дтd]+[еёeя]*[цтсшc]
+        # \s*[пn][иuеe]*[сcзz]+[дтd]+[еёeя]+[цтсcшж]*
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("пистеш"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("пестеть"))
+        
     def test_get_hint(self):
 
         self.assertIn(", ".join(moderator.HINT), self.moderator.get_hint(test_softice.TESTPLACE_CHAT_NAME))
