@@ -60,21 +60,21 @@ class CModerator(prototype.CPrototype):
         if pmessage:
 
             text: str = pmessage.lower()
-            print(f"**** mod:chbw:09 {text=}")
+            # print(f"**** mod:chbw:09 {text=}")
             for bad_word in self.bad_words:
 
-                print(f"*   *** mod:chbw:10 {bad_word=}")
+                # print(f"*   *** mod:chbw:10 {bad_word=}")
                 result: bool = True
                 while result:
 
                     result = re.match(bad_word, text) is not None
-                    print(f"**** mod:chbw:11 {result=}")
+                    # print(f"**** mod:chbw:11 {result=}")
                     if result:
 
                         print("bad word detected.")
                         detected = True
                         text = replace_bad_words(bad_word, text)
-                        print(f"**** mod:chbw:11 {text=}")
+                        # print(f"**** mod:chbw:11 {text=}")
 
             if detected:
 
