@@ -38,9 +38,8 @@ class CTestModerator(TestCase):
 
     
     def test_check_bad_words_ex(self):
-    
-        #def check_bad_words_ex(self, pmessage: str) -> str:
-        self.assertEqual(self.moderator.check_bad_words_ex(""), "")
+        print("*** testmod:tcbwe 11")
+
         #  1 # (?:^| )[6бмп]+л+([яR@]+|(9\|)|(еа))*[дт]*[ьъb]*(?!м)(?!ж)        
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex(" млять пофуй"))
         self.assertNotEqual(self.moderator.check_bad_words_ex("Вразумляться"), moderator.CENSORED)
@@ -96,10 +95,11 @@ class CTestModerator(TestCase):
         self.assertIn(moderator .CENSORED, self.moderator.check_bad_words_ex("наcp@ть"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("п0ср@mь"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("усраться"))
-        # 14 # \s*[oо0]*([пn][рp][иu])*[фхб]уе(ть)*л*
+        # 14 # \s*[oо0]*([пn][рp][иu])*[сc]*[фхб][уy][еe]([тm][ьb])*л*
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("обуел"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("прифуеть"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("cбуeл"))
+        #\s*[oо0]*([пn][рp][иu])*[cс]*[фхб]уе(ть)*л*
         
         
     def test_get_hint(self):

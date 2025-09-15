@@ -55,6 +55,7 @@ class CModerator(prototype.CPrototype):
     def check_bad_words_ex(self, pmessage: str) -> str:
         """Проверяет сообщение на наличие мата."""
 
+        # print(f"**** mod:chbw:08 {pmessage=}")
         answer: str = ""
         detected: bool = False
         if pmessage:
@@ -71,11 +72,11 @@ class CModerator(prototype.CPrototype):
                     # print(f"**** mod:chbw:11 {result=}")
                     if result:
 
-                        print("bad word detected.")
+                        # print(f"bad word detected. ")
                         detected = True
                         text = replace_bad_words(bad_word, text)
                         # print(f"**** mod:chbw:11 {text=}")
-
+                        
             if detected:
 
                 answer = text
