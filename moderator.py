@@ -63,7 +63,7 @@ class CModerator(prototype.CPrototype):
             # print(f"**** mod:chbw:09 {text=}")
             for bad_word in self.bad_words:
 
-                # print(f"*   *** mod:chbw:10 {bad_word=}")
+                # print(f"**** mod:chbw:10 {bad_word=}")
                 result: bool = True
                 while result:
 

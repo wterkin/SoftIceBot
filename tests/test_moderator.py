@@ -93,9 +93,13 @@ class CTestModerator(TestCase):
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("cцyk0"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("сцук"))
         # 13 # \s*([пn]оo0)*(н[аa@])*[уy]*[сc][рp][аa@]ть([cс]я)*
-        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("наcp@ть"))
+        self.assertIn(moderator .CENSORED, self.moderator.check_bad_words_ex("наcp@ть"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("п0ср@mь"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("усраться"))
+        # 14 # \s*[oо0]*([пn][рp][иu])*[фхб]уе(ть)*л*
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("обуел"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("прифуеть"))
+        self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("cбуeл"))
         
         
     def test_get_hint(self):
