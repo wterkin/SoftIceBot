@@ -11,9 +11,9 @@ UNIT_ID = "collector"
 WORK_HOURS: tuple = (12, 13, 14, 15, 16, 17, 18)
 PROBABILITY: int = 16
 CHANCE_VALUE: int = 8
-DONATE_MESSAGE: str = ("\n\nНравится SoftIce? Поддержи проект! Пожертвуй 50 рублей на "
-                       "содержание бота, это очень просто: \n"
-                       "https://yoomoney.ru/to/41001510609674/50")
+DONATE_MESSAGE: str = ("\n\nНравится SoftIce? Поддержи проект! Пожертвуй 51 рубль,"
+                       "этих денег хватит на неделю содержания бота, это очень просто: \n"
+                       "https://yoomoney.ru/to/41001510609674/51")
 
 
 class CCollector(prototype.CPrototype):

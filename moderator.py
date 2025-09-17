@@ -55,27 +55,22 @@ class CModerator(prototype.CPrototype):
     def check_bad_words_ex(self, pmessage: str) -> str:
         """Проверяет сообщение на наличие мата."""
 
-        # print(f"**** mod:chbw:08 {pmessage=}")
         answer: str = ""
         detected: bool = False
         if pmessage:
 
             text: str = pmessage.lower()
-            # print(f"**** mod:chbw:09 {text=}")
             for bad_word in self.bad_words:
 
-                # print(f"**** mod:chbw:10 {bad_word=}")
                 result: bool = True
                 while result:
 
                     result = re.match(bad_word, text) is not None
-                    # print(f"**** mod:chbw:11 {result=}")
                     if result:
 
                         # print(f"bad word detected. ")
                         detected = True
                         text = replace_bad_words(bad_word, text)
-                        # print(f"**** mod:chbw:11 {text=}")
                         
             if detected:
 
@@ -84,7 +79,7 @@ class CModerator(prototype.CPrototype):
         return answer
 
 
-    def control_talking(self, prec):
+    def control_talking(self, prec) -> str:
         """Следит за матершинниками."""
 
         answer: str = ""
@@ -101,8 +96,11 @@ class CModerator(prototype.CPrototype):
 
             text = self.check_bad_words_ex(source_text)
             if text:
-
-                self.bot.delete_message(chat_id=prec[cn.MCHAT_ID], message_id=prec[cn.MMESSAGE_ID])
+                
+                # *** Если это не тестовый запуск - удаляем сообщение
+                if not ("testing" in self.config and self.config["testing"] == "1"):
+                    
+                    self.bot.delete_message(chat_id=prec[cn.MCHAT_ID], message_id=prec[cn.MMESSAGE_ID])
                 answer = prec[cn.MUSER_TITLE]
                 if prec[cn.MUSER_LASTNAME]:
 
@@ -111,10 +109,6 @@ class CModerator(prototype.CPrototype):
                 print(f"Он сказал: {source_text}")
                 answer += f" хотел сказать \"{text}\""
         return answer
-
-
-    # def delete_message(self, pmessage):
-    #    """Удаляет сообщение пользователя."""
 
 
     def get_help(self, pchat_title: str) -> str:

@@ -5,6 +5,7 @@ import telebot
 import softice
 import test_softice
 import functions as func
+import constants as cn
 import moderator
 
 class CTestModerator(TestCase):
@@ -28,6 +29,7 @@ class CTestModerator(TestCase):
         self.assertEqual(moderator.replace_bad_words("чатлане","Жадный, как все чатлане"), 
                          f"Жадный, как все {moderator.CENSORED}")
 
+
     def test_can_process(self):
 
         self.assertFalse(self.moderator.can_process("fakechat", "!adm"))
@@ -38,7 +40,6 @@ class CTestModerator(TestCase):
 
     
     def test_check_bad_words_ex(self):
-        print("*** testmod:tcbwe 11")
 
         #  1 # (?:^| )[6бмп]+л+([яR@]+|(9\|)|(еа))*[дт]*[ьъb]*(?!м)(?!ж)        
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex(" млять пофуй"))
@@ -102,9 +103,44 @@ class CTestModerator(TestCase):
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("обуел"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("прифуеть"))
         self.assertIn(moderator.CENSORED, self.moderator.check_bad_words_ex("cбуeл"))
-        #\s*[oо0]*([пn][рp][иu])*[cс]*[фхб]уе(ть)*л*
         
+        
+    def test_control_talking(self):
+        
+        record: dict = {}
+        record[cn.MCONTENT_TYPE] = "text"
+        record[cn.MTEXT] = "мля"
+        record[cn.MCAPTION] = "мля"
+        record[cn.MCHAT_TITLE] = test_softice.TESTPLACE_CHAT_NAME
+        record[cn.MCHAT_ID] = test_softice.TESTPLACE_CHAT_ID
+        record[cn.MMESSAGE_ID] = 0
+        record[cn.MUSER_TITLE] = self.config["master_name"]
+        record[cn.MUSER_LASTNAME] = ""
+        self.assertIn(moderator.CENSORED, self.moderator.control_talking(record))
+        # *** Если сообщение пустое - не обрабатывается
+        record[cn.MTEXT] = ""
+        self.assertEqual(self.moderator.control_talking(record), "")
+        # *** Проверка разрешенных чатов
+        record[cn.MCHAT_TITLE] = "fakechat"
+        record[cn.MTEXT] = "мля"
+        self.assertEqual(self.moderator.control_talking(record), "")
+        record[cn.MCHAT_TITLE] = "emptychat"
+        self.assertEqual(self.moderator.control_talking(record), "")
+
         
     def test_get_hint(self):
 
         self.assertIn(", ".join(moderator.HINT), self.moderator.get_hint(test_softice.TESTPLACE_CHAT_NAME))
+
+
+    def test_is_enabled(self):
+
+        self.assertFalse(self.moderator.is_enabled("fakechat"))
+        self.assertFalse(self.moderator.is_enabled("emptychat"))
+        self.assertTrue(self.moderator.is_enabled(test_softice.TESTPLACE_CHAT_NAME))
+
+
+    def test_is_master(self):
+
+        self.assertEqual(self.moderator.is_master("user", "User"), (False, f"У вас нет на это прав, User."))
+        self.assertTrue(self.moderator.is_master(self.config["master"], self.config["master_name"]))
