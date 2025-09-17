@@ -11,7 +11,6 @@ import moderator
 class CTestModerator(TestCase):
 
     def setUp(self) -> None:
-
         with open("unittest_config.json", "r", encoding="utf-8") as json_file:
 
             self.config = json.load(json_file)
@@ -117,6 +116,8 @@ class CTestModerator(TestCase):
         record[cn.MUSER_TITLE] = self.config["master_name"]
         record[cn.MUSER_LASTNAME] = ""
         self.assertIn(moderator.CENSORED, self.moderator.control_talking(record))
+        record[cn.MTEXT] = "абырвалг"
+        self.assertEqual(self.moderator.control_talking(record), "")
         # *** Если сообщение пустое - не обрабатывается
         record[cn.MTEXT] = ""
         self.assertEqual(self.moderator.control_talking(record), "")
@@ -144,3 +145,27 @@ class CTestModerator(TestCase):
 
         self.assertEqual(self.moderator.is_master("user", "User"), (False, f"У вас нет на это прав, User."))
         self.assertTrue(self.moderator.is_master(self.config["master"], self.config["master_name"]))
+
+    
+    def test_moderator(self): 
+        
+        record: dict = {}
+        record[cn.MCONTENT_TYPE] = "text"
+        record[cn.MTEXT] = "абырвалг"
+        record[cn.MCHAT_TITLE] = test_softice.TESTPLACE_CHAT_NAME
+        record[cn.MCHAT_ID] = test_softice.TESTPLACE_CHAT_ID
+        record[cn.MMESSAGE_ID] = 0
+        record[cn.MUSER_NAME] = self.config["master"]
+        record[cn.MUSER_TITLE] = self.config["master_name"]
+        record[cn.MUSER_LASTNAME] = ""
+        self.assertEqual(self.moderator.moderator(record), "")
+        record[cn.MTEXT] = "!bwrl"
+        self.assertIn("Словарь", self.moderator.moderator(record))
+        record[cn.MUSER_NAME] = "user"
+        record[cn.MUSER_TITLE] = "User"
+        self.assertIn("Извини", self.moderator.moderator(record))
+        record[cn.MCHAT_TITLE] = "fakechat"
+        record[cn.MTEXT] = "!bwrl"
+        self.assertEqual(self.moderator.control_talking(record), "")
+        record[cn.MCHAT_TITLE] = "emptychat"
+        self.assertEqual(self.moderator.control_talking(record), "")
