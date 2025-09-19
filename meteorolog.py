@@ -2,7 +2,7 @@
 # @author: Andrey Pakhomenkov pakhomenkov dog mail.ru
 """Погодный модуль для бота."""
 
-import datetime as pdate
+import datetime as dtime
 import requests
 
 import functions as func
@@ -35,29 +35,30 @@ ICON_CONVERT: dict = {"01d": "Ясно. ☀️",
                       "50d": "Туман.🌫",
                       "50n": "Туман.🌫"}
 RUSSIAN_DATE_FORMAT: str = "%d.%m.%Y"
+STEP: int = 45
+DIRECTIONS: list = ['сев. ', 'св', ' вост.', 'юв', 'юг ', 'юз', ' зап.', 'сз']
 
 
-def get_wind_direction(pdegree):
+
+def get_wind_direction(pdegree) -> str:
     """Возвращает направление ветра."""
 
-    directions: list = ['сев. ', 'св', ' вост.', 'юв', 'юг ', 'юз', ' зап.', 'сз']
     result: str = ""
     for i in range(0, 8):
 
-        step = 45.
-        min_degree = i * step - 45 / 2.
-        max_degree = i * step + 45 / 2.
-        if i == 0 and pdegree > 360 - 45 / 2.:
+        min_degree = i * STEP - STEP / 2.
+        max_degree = i * STEP + STEP / 2.
+        if i == 0 and pdegree > 360 - STEP / 2.:
 
             pdegree = pdegree - 360
         if min_degree <= pdegree <= max_degree:
 
-            result = directions[i]
+            result = DIRECTIONS[i]
             break
     return result
 
 
-def parse_weather(pdata, preq_date):
+def parse_weather(pdata, preq_date) -> str:
     """Парсит данные погоды и формирует строку погоды."""
 
     min_temperature: int = 100
@@ -75,7 +76,7 @@ def parse_weather(pdata, preq_date):
     for item in pdata['list']:
 
         # 1. Выбираем данные за заданную дату
-        if pdate.datetime.fromtimestamp(item['dt']).date() == preq_date:
+        if dtime.datetime.fromtimestamp(item['dt']).date() == preq_date:
 
             # *** Температура
             min_temperature = min(item['main']["temp"], min_temperature)
@@ -231,14 +232,14 @@ class CMeteorolog(prototype.CPrototype):
                 if city_id > 0:
 
                     # *** Указан существующий город, работаем.
-                    now: pdate.datetime = pdate.datetime.now()
+                    now: dtime.datetime = dtime.datetime.now()
                     date_str: str = ""
                     weather_str: str = ""
                     # *** Прогноз на завтра?
                     if word_list[0] in ["прогноз", "пр", "forecast", "fr"]:
 
                         # *** Да, так и есть.
-                        tomorrow: pdate.datetime = now + pdate.timedelta(days=1)
+                        tomorrow: dtime.datetime = now + dtime.timedelta(days=1)
                         date_str = tomorrow.strftime(RUSSIAN_DATE_FORMAT)
                         weather_str = self.request_weather(city_id, tomorrow)
 
@@ -271,7 +272,7 @@ class CMeteorolog(prototype.CPrototype):
         pass
 
 
-    def request_weather(self, pcity_id, prequest_date: pdate.datetime, plang: str = "ru"):
+    def request_weather(self, pcity_id, prequest_date: dtime.datetime, plang: str = "ru"):
         """Запрос погоды на завтра."""
 
         answer: str = ""
