@@ -7,7 +7,7 @@ from pathlib import Path
 import functions as func
 import prototype
 import constants as cn
-import debug as dbg
+# import debug as dbg
 
 RELOAD_BAD_WORDS: list = ["bwreload", "bwrl"]
 HINT = ["адм", "adm"]
@@ -71,7 +71,7 @@ class CModerator(prototype.CPrototype):
                         # print(f"bad word detected. ")
                         detected = True
                         text = replace_bad_words(bad_word, text)
-                        
+
             if detected:
 
                 answer = text
@@ -96,11 +96,12 @@ class CModerator(prototype.CPrototype):
 
             text = self.check_bad_words_ex(source_text)
             if text:
-                
+
                 # *** Если это не тестовый запуск - удаляем сообщение
                 if not ("testing" in self.config and self.config["testing"] == "1"):
-                    
-                    self.bot.delete_message(chat_id=prec[cn.MCHAT_ID], message_id=prec[cn.MMESSAGE_ID])
+
+                    self.bot.delete_message(chat_id=prec[cn.MCHAT_ID],
+                                            message_id=prec[cn.MMESSAGE_ID])
                 answer = prec[cn.MUSER_TITLE]
                 if prec[cn.MUSER_LASTNAME]:
 
@@ -128,7 +129,7 @@ class CModerator(prototype.CPrototype):
         """Возвращает True, если на этом канале этот модуль разрешен."""
 
         if pchat_title in self.config["chats"]:
-       
+
             return UNIT_ID in self.config["chats"][pchat_title]
         return False
 

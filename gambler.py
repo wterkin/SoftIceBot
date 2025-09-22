@@ -88,16 +88,6 @@ class CGambler(prototype.CPrototype):
 
             command_list += ", ".join(ROCKSCIPAPLIZSPOCK_COMMANDS)+"\n"
             command_list += ", ".join(THROW_COIN_COMMANDS)
-            """
-            for command in ROCKSCIPAPLIZSPOCK_COMMANDS:
-
-                command_list += ", ".join(command)
-                command_list += "\n"
-            for command in THROW_COIN_COMMANDS:
-
-                command_list += ", ".join(command)
-                command_list += "\n"
-                """
         return command_list
 
 
@@ -121,8 +111,8 @@ class CGambler(prototype.CPrototype):
             "Пропущен параметр <pchat_title> !"
         if pchat_title in self.config["chats"]:
 
-          return UNIT_ID in self.config["chats"][pchat_title]
-        return False  
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
 
     def is_master(self, puser_name, puser_title):
@@ -180,7 +170,8 @@ class CGambler(prototype.CPrototype):
         turn = random.randint(0,4)
         if pcommand == turn:
 
-            answer += f"Я выбрал также {EMODJIES[turn]}{ROCKSCIPAPLIZSPOCK_COMMANDS[turn]}. Ничья. 🤝"
+            answer += (f"Я выбрал также {EMODJIES[turn]}"
+                       f"{ROCKSCIPAPLIZSPOCK_COMMANDS[turn]}. Ничья. 🤝")
         else:
 
             answer += f"Я выбираю {EMODJIES[turn]} {ROCKSCIPAPLIZSPOCK_COMMANDS[turn]}."
@@ -277,10 +268,12 @@ class CGambler(prototype.CPrototype):
                 # *** Получим код команды
                 if word_list[0] in ROCKSCIPAPLIZSPOCK_COMMANDS:
 
-                    answer = self.rock_scissors_paper_lizard_spock(ROCKSCIPAPLIZSPOCK_COMMANDS.index(word_list[0]))
+                    answer = self.rock_scissors_paper_lizard_spock( \
+                             ROCKSCIPAPLIZSPOCK_COMMANDS.index(word_list[0]))
                 elif word_list[0] in ROCKSCIPAPLIZSPOCK_SHORT_COMMANDS:
 
-                    answer = self.rock_scissors_paper_lizard_spock(ROCKSCIPAPLIZSPOCK_SHORT_COMMANDS.index(word_list[0]))
+                    answer = self.rock_scissors_paper_lizard_spock( \
+                             ROCKSCIPAPLIZSPOCK_SHORT_COMMANDS.index(word_list[0]))
                 elif word_list[0] in THROW_COIN_COMMANDS:
 
                     answer = self.throw_coin()

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # @author: Andrey Pakhomenkov  pakhomenkov dog mail.ru
 """Модуль - цитатник для бота."""
-import os
+# import os
 import random
-from datetime import datetime as dtime
+# from datetime import datetime as dtime
 import functions as func
 import prototype
 import messages
@@ -232,9 +232,9 @@ class CLibrarian(prototype.CPrototype):
             "Assert: [librarian.is_enabled] " \
             "Пропущен параметр <pchat_title> !"
         if pchat_title in self.config["chats"]:
-            
+
             return UNIT_ID in self.config["chats"][pchat_title]
-        return False  
+        return False
 
 
     def is_master(self, puser_name, puser_title):
@@ -260,7 +260,7 @@ class CLibrarian(prototype.CPrototype):
         command: int
         answer: str = ""
         word_list: list = func.parse_input(pmessage_text)
-        
+
         if self.can_process(pchat_title, pmessage_text):
 
             # *** Возможно, запросили перезагрузку.
@@ -302,7 +302,7 @@ class CLibrarian(prototype.CPrototype):
                 # *** Получим код команды
                 command = get_command(word_list[0])
                 if command >= 0:
-                    
+
                     answer = self.execute_quotes_commands(puser_name, puser_title,
                                                           word_list, command)
             if answer:

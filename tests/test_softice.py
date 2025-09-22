@@ -22,7 +22,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_decode_message(self):
 
-        # dbg.dout("***** test_decode_message")
+        # dbg.dbg("***** test_decode_message")
         chat: bt.ChatFullInfo = bt.ChatFullInfo(TESTPLACE_CHAT_ID, type="group")
         user: bt.User = bt.User(self.bot.config["master_id"], False, self.bot.config["master_name"])
         message: bt.Message = bt.Message(1, user,
@@ -66,7 +66,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_chat_legitimate(self):
 
-        # dbg.dout("***** test_is_chat_legitimate")
+        # dbg.dbg("***** test_is_chat_legitimate")
         # *** TestPlace
         self.bot.event[cn.MCHAT_TITLE] = 'TestPlace'
         self.bot.event[cn.MCHAT_ID] = TESTPLACE_CHAT_ID
@@ -82,7 +82,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_foreign_command(self):
 
-        # dbg.dout("***** test_is_foreign_command")
+        # dbg.dbg("***** test_is_foreign_command")
         # *** Пробуем бота Mafioso
         self.assertEqual(self.bot.is_foreign_command ("Mafioso"), True)
         # *** Пробуем бота SuperPuperBot
@@ -91,7 +91,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_master(self):
 
-        # dbg.dout("***** test_is_master")
+        # dbg.dbg("***** test_is_master")
         # *** Try master name
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
         self.assertTrue(self.bot.is_master())
@@ -102,7 +102,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_is_message_actual(self):
 
-        # dbg.dout("***** test_is_message_actual")
+        # dbg.dbg("***** test_is_message_actual")
         # *** Actual message
         self.bot.event[cn.MDATE] = (datetime.now() - timedelta(seconds=30)).timestamp()
         self.assertTrue (self.bot.is_message_actual())
@@ -113,7 +113,7 @@ class CTestSoftIceBot(TestCase):
 
     def test_load_config(self):
 
-        # dbg.dout("***** test_load_config")
+        # dbg.dbg("***** test_load_config")
         self.assertTrue(self.bot.load_config(softice.UNITTEST_CONFIG_NAME))
         self.assertFalse(self.bot.load_config("unittest_bad_config.json"))
 

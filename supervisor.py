@@ -19,7 +19,7 @@ MINIMAL_PHOTO_RATING: int = 60
 MINIMAL_AUDIO_RATING: int = 100
 MINIMAL_VIDEO_RATING: int = 150
 # KARMA_UPPER_LIMIT: int = 50
-# ENABLED_IN_CHATS_KEY: str = "supervisor_chats"
+ENABLED_IN_CHATS_KEY: str = "supervisor_chats"
 UNIT_ID = "supervisor"
 COMMANDS: list = ["svon", "svoff", "rt+", "rt-", "rt="]
 PARAMETER_COUNT = "-c"

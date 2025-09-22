@@ -9,7 +9,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, Boolean, MetaData, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import exc
-
 # py lint: disable=C0301
 # py lint: disable=line-too-long
 
@@ -227,7 +226,7 @@ class CSignal(CAncestor):
         super().__init__()
         self.fuserid = puserid
         self.fword = pword
-        
+
 
     def __repr__(self):
 
@@ -291,7 +290,7 @@ class CDataBase:
             self.session = session()
             Base.metadata.bind = self.engine
             result = True
-        except exc.SQLAlchemyError as ex:
+        except exc.SQLAlchemyError:
 
             print("Ошибка подключения к БД!")
         return result
@@ -339,4 +338,3 @@ class CDataBase:
             # *** Разлочим базу
             self.busy = False
         return query
-

@@ -50,7 +50,7 @@ def get_command(pword: str) -> int:
         "Assert: [haijin.get_command] " \
         "Пропущен параметр <pword> !"
     result: int = -1
-  
+
     for command_idx, command in enumerate(HAIJIN_COMMANDS):
 
         if pword in command:
@@ -199,7 +199,7 @@ class CHaijin(prototype.CPrototype):
 
                 answer = self.get_help(pchat_title)
             else:
-              
+
                 answer, unformatted_answer = self.process_command(word_list,
                                                                   puser_name,
                                                                   puser_title)
@@ -225,8 +225,8 @@ class CHaijin(prototype.CPrototype):
             "Пропущен параметр <pchat_title> !"
         if pchat_title in self.config["chats"]:
 
-          return UNIT_ID in self.config["chats"][pchat_title]
-        return False  
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
 
     def is_master(self, puser_name, puser_title):
@@ -257,7 +257,7 @@ class CHaijin(prototype.CPrototype):
 
                     unformatted_answer = answer
                     answer = self.format_hokku(unformatted_answer)
-                    
+
             elif command == ADD_HOKKU_CMD:
 
                 # *** Пользователь хочет добавить хокку в книгу

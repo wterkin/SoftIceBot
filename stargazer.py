@@ -3,9 +3,9 @@
 """Модуль прототипа классов модулей бота."""
 
 from datetime import date, timedelta, datetime
+import locale
 import prototype
 import functions as func
-import locale
 locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
 NEW_STYLE_OFFSET: int = 13
@@ -142,21 +142,6 @@ class CStarGazer(prototype.CPrototype):
 
         return found
 
-    """
-       def check_command(self, commands, pmessage_text: str):
-           ""Проверяет команду на попадание в заданный диапазон.""
-
-            found: bool = False
-            word_list: list = func.parse_input(pmessage_text)
-            for command in commands:
-
-                found = word_list[0] in command
-
-                if found:
-
-                    break
-        return found
-    """
 
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
@@ -241,7 +226,7 @@ class CStarGazer(prototype.CPrototype):
 
                 today = f"{now_date.day:02}/{now_date.month:02}"
                 jul_greg_delta = timedelta(days=JUL_GREG_CALENDAR_DIFF)
-                jul_now_date: date = (now_date - jul_greg_delta)
+                jul_now_date: date = now_date - jul_greg_delta
                 answer = "Сегодня " + now_date.strftime("%d %B %Y") + \
                          " г., по старому стилю " + jul_now_date.strftime("%d %B %Y") + " г. "
 
@@ -251,7 +236,7 @@ class CStarGazer(prototype.CPrototype):
                  word_list[0] in COMMANDS[NEW_YEAR_SHORTS_INDEX]:
                 today: date = date.today()
                 newyear: date = date(today.year, 12, 31)
-                delta: timedelta = (newyear - today)
+                delta: timedelta = newyear - today
                 print(delta.days + 1)
                 answer = f"До Нового года осталось {delta.days+1} дней."
 

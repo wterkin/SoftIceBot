@@ -6,7 +6,7 @@ debug_state: bool = False  # True
 # debug_state: bool = True
 
 
-def dout(pmessage: str):
+def dbg(pmessage: str):
     """Выводит диагностические сообщения."""
     global debug_state
     if debug_state:

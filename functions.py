@@ -75,7 +75,7 @@ def save_list(plist: list, pfile_name: str): # noqa
 
     new_file_name: str = f"{pfile_name}_{dtime.now().strftime('%Y%m%d-%H%M%S')}"
     if os.path.exists(pfile_name):
-    
+
         os.rename(pfile_name, new_file_name)
     with open(pfile_name, "w", encoding="utf8") as out_file:
 
