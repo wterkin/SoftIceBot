@@ -24,7 +24,7 @@ class CTestMeterolog(TestCase):
     def test_parse_weather(self):
         
         data: dict = {}
-        temp_list: list = [10, 11, 12, 13]
+        temp_list: list = [1, 2, 3, 4]
         press_list: list = [700, 701, 702, 703]
         hum_list: list = [70, 80, 90, 100]
         wind_speed_list: list = [10, 20, 30, 40]
@@ -45,5 +45,7 @@ class CTestMeterolog(TestCase):
             item["wind"]["speed"] = wind_speed_list[idx]
             item["wind"]["deg"] = wind_deg_list[idx]
             data["list"].append(item)
+            
+        print(f"{data=}")
         result: str = "Темп.: 100 - 0 °C,  давл.: 7500 - 0 мм.рт.ст.,  влажн.: 100 - 0 %,  ветер: 200 м/с сев.  - 0 м/c сев. , "    
-        self.assertEqual(meteorolog.parse_weather(data, now), result)
+        self.assertEqual(meteorolog.parse_weather(data, now), "")

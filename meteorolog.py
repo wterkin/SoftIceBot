@@ -81,6 +81,7 @@ def parse_weather(pdata, preq_date) -> str:
             # *** Температура
             min_temperature = min(item['main']["temp"], min_temperature)
             max_temperature = max(item['main']["temp"], max_temperature)
+            print(f"****************** {item['main']['temp']=}")
             # *** Давление
             min_pressure = min(item['main']["pressure"], min_pressure)
             max_pressure = max(item['main']["pressure"], max_pressure)
