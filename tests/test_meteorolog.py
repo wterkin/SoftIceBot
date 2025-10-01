@@ -32,7 +32,6 @@ class CTestMeterolog(TestCase):
         icon_list: list = ["01  ", "02   ", "04d  ", "03d  "]
         data["list"] = []
         now: dtime.datetime = dtime.datetime.now()
-        
         for idx in range(0, len(temp_list)):
             
             item: dict = {}
@@ -50,4 +49,11 @@ class CTestMeterolog(TestCase):
             item["weather"].append(weather)
             
         result: str = "Темп.: 15 - 30 °C,  давл.: 710 - 740 мм.рт.ст.,  влажн.: 70 - 100 %,  ветер: 10 м/с сев.  - 40 м/c юг , Ясно. \u2600\ufe0f Облачно. \u2601 "
-        self.assertEqual(meteorolog.parse_weather(data, now), result)
+        self.assertEqual(meteorolog.parse_weather(data, now.date()), result)
+
+    def test_can_process(self):
+        
+        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пг'), True)
+        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пр'), True)
+        self.assertEqual(self.meteorolog.can_process('fakechat', '!пр'), False)
+        self.assertEqual(self.meteorolog.can_process('empttychat', '!пг'), False)
