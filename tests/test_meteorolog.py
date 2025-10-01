@@ -24,13 +24,13 @@ class CTestMeterolog(TestCase):
     def test_parse_weather(self):
         
         data: dict = {}
-        temp_list: list = [1, 2, 3, 4]
-        press_list: list = [700, 701, 702, 703]
+        temp_list: list = [15, 20, 25, 30]
+        press_list: list = [710, 720, 730, 740]
         hum_list: list = [70, 80, 90, 100]
         wind_speed_list: list = [10, 20, 30, 40]
         wind_deg_list: list = [0, 45, 90, 180]
+        icon_list: list = ["01  ", "02   ", "04d  ", "03d  "]
         data["list"] = []
-        #now: dtime.datetime = dtime.now()
         now: dtime.datetime = dtime.datetime.now()
         
         for idx in range(0, len(temp_list)):
@@ -39,13 +39,15 @@ class CTestMeterolog(TestCase):
             item["dt"] = now.timestamp()
             item['main']: dict = {}
             item['main']["temp"] = temp_list[idx]
-            item['main']["pressure"] = press_list[idx]
+            item['main']["pressure"] = press_list[idx]/0.75
             item['main']["humidity"] = hum_list[idx]
             item['wind']: dict = {}
             item["wind"]["speed"] = wind_speed_list[idx]
             item["wind"]["deg"] = wind_deg_list[idx]
             data["list"].append(item)
+            weather: dict = {'icon':icon_list[idx]} 
+            item["weather"]: list = []
+            item["weather"].append(weather)
             
-        print(f"{data=}")
-        result: str = "Темп.: 100 - 0 °C,  давл.: 7500 - 0 мм.рт.ст.,  влажн.: 100 - 0 %,  ветер: 200 м/с сев.  - 0 м/c сев. , "    
-        self.assertEqual(meteorolog.parse_weather(data, now), "")
+        result: str = "Темп.: 15 - 30 °C,  давл.: 710 - 740 мм.рт.ст.,  влажн.: 70 - 100 %,  ветер: 10 м/с сев.  - 40 м/c юг , Ясно. \u2600\ufe0f Облачно. \u2601 "
+        self.assertEqual(meteorolog.parse_weather(data, now), result)
