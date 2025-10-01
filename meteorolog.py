@@ -76,7 +76,7 @@ def parse_weather(pdata, preq_date) -> str:
     for item in pdata['list']:
 
         # 1. Выбираем данные за заданную дату
-        if dtime.datetime.fromtimestamp(item['dt']) == preq_date:
+        if dtime.datetime.fromtimestamp(item['dt']).date() == preq_date:
 
             # *** Температура
             min_temperature = min(item['main']["temp"], min_temperature)
