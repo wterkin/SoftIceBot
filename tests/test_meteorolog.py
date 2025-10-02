@@ -15,6 +15,7 @@ class CTestMeterolog(TestCase):
             self.config = json.load(json_file)
         self.meteorolog: meteorolog.CMeteorolog = meteorolog.CMeteorolog(self.config)
 
+
     def test_get_wind_direction(self):
         
         self.assertEqual(meteorolog.get_wind_direction(180), meteorolog.DIRECTIONS[4]) # Юг
@@ -51,9 +52,15 @@ class CTestMeterolog(TestCase):
         result: str = "Темп.: 15 - 30 °C,  давл.: 710 - 740 мм.рт.ст.,  влажн.: 70 - 100 %,  ветер: 10 м/с сев.  - 40 м/c юг , Ясно. \u2600\ufe0f Облачно. \u2601 "
         self.assertEqual(meteorolog.parse_weather(data, now.date()), result)
 
+
     def test_can_process(self):
         
         self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пг'), True)
         self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пр'), True)
         self.assertEqual(self.meteorolog.can_process('fakechat', '!пр'), False)
         self.assertEqual(self.meteorolog.can_process('empttychat', '!пг'), False)
+
+
+    def test_get_city_id(self):
+
+        self.assertEqual(self.meteorolog.get_city_id("Смоленск"), 491687)

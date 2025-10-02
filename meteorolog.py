@@ -151,12 +151,14 @@ class CMeteorolog(prototype.CPrototype):
         city_id: int = 0
         try:
 
+            # int(f"{self.config['api_key']}")
             res = requests.get(FIND_CITY_URL,
                                params={'q': pcity_name, 'type': 'like',
                                        'units': 'metric', 'lang': plang,
                                        'APPID': self.config["api_key"]},
                                timeout=READ_TIMEOUT)
             data = res.json()
+            # print(f"*** {data=}")
             if 'list' in data:
 
                 if len(data['list']) > 0:
