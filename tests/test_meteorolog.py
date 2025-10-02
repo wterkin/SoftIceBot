@@ -85,4 +85,5 @@ class CTestMeterolog(TestCase):
 
     def test_meteorolog(self):
 
-        
+        #Смоленск : 02.10.2025
+        self.assertIn(dtime.datetime.now().strftime("Смоленск : %d.%m.%Y"), self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг Смоленск"))
