@@ -55,8 +55,8 @@ class CTestMeterolog(TestCase):
 
     def test_can_process(self):
         
-        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пг'), True)
-        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пр'), True)
+        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пг Смоленск'), True)
+        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пр Смоленск'), True)
         self.assertEqual(self.meteorolog.can_process('fakechat', '!пр'), False)
         self.assertEqual(self.meteorolog.can_process('empttychat', '!пг'), False)
 
@@ -64,3 +64,25 @@ class CTestMeterolog(TestCase):
     def test_get_city_id(self):
 
         self.assertEqual(self.meteorolog.get_city_id("Смоленск"), 491687)
+
+
+    def test_get_help(self):
+
+        self.assertIn("погода <город>, пг <город>", self.meteorolog.get_help(test_softice.TESTPLACE_CHAT_NAME))
+
+
+    def test_get_hint(self):
+
+        self.assertIn("метео, meteo", self.meteorolog.get_hint(test_softice.TESTPLACE_CHAT_NAME))
+    
+
+    def test_is_enabled(self):
+
+        self.assertFalse(self.meteorolog.is_enabled("fakechat"))
+        self.assertFalse(self.meteorolog.is_enabled("emptychat"))
+        self.assertTrue(self.meteorolog.is_enabled(test_softice.TESTPLACE_CHAT_NAME))
+
+
+    def test_meteorolog(self):
+
+        

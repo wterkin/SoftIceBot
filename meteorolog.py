@@ -185,7 +185,7 @@ class CMeteorolog(prototype.CPrototype):
 
         if self.is_enabled(pchat_title):
 
-            command_list: str = ", ".join(WEATHER_COMMANDS)
+            command_list: str = " <город>, ".join(WEATHER_COMMANDS)
             command_list += "\n"
             return command_list
         return ""
