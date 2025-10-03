@@ -84,9 +84,9 @@ class CTestSoftIceBot(TestCase):
 
         # dbg.dbg("***** test_is_foreign_command")
         # *** Пробуем бота Mafioso
-        self.assertEqual(self.bot.is_foreign_command ("Mafioso"), True)
+        self.assertTrue(self.bot.is_foreign_command ("Mafioso"))
         # *** Пробуем бота SuperPuperBot
-        self.assertNotEqual(self.bot.is_foreign_command ("SuperPuperBot"), True)
+        self.assertFalse(self.bot.is_foreign_command ("SuperPuperBot"))
 
 
     def test_is_master(self):
@@ -181,11 +181,11 @@ class CTestSoftIceBot(TestCase):
         # *** Master
         self.bot.event[cn.MUSER_TITLE] = self.bot.config["master_name"]
         self.bot.event[cn.MUSER_NAME] = self.bot.config["master"]
-        self.assertEqual(self.bot.reload_config(), True)
+        self.assertTrue(self.bot.reload_config())
         # *** User
         self.bot.event[cn.MUSER_TITLE] = "User"
         self.bot.event[cn.MUSER_NAME] = "User"
-        self.assertEqual(self.bot.reload_config(), False)
+        self.assertFalse(self.bot.reload_config())
 
     # say
     # send_answer

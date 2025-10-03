@@ -172,7 +172,10 @@ class CStarGazer(prototype.CPrototype):
             "Assert: [stargazer.is_enabled] " \
             "No <pchat_title> parameter specified!"
 
-        return UNIT_ID in self.config["chats"][pchat_title]
+        if pchat_title in self.config["chats"]:
+
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False    
         # return pchat_title in self.config[ENABLED_IN_CHATS_KEY]
 
     def reload(self):

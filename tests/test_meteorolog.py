@@ -55,10 +55,11 @@ class CTestMeterolog(TestCase):
 
     def test_can_process(self):
         
-        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пг Смоленск'), True)
-        self.assertEqual(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пр Смоленск'), True)
-        self.assertEqual(self.meteorolog.can_process('fakechat', '!пр'), False)
-        self.assertEqual(self.meteorolog.can_process('empttychat', '!пг'), False)
+        self.assertTrue(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пг Смоленск'))
+        self.assertTrue(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!пр Смоленск'))
+        self.assertFalse(self.meteorolog.can_process('fakechat', '!пр'))
+        self.assertFalse(self.meteorolog.can_process('empttychat', '!пг'))
+        self.assertFalse(self.meteorolog.can_process(test_softice.TESTPLACE_CHAT_NAME, '!кукабарра'))
 
 
     def test_get_city_id(self):

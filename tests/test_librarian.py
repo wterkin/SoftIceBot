@@ -40,9 +40,9 @@ class CTestLibrarian(TestCase):
     
     def test_can_process(self):
         
-        self.assertEqual(self.librarian.can_process(test_softice.TESTPLACE_CHAT_NAME, '!цт'), True)
-        self.assertEqual(self.librarian.can_process('fakechat', '!цт'), False)
-        self.assertEqual(self.librarian.can_process('empttychat', '!хквс'), False)
+        self.assertTrue(self.librarian.can_process(test_softice.TESTPLACE_CHAT_NAME, '!цт'))
+        self.assertFalse(self.librarian.can_process('fakechat', '!цт'))
+        self.assertFalse(self.librarian.can_process('empttychat', '!хквс'))
 
 
     def test_execute_quotes_commands(self):
