@@ -86,4 +86,18 @@ class CTestMeterolog(TestCase):
     def test_meteorolog(self):
 
         #Смоленск : 02.10.2025
-        self.assertIn(dtime.datetime.now().strftime("Смоленск : %d.%m.%Y"), self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг Смоленск"))
+        self.assertEqual(self.meteorolog.meteorolog("fakechat", "!пг Смоленск"), "")
+        self.assertEqual(self.meteorolog.meteorolog("emptychat", "!пг Смоленск"), "")
+        self.assertIn("А в каком городе погода нужна?", self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг"))
+        self.assertIn("Нет данных о погоде для города Диптаун", self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг Диптаун"))
+        now_date = dtime.datetime.now()
+        self.assertIn(now_date.strftime("Смоленск : %d.%m.%Y"), self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг Смоленск"))
+        tomorrow_date = now_date + dtime.timedelta(days=1) 
+        self.assertIn(tomorrow_date.strftime("Смоленск : %d.%m.%Y"), self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг Смоленск"))
+
+
+    def test_request_weather(self):
+
+        now_date = dtime.datetime.now()
+        self.assertIn(now_date.strftime("Смоленск : %d.%m.%Y"), self.meteorolog.request_weather(491687, now_date))
+        
