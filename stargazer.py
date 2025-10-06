@@ -153,6 +153,7 @@ class CStarGazer(prototype.CPrototype):
         if self.is_enabled(pchat_title):
 
             for command in COMMANDS:
+              
                 command_list += ", ".join(command) + "\n"
         return command_list
 
