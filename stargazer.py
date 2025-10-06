@@ -188,6 +188,7 @@ class CStarGazer(prototype.CPrototype):
             "Assert: [stargazer.stargazer] No <pchat_title> parameter specified!"
         assert pmessage_text is not None, \
             "Assert: [stargazer.stargazer] No <pmessage_text> parameter specified!"
+
         answer: str = ""
         word_list: list = func.parse_input(pmessage_text)
         year: int
