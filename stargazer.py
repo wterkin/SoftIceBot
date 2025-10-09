@@ -193,33 +193,35 @@ class CStarGazer(prototype.CPrototype):
     def print_month(self):
       """Выводит календарь на текущий месяц, используя команду cal линукса."""
 
-      now_date: date = date.today()
-      this_day: str = str(now_date.day)
-      result = sub.run(["cal","-mv"], stdout=sub.PIPE)
-      answer = result.stdout.decode("utf-8").strip()
-      lines: list = answer.split("\n")
-      days: list
-      today_found: bool = False
-      for lindex, line in enumerate(lines[1:]):
+        now_date: date = date.today()
+        this_day: str = str(now_date.day)
+        result = sub.run(["cal","-mv"], stdout=sub.PIPE)
+        answer = result.stdout.decode("utf-8") # .strip()
+        lines: list = answer.split("\n")
+        days: list
+        today_found: bool = False
+        for lindex, line in enumerate(lines[1:]):
 
-          if not today_found:
+            if not today_found:
 
-              days = line.split(" ")
-              for day in days:
+                days = line.split(" ")
+                for dindex, day in enumerate(days):
 
-                  if day.strip() == this_day:
-                
-                      day = f"{BOLD}{day}{BOLD}"
-                      today_found = True
+                    if day.strip() == this_day:
 
-          if "Сб" in line or "Вс" in line:
+                        days[dindex] = f"{BOLD}{day}{BOLD}"
+                        today_found = True
+                        lines[lindex+1] = " ".join(days)
+            if "Сб" in line or "Вс" in line:
 
-              days = line.split(" ")
-              for index, day in enumeration(days):
+                if lindex >1:
 
-                  days[index] = f"{ITALIC}{day}{ITALIC}"
-              
-              lines[lindex] = " ".join(days)
+                    days = line.strip().split(" ")
+                    for index, day in enumerate(days):
+
+                        days[index] = f"{ITALIC}{day}{ITALIC}"
+
+                    lines[lindex+1] = " ".join(days)
       return "\n".join(lines)
 
         
@@ -292,7 +294,7 @@ class CStarGazer(prototype.CPrototype):
             elif word_list[0] in COMMANDS[MONTH_INDEX] or \
                  word_list[0] in COMMANDS[MONTH_SHORTS_INDEX]:
 
-                answer = print_month() 
+                answer = self.print_month() 
         if answer:
 
             print(f"Stargazer answers: {answer[:func.OUT_MSG_LOG_LEN]}")
