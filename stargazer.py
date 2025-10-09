@@ -191,7 +191,7 @@ class CStarGazer(prototype.CPrototype):
 
 
     def print_month(self):
-      """Выводит календарь на текущий месяц, используя команду cal линукса."""
+        """Выводит календарь на текущий месяц, используя команду cal линукса."""
 
         now_date: date = date.today()
         this_day: str = str(now_date.day)
@@ -222,7 +222,7 @@ class CStarGazer(prototype.CPrototype):
                         days[index] = f"{ITALIC}{day}{ITALIC}"
 
                     lines[lindex+1] = " ".join(days)
-      return "\n".join(lines)
+        return "\n".join(lines)
 
         
     def reload(self):
