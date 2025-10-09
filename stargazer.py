@@ -6,6 +6,8 @@ from datetime import date, timedelta, datetime
 import locale
 import prototype
 import functions as func
+import subprocess as sub
+
 locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
 NEW_STYLE_OFFSET: int = 13
@@ -14,11 +16,15 @@ DATE_CMD_INDEX: int = 1
 DAY_CMD_INDEX: int = 2
 NEW_YEAR_INDEX: int = 3
 NEW_YEAR_SHORTS_INDEX: int = 4
+MONTH_INDEX: int = 5
+MONTH_SHORTS_INDEX: int = 6
 COMMANDS: tuple = (("пасха", "easter"),
                    ("дата", "date"),
                    ("день", "day"),
                    ("новыйгод", "newyear"),
-                   ("нг", "ny"))
+                   ("нг", "ny"),
+                   ("месяц", "month"),
+                   ("мс", "mn"))
 HINTS: tuple = ("календарь", "кл", "calendar", "cl")
 UNIT_ID = "stargazer"
 RUSSIAN_DATE_FORMAT = "%d.%m.%Y"
@@ -30,6 +36,9 @@ CIVILIAN_CALENDAR: str = "dates.txt"
 JUL_GREG_CALENDAR_DIFF: int = 13
 YEAR_DAYS: int = 365
 LEAP_YEAR_DAYS: int = 366
+BOLD: str = "*"
+ITALIC: str = "_"
+
 
 def calculate_easter(pyear):
     """Вычисляет дату пасхи на заданный год."""
@@ -157,6 +166,7 @@ class CStarGazer(prototype.CPrototype):
                 command_list += ", ".join(command) + "\n"
         return command_list
 
+
     def get_hint(self, pchat_title: str) -> str:
         """Возвращает команду верхнего уровня, в ответ на которую
            модуль возвращает полный список команд, доступных пользователю."""
@@ -166,6 +176,7 @@ class CStarGazer(prototype.CPrototype):
         if self.is_enabled(pchat_title):
             return ", ".join(HINTS)
         return ""
+
 
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
@@ -177,10 +188,44 @@ class CStarGazer(prototype.CPrototype):
 
             return UNIT_ID in self.config["chats"][pchat_title]
         return False    
-        # return pchat_title in self.config[ENABLED_IN_CHATS_KEY]
 
+
+    def print_month(self):
+      """Выводит календарь на текущий месяц, используя команду cal линукса."""
+
+      now_date: date = date.today()
+      this_day: str = str(now_date.day)
+      result = sub.run(["cal","-mv"], stdout=sub.PIPE)
+      answer = result.stdout.decode("utf-8").strip()
+      lines: list = answer.split("\n")
+      days: list
+      today_found: bool = False
+      for lindex, line in enumerate(lines[1:]):
+
+          if not today_found:
+
+              days = line.split(" ")
+              for day in days:
+
+                  if day.strip() == this_day:
+                
+                      day = f"{BOLD}{day}{BOLD}"
+                      today_found = True
+
+          if "Сб" in line or "Вс" in line:
+
+              days = line.split(" ")
+              for index, day in enumeration(days):
+
+                  days[index] = f"{ITALIC}{day}{ITALIC}"
+              
+              lines[lindex] = " ".join(days)
+      return "\n".join(lines)
+
+        
     def reload(self):
         """Вызывает перезагрузку внешних данных модуля."""
+
 
     def stargazer(self, pchat_title: str, pmessage_text: str) -> str:
         """Обработчик команд звездочёта."""
@@ -244,11 +289,15 @@ class CStarGazer(prototype.CPrototype):
                 delta: timedelta = newyear - today
                 print(delta.days + 1)
                 answer = f"До Нового года осталось {delta.days+1} дней."
+            elif word_list[0] in COMMANDS[MONTH_INDEX] or \
+                 word_list[0] in COMMANDS[MONTH_SHORTS_INDEX]:
 
+                answer = print_month() 
         if answer:
 
             print(f"Stargazer answers: {answer[:func.OUT_MSG_LOG_LEN]}")
         return answer.strip()
+
 
     def search_in_calendar(self, pcalendar: str, ptoday: str):
         """Ищет заданную дату в заданном календаре."""
@@ -259,4 +308,7 @@ class CStarGazer(prototype.CPrototype):
             if item[:5] == ptoday:
 
                 answer += item[6:] + "\n"
+        if not answer:
+
+            answer = "В этот день ничего не произошло."
         return answer[:-1:]
