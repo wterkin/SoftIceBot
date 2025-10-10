@@ -23,8 +23,9 @@ COMMANDS: tuple = (("пасха", "easter"),
                    ("день", "day"),
                    ("новыйгод", "newyear"),
                    ("нг", "ny"),
-                   ("месяц", "month"),
-                   ("мс", "mn"))
+                   # ("месяц", "month"),
+                   # ("мс", "mn")
+                  )
 HINTS: tuple = ("календарь", "кл", "calendar", "cl")
 UNIT_ID = "stargazer"
 RUSSIAN_DATE_FORMAT = "%d.%m.%Y"
@@ -189,9 +190,9 @@ class CStarGazer(prototype.CPrototype):
             return UNIT_ID in self.config["chats"][pchat_title]
         return False    
 
-
+    """
     def print_month(self):
-        """Выводит календарь на текущий месяц, используя команду cal линукса."""
+        ""Выводит календарь на текущий месяц, используя команду cal линукса.""
 
         now_date: date = date.today()
         this_day: str = str(now_date.day)
@@ -223,7 +224,7 @@ class CStarGazer(prototype.CPrototype):
 
                     lines[lindex+1] = " ".join(days)
         return "\n".join(lines)
-
+    """
         
     def reload(self):
         """Вызывает перезагрузку внешних данных модуля."""
@@ -291,10 +292,10 @@ class CStarGazer(prototype.CPrototype):
                 delta: timedelta = newyear - today
                 print(delta.days + 1)
                 answer = f"До Нового года осталось {delta.days+1} дней."
-            elif word_list[0] in COMMANDS[MONTH_INDEX] or \
-                 word_list[0] in COMMANDS[MONTH_SHORTS_INDEX]:
+            # elif word_list[0] in COMMANDS[MONTH_INDEX] or \
+            #    word_list[0] in COMMANDS[MONTH_SHORTS_INDEX]:
 
-                answer = self.print_month() 
+            #    answer = self.print_month() 
         if answer:
 
             print(f"Stargazer answers: {answer[:func.OUT_MSG_LOG_LEN]}")

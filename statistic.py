@@ -8,25 +8,24 @@ import database as db
 import functions as func
 import constants as cn
 
-TOP_10_COMMAND = [0, 4]
-TOP_25_COMMAND = [1, 5]
-TOP_50_COMMAND = [2, 6]
-PERS_COMMAND = [3, 7]
+TOP_10_COMMAND: list = [0, 4]
+TOP_25_COMMAND: list = [1, 5]
+TOP_50_COMMAND: list = [2, 6]
+PERS_COMMAND: list = [3, 7]
 
-HINT = ["стат", "stat"]
-COMMANDS = ["топ10", "топ25", "топ50", "перс", "top10", "top25", "top50", "pers"]
-UNIT_ID = "statistic"
-# BOTS = ("TrueMafiaBot", "MafiaWarBot", "glagolitic_bot", "combot", "chgk_bot")
-FOREIGN_BOTS = "foreign_bots"
+HINT: list = ["стат", "stat"]
+COMMANDS: list = ["топ10", "топ25", "топ50", "перс", "top10", "top25", "top50", "pers"]
+UNIT_ID: str = "statistic"
+FOREIGN_BOTS: str = "foreign_bots"
 SORTED_BY: tuple = ("фраз", "слов", "стикеров", "картинок",
                     "звуковых сообщений", "видео сообщений")
 
 
-def decode_stat(pstat: db.CStat):
-    """Декодирует запись статистики."""
+#def decode_stat(pstat: db.CStat):
+#    """Декодирует запись статистики."""
 
-    return pstat.fletters, pstat.fwords, pstat.fphrases, pstat.fstickers, \
-        pstat.fpictures, pstat.faudios, pstat.fvideos
+#    return pstat.fletters, pstat.fwords, pstat.fphrases, pstat.fstickers, \
+#        pstat.fpictures, pstat.faudios, pstat.fvideos
 
 
 def extract_user_name(pevent: dict):
