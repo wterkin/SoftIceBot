@@ -305,6 +305,7 @@ class CStarGazer(prototype.CPrototype):
     def search_in_calendar(self, pcalendar: str, ptoday: str):
         """Ищет заданную дату в заданном календаре."""
         calendar: list = func.load_from_file(self.data_path + pcalendar)
+        now_date: date = date.today()
         answer: str = ""
         for item in calendar:
 
@@ -313,5 +314,5 @@ class CStarGazer(prototype.CPrototype):
                 answer += item[6:] + "\n"
         if not answer:
 
-            answer = "В этот день ничего не произошло."
+            answer = f"{now_date.day:02}/{now_date.month:02} В этот день ничего не произошло."
         return answer[:-1:]

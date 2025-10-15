@@ -3,6 +3,8 @@
 
 """Модуль статистики для бота."""
 
+from sqlalchemy.exc import SQLAlchemyError
+
 import prototype
 import database as db
 import functions as func
@@ -54,12 +56,16 @@ class CStatistic(prototype.CPrototype):
         self.database: db.CDataBase = pdatabase
 
 
-    def add_chat_to_base(self, ptg_chat_id: int, ptg_chat_title: str):
+    def add_chat_to_base(self, ptg_chat_id: int, ptg_chat_title: str) -> int:
         """Добавляет новый чат в БД и возвращает его ID."""
+        try:
 
-        chat = db.CChat(ptg_chat_id, ptg_chat_title)
-        self.database.commit_changes(chat)
-        return chat.id
+            chat = db.CChat(ptg_chat_id, ptg_chat_title)
+            self.database.commit_changes(chat)
+            return chat.id
+        except SQLAlchemyError:
+            
+            return cn.ERROR_CODE
 
 
     def add_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):

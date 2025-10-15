@@ -15,3 +15,4 @@ MMESSAGE_ID: str = "message_id"
 MUSER_LASTNAME: str = "user_lastname"
 MPROCESSED: str = "processed"
 SCREENED: str = "#"
+ERROR_CODE: int = -1
