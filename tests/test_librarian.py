@@ -2,6 +2,9 @@ from unittest import TestCase
 import json
 import librarian
 import test_softice
+import softice
+from pathlib import Path
+from sys import platform
 
 
 class CTestLibrarian(TestCase):
@@ -10,8 +13,15 @@ class CTestLibrarian(TestCase):
         with open('unittest_config.json', "r", encoding="utf-8") as json_file:
 
             self.config = json.load(json_file)
-        self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.config["windows_data_folder"])
+        if platform in ("linux", "linux2"):
+
+            self.data_path: str = self.config[softice.LINUX_DATA_FOLDER_KEY]
+        else:
+
+            self.data_path: str = self.config[softice.WINDOWS_DATA_FOLDER_KEY]
+        self.librarian: librarian.CLibrarian = librarian.CLibrarian(self.config, self.data_path)
         self.librarian.reload()
+
 
     def test_find_in_book(self):
         
@@ -120,3 +130,9 @@ class CTestLibrarian(TestCase):
                                                   "Извини, Юзер, только Петрович может удалять цитаты")     
         self.assertEqual(self.librarian.librarian(test_softice.TESTPLACE_CHAT_NAME, "user", "Юзер", "!qt"), 
                                              "[1] Мы думаем, что Бог видит нас сверху - но Он видит нас изнутри...")
+
+    def tearDown(self):
+
+        for file in Path(self.librarian.data_path).glob("quotes.txt_*"):
+  
+            file.unlink()

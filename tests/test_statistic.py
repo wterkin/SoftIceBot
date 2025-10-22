@@ -44,6 +44,7 @@ class CTestStatistic(TestCase):
 
     def tearDown(self):
 
+        self.database.disconnect()
         for file in Path(self.data_path).glob("softice.db"):
 
             file.unlink()
