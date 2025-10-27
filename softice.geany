@@ -28,15 +28,14 @@ long_line_behaviour=1
 long_line_column=140
 
 [files]
-current_page=6
-FILE_NAME_0=1414;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_statistic.py;0;4
-FILE_NAME_1=279;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cstatistic.py;0;2
+current_page=1
+FILE_NAME_0=2980;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_statistic.py;0;4
+FILE_NAME_1=9195;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cstatistic.py;0;2
 FILE_NAME_2=7492;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Csoftice.py;0;2
-FILE_NAME_3=70;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_stargazer.py;0;2
-FILE_NAME_4=8832;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cdatabase.py;0;2
-FILE_NAME_5=515;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cconstants.py;0;2
-FILE_NAME_6=8145;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_librarian.py;0;2
-FILE_NAME_7=3286;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_haijin.py;0;2
+FILE_NAME_3=8872;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cdatabase.py;0;2
+FILE_NAME_4=526;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cconstants.py;0;2
+FILE_NAME_5=1542;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_haijin.py;0;2
+FILE_NAME_6=8470;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Chaijin.py;0;2
 
 [prjorg]
 expanded_paths=D:\\home\\projects\\softice\\tests;

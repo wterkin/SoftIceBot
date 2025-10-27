@@ -16,7 +16,7 @@ TOP_50_COMMAND: list = [2, 6]
 PERS_COMMAND: list = [3, 7]
 
 HINT: list = ["стат", "stat"]
-COMMANDS: list = ["топ10", "топ25", "топ50", "перс", "top10", "top25", "top50", "pers"]
+COMMANDS: list = ["перв10", "перв25", "перв50", "личные", "top10", "top25", "top50", "pers"]
 UNIT_ID: str = "statistic"
 FOREIGN_BOTS: str = "foreign_bots"
 SORTED_BY: tuple = ("фраз", "слов", "стикеров", "картинок",
@@ -71,16 +71,28 @@ class CStatistic(prototype.CPrototype):
     def add_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
         """Добавляет новую запись статистики по человеку."""
 
-        stat = db.CStat(puser_id, pchat_id, pstatfields)
-        self.database.commit_changes(stat)
+        try:
+
+            stat = db.CStat(puser_id, pchat_id, pstatfields)
+            self.database.commit_changes(stat)
+            return stat.id
+        except SQLAlchemyError:
+            
+            return cn.ERROR_CODE
 
 
     def add_user_to_base(self, ptg_user_id: int, ptg_user_title: str):
         """Добавляет нового пользователя в БД и возвращает его ID."""
 
-        user = db.CUser(ptg_user_id, ptg_user_title)
-        self.database.commit_changes(user)
-        return user.id
+        try:
+        
+            user = db.CUser(ptg_user_id, ptg_user_title)
+            self.database.commit_changes(user)
+            return user.id
+        except SQLAlchemyError:
+            
+            return cn.ERROR_CODE
+            
 
 
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
@@ -225,7 +237,10 @@ class CStatistic(prototype.CPrototype):
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
 
-        return UNIT_ID in self.config["chats"][pchat_title]
+        if pchat_title in self.config["chats"]:
+
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
 
     def reload(self):
