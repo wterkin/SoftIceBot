@@ -47,7 +47,6 @@ class CTestStatistic(TestCase):
         self.assertEqual(self.statistic.add_user_to_base(777, "Master"), 1)
         
 
-
     def test_add_user_stat(self):
 
         statfields: dict = {db.STATUSERID: 0,
@@ -76,10 +75,26 @@ class CTestStatistic(TestCase):
         self.assertFalse(self.statistic.can_process(test_softice.TESTPLACE_CHAT_NAME, "!кукабарра"))
 
 
+    def test_get_chat_id(self):
+
+        # FixMe: Этот тест отрабатывает через раз
+        self.assertEqual(self.statistic.get_chat_id(777), 1)
+        self.assertEqual(self.statistic.get_chat_id(0), -1)
+        
+
+    def test_get_help(self):
+
+        self.assertIn("перв10, перв25, перв50, личные", self.statistic.get_help(test_softice.TESTPLACE_CHAT_NAME))
+
+
+    def test_get_hint(self):
+
+        self.assertIn("стат, stat", self.statistic.get_hint(test_softice.TESTPLACE_CHAT_NAME))
+
 
     def tearDown(self):
 
         self.database.disconnect()
         for file in Path(self.data_path).glob("softice.db"):
 
-            file.unlink()
+           file.unlink()

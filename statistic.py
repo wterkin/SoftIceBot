@@ -108,13 +108,18 @@ class CStatistic(prototype.CPrototype):
     def get_chat_id(self, ptg_chat_id):
         """Если чат уже есть в базе, возвращает его ID, если нет - None."""
 
-        query = self.database.query_data(db.CChat)
-        query = query.filter_by(fchatid=ptg_chat_id)
-        chat = query.first()
-        if chat is not None:
+        try:
+          
+            query = self.database.query_data(db.CChat)
+            query = query.filter_by(fchatid=ptg_chat_id)
+            chat = query.first()
+            if chat is not None:
 
-            return chat.id
-        return None
+                return chat.id
+            return cn.ERROR_CODE
+        except SQLAlchemyError:
+            
+            return cn.ERROR_CODE
 
 
     def get_help(self, pchat_title: str) -> str:

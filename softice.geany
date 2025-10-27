@@ -28,13 +28,13 @@ long_line_behaviour=1
 long_line_column=140
 
 [files]
-current_page=1
-FILE_NAME_0=2980;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_statistic.py;0;4
-FILE_NAME_1=9195;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cstatistic.py;0;2
+current_page=0
+FILE_NAME_0=3166;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_statistic.py;0;4
+FILE_NAME_1=403;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cstatistic.py;0;2
 FILE_NAME_2=7492;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Csoftice.py;0;2
 FILE_NAME_3=8872;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cdatabase.py;0;2
 FILE_NAME_4=526;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cconstants.py;0;2
-FILE_NAME_5=1542;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_haijin.py;0;2
+FILE_NAME_5=2490;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_haijin.py;0;2
 FILE_NAME_6=8470;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Chaijin.py;0;2
 
 [prjorg]
