@@ -219,7 +219,7 @@ class CBarman(prototype.CPrototype):
             word_list: list = func.parse_input(pmessage_text)
             for command in COMMANDS:
 
-                found = word_list[0] in command
+                found = word_list[0].lower() in command
                 if found:
 
                     break
@@ -312,10 +312,14 @@ class CBarman(prototype.CPrototype):
         assert pcommand is not None, \
             "Assert: [barman.serve_client] Пропущен параметр <pcommand> !"
 
+        print(f"{pcommand=}")
+        print(f"{pcommand.strip()=}")
+        print(f"{pcommand.strip().lower()=}")
         answer: str = ""
         for item in ASSORTMENT:
 
-            if pcommand.strip() in item[COMMAND_KEY]:
+            
+            if pcommand.strip().lower() in item[COMMAND_KEY]:
 
                 arguments: list = []
                 for prop in item[PROPERTIES_KEY]:
