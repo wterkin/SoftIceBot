@@ -28,11 +28,11 @@ long_line_behaviour=1
 long_line_column=140
 
 [files]
-current_page=5
-FILE_NAME_0=3166;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_statistic.py;0;4
-FILE_NAME_1=403;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cstatistic.py;0;2
-FILE_NAME_2=7492;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Csoftice.py;0;2
-FILE_NAME_3=8872;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cdatabase.py;0;2
+current_page=2
+FILE_NAME_0=1195;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_statistic.py;0;4
+FILE_NAME_1=1802;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cstatistic.py;0;2
+FILE_NAME_2=32737;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Csoftice.py;0;2
+FILE_NAME_3=7611;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cdatabase.py;0;2
 FILE_NAME_4=526;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cconstants.py;0;2
 FILE_NAME_5=6897;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Ctests%5Ctest_moderator.py;0;2
 FILE_NAME_6=2365;Python;0;EUTF-8;0;1;0;D%3A%5Chome%5Cprojects%5Csoftice%5Cmoderator.py;0;2

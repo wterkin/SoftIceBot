@@ -24,6 +24,11 @@ class CTestStatistic(TestCase):
         else:
 
             self.data_path: str = self.config[softice.WINDOWS_DATA_FOLDER_KEY]
+
+        for file in Path(self.data_path).glob("softice.db"):
+
+           file.unlink()
+            
         self.database: db.CDataBase = db.CDataBase(self.config, self.data_path)
         self.database.create()
         self.statistic: statistic.CStatistic = statistic.CStatistic(self.config, self.database)
@@ -95,6 +100,3 @@ class CTestStatistic(TestCase):
     def tearDown(self):
 
         self.database.disconnect()
-        for file in Path(self.data_path).glob("softice.db"):
-
-           file.unlink()

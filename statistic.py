@@ -58,6 +58,7 @@ class CStatistic(prototype.CPrototype):
 
     def add_chat_to_base(self, ptg_chat_id: int, ptg_chat_title: str) -> int:
         """Добавляет новый чат в БД и возвращает его ID."""
+
         try:
 
             chat = db.CChat(ptg_chat_id, ptg_chat_title)

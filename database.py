@@ -270,6 +270,9 @@ class CDataBase:
             if delayed > 0:
 
                 print(f"* Commit paused for {delayed//10} second.")
+        except SQLAlchemyError:
+
+            print("Ошибка!!!")
         finally:
 
             # *** Разлочим базу
@@ -295,6 +298,7 @@ class CDataBase:
 
             print("Ошибка подключения к БД!")
         return result
+
 
     def create(self):
         """Создает или изменяет БД в соответствии с описанной в классах структурой."""
