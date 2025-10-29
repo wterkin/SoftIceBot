@@ -257,9 +257,9 @@ class CHaijin(prototype.CPrototype):
 
                     unformatted_answer = answer
                     answer = self.format_hokku(unformatted_answer)
-                else:
+                    if not answer:
 
-                    answer = "Такого хокку нет в моей базе."
+                        answer = "Такого хокку нет в моей базе"
 
             elif command == ADD_HOKKU_CMD:
 

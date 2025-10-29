@@ -4,6 +4,7 @@
 *.7z
 
 data/*
+test_data/*
 flags/*
 logs/*
 __pycache__/*

@@ -52,9 +52,11 @@ def find_in_book(pbook: list, pword_list: list) -> str:
             if search_line.upper() in line.upper():
 
                 found_list.append(f"[{idx+1}]{line}")
+                
         if len(found_list) > 0:
 
             answer = random.choice(found_list)
+            
     if not answer:
 
         answer = messages.MESSAGE_NOT_FOUND
@@ -107,6 +109,7 @@ def quote(pbook: list, pword_list: list) -> str:
         else:
 
             answer = find_in_book(pbook, pword_list)
+
     else:
 
         # *** случайную.

@@ -312,9 +312,6 @@ class CBarman(prototype.CPrototype):
         assert pcommand is not None, \
             "Assert: [barman.serve_client] Пропущен параметр <pcommand> !"
 
-        print(f"{pcommand=}")
-        print(f"{pcommand.strip()=}")
-        print(f"{pcommand.strip().lower()=}")
         answer: str = ""
         for item in ASSORTMENT:
 
