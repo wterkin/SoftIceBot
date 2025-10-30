@@ -260,12 +260,15 @@ class CDataBase:
 
             sleep(WAITING_TIME)
             delayed += 1
+            print(f"@@@@@ {delayed=}")
         # *** Теперь сами её залочим.
         self.busy = True
+        print("@@@@@ Locked")
         # *** Сохраняем данные
         try:
 
             self.session.add(obj)
+            print(f"@@@@@ Stored {obj=}")
             self.session.commit()
             if delayed > 0:
 

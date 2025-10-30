@@ -24,13 +24,20 @@ class CTestStatistic(TestCase):
         else:
 
             self.data_path: str = self.config[softice.WINDOWS_DATA_FOLDER_KEY]
-
+        """
+        Как-то нужно удалять и создавать базу один раз, а потом уже не дрыгаться
         for file in Path(self.data_path).glob("softice.db"):
 
            file.unlink()
-            
+
+        print(f"{self.data_path=}")    
+        file_name =  Path(self.data_path) / "softice.db"
+        if not file_name.is_file():
+
+            print("Create!")
+            self.database.create()
+        """            
         self.database: db.CDataBase = db.CDataBase(self.config, self.data_path)
-        self.database.create()
         self.statistic: statistic.CStatistic = statistic.CStatistic(self.config, self.database)
 
 
