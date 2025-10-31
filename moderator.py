@@ -68,7 +68,7 @@ class CModerator(prototype.CPrototype):
                     result = re.match(bad_word, text) is not None
                     if result:
 
-                        # print(f"bad word detected. {bad_word=} {text=}")
+                        print(f"bad word detected. {bad_word=} {text=}")
                         detected = True
                         text = replace_bad_words(bad_word, text)
 
