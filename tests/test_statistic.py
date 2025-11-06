@@ -105,6 +105,27 @@ class CTestStatistic(TestCase):
         self.assertIn("стат, stat", self.statistic.get_hint(test_softice.TESTPLACE_CHAT_NAME))
 
 
+    def test_save_all_type_of_messages(self):
+
+        #    def save_all_type_of_messages(self, pevent: dict):
+        pass
+
+
+
+    def test_get_personal_information(self):
+        
+        # def get_personal_information(self, ptg_chat_id: int, puser_title: str):
+        self.assertIn("наболтал", self.statistic.get_personal_information(777, "Master"))
+        self.assertEqual(self.statistic.get_personal_information(777, "Somebody"), "")
+        self.assertEqual(self.statistic.get_personal_information(1, "Master"), "")
+
+
+    def test_get_statistic(self):
+
+        #  def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
+        pass        
+
+
     def tearDown(self):
 
         self.database.disconnect()
