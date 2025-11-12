@@ -106,7 +106,7 @@ class CTestModerator(TestCase):
         self.assertNotIn(moderator.CENSORED, self.moderator.check_bad_words_ex("enjoy"))
         self.assertNotIn(moderator.CENSORED, self.moderator.check_bad_words_ex("благодарю"))
         self.assertNotIn(moderator.CENSORED, self.moderator.check_bad_words_ex("плохо"))
-        
+        # попался
         
     def test_control_talking(self):
         

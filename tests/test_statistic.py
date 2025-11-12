@@ -90,7 +90,6 @@ class CTestStatistic(TestCase):
 
     def test_get_chat_id(self):
 
-        # FixMe: Этот тест отрабатывает через раз
         self.assertEqual(self.statistic.get_chat_id(777), 1)
         self.assertEqual(self.statistic.get_chat_id(0), -1)
         
@@ -108,6 +107,17 @@ class CTestStatistic(TestCase):
     def test_save_all_type_of_messages(self):
 
         #    def save_all_type_of_messages(self, pevent: dict):
+        event: dict = {}
+        event[cn.MTEXT] = "Hello, world!"
+        event[cn.MCHAT_ID] = 777
+        event[cn.MCHAT_TITLE] = "Test Place"
+        event[cn.MUSER_ID] = 777
+        event[cn.MUSER_NAME] = "Петрович"
+        
+        
+
+
+        event[cn.MCAPTION] = "Some picture"
         pass
 
 
@@ -125,6 +135,12 @@ class CTestStatistic(TestCase):
         #  def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
         pass        
 
+    # def get_user_id(self, ptg_user_id):
+    # def get_user_stat(self, pchat_id: int, puser_id: int):
+    # def is_enabled(self, pchat_title: str) -> bool:
+    # def reload(self):
+    # def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
+    # def update_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
 
     def tearDown(self):
 

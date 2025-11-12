@@ -69,6 +69,7 @@ class CStatistic(prototype.CPrototype):
             return cn.ERROR_CODE
 
 
+
     def add_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
         """Добавляет новую запись статистики по человеку."""
 
@@ -80,6 +81,7 @@ class CStatistic(prototype.CPrototype):
         except SQLAlchemyError:
             
             return cn.ERROR_CODE
+
 
 
     def add_user_to_base(self, ptg_user_id: int, ptg_user_title: str):
@@ -106,6 +108,7 @@ class CStatistic(prototype.CPrototype):
         return False
 
 
+
     def get_chat_id(self, ptg_chat_id):
         """Если чат уже есть в базе, возвращает его ID, если нет - None."""
 
@@ -123,6 +126,7 @@ class CStatistic(prototype.CPrototype):
             return cn.ERROR_CODE
 
 
+
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
 
@@ -134,6 +138,7 @@ class CStatistic(prototype.CPrototype):
         return ""
 
 
+
     def get_hint(self, pchat_title: str) -> str:
         """Возвращает команду верхнего уровня, в ответ на которую
            модуль возвращает полный список команд, доступных пользователю."""
@@ -142,6 +147,7 @@ class CStatistic(prototype.CPrototype):
 
             return ", ".join(HINT)
         return ""
+
 
 
     def get_personal_information(self, ptg_chat_id: int, puser_title: str):
@@ -173,6 +179,7 @@ class CStatistic(prototype.CPrototype):
                              f"{0 if stat.fvideos is None else stat.fvideos} видео,"
 
         return answer
+
 
 
     def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
@@ -220,6 +227,7 @@ class CStatistic(prototype.CPrototype):
         return answer
 
 
+
     def get_user_id(self, ptg_user_id):
         """Если пользователь уже есть в базе, возвращает его ID, если нет - None."""
 
@@ -232,12 +240,14 @@ class CStatistic(prototype.CPrototype):
         return None
 
 
+
     def get_user_stat(self, pchat_id: int, puser_id: int):
         """Получает из базы статистику пользователя и возвращает её."""
 
         query = self.database.query_data(db.CStat)
         query = query.filter_by(fuserid=puser_id, fchatid=pchat_id)
         return query.first()
+
 
 
     def is_enabled(self, pchat_title: str) -> bool:
@@ -249,8 +259,10 @@ class CStatistic(prototype.CPrototype):
         return False
 
 
+
     def reload(self):
         """Вызывает перезагрузку внешних данных модуля."""
+
 
 
     def save_all_type_of_messages(self, pevent: dict):
@@ -332,6 +344,7 @@ class CStatistic(prototype.CPrototype):
                     self.update_user_stat(user_id, chat_id, statfields)
 
 
+
     def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
         """Обработчик команд."""
 
@@ -370,6 +383,7 @@ class CStatistic(prototype.CPrototype):
 
                         answer = self.get_personal_information(pchat_id, puser_title)
         return answer
+
 
 
     def update_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
