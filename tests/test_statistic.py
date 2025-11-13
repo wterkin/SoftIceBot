@@ -110,16 +110,21 @@ class CTestStatistic(TestCase):
         event: dict = {}
         event[cn.MTEXT] = "Hello, world!"
         event[cn.MCHAT_ID] = 777
-        event[cn.MCHAT_TITLE] = "Test Place"
+        event[cn.MCHAT_TITLE] = "TestPlace"
         event[cn.MUSER_ID] = 777
-        event[cn.MUSER_NAME] = "Петрович"
-        
-        
-
-
+        event[cn.MUSER_NAME] = "Master"
+        event[cn.MCONTENT_TYPE] = "text"
+        self.assertTrue(self.statistic.save_all_type_of_messages(event))
         event[cn.MCAPTION] = "Some picture"
-        pass
-
+        self.assertTrue(self.statistic.save_all_type_of_messages(event))
+        event[cn.MUSER_NAME] = "User"
+        self.assertFalse(self.statistic.save_all_type_of_messages(event))
+        event[cn.MUSER_NAME] = "TrueMafiaBot"
+        self.assertFalse(self.statistic.save_all_type_of_messages(event))
+        event[cn.MCHAT_TITLE] = "fakechat"
+        self.assertFalse(self.statistic.save_all_type_of_messages(event))
+        event[cn.MCHAT_TITLE] = "emptychat"
+        self.assertFalse(self.statistic.save_all_type_of_messages(event))
 
 
     def test_get_personal_information(self):

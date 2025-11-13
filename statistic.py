@@ -265,25 +265,30 @@ class CStatistic(prototype.CPrototype):
 
 
 
-    def save_all_type_of_messages(self, pevent: dict):
+    def save_all_type_of_messages(self, pevent: dict) -> bool:
         """Учитывает стикеры, видео, аудиосообщения."""
 
+        print(f"**** stat:sav 00 {pevent[cn.MCHAT_TITLE]= }")
+        result: bool = False
         if self.is_enabled(pevent[cn.MCHAT_TITLE]):
-
+            # ~ print(f"**** stat:sav 01 {pevent[cn.MUSER_NAME]= }")
+            # *** Получим текстовое сообщение из события
             if cn.MTEXT in pevent:
 
                 message_text: str = pevent[cn.MTEXT]
             else:
 
                 message_text: str = pevent[cn.MCAPTION]
+            # *** Получим остальные данные    
             tg_chat_id: int = pevent[cn.MCHAT_ID]
             tg_chat_title: str = pevent[cn.MCHAT_TITLE]
             tg_user_id: int = pevent[cn.MUSER_ID]
             tg_user_name: str = ""
+            # *** Если есть имя пользователя (а может не быть?) - берем его
             if cn.MUSER_NAME in pevent:
 
                 tg_user_name = pevent[cn.MUSER_NAME]
-
+            # *** Создаём пустой словарь для статистических данных
             statfields: dict = {db.STATUSERID: 0,
                                 db.STATLETTERS: 0,
                                 db.STATWORDS: 0,
@@ -292,11 +297,12 @@ class CStatistic(prototype.CPrototype):
                                 db.STATSTICKERS: 0,
                                 db.STATAUDIOS: 0,
                                 db.STATVIDEOS: 0}
-
+            # *** Получаем другие имеющиеся имена пользователя
             tg_user_title = extract_user_name(pevent)
             # *** Это не бот написал? Чужой бот, не наш?
             if tg_user_name not in self.config[FOREIGN_BOTS]:
 
+                print("**** stat:sav 02")
                 # Проверить, нет ли уже этого чата в таблице чатов
                 chat_id = self.get_chat_id(tg_chat_id)
                 if chat_id is None:
@@ -329,12 +335,14 @@ class CStatistic(prototype.CPrototype):
                     statfields[db.STATSTICKERS] += 1
                 elif pevent[cn.MCONTENT_TYPE] == "text":
 
+                    # *** Если это не команда боту...
                     if message_text[0] != "!":
 
                         statfields[db.STATLETTERS] += len(message_text)
                         statfields[db.STATWORDS] += len(message_text.split(" "))
                         statfields[db.STATPHRASES] += 1
 
+                # *** Если информации о юзере нет в базе, добавляем, иначе апдейтим
                 if user_stat is None:
 
                     self.add_user_stat(user_id, chat_id, statfields)
@@ -343,8 +351,10 @@ class CStatistic(prototype.CPrototype):
 
                     self.update_user_stat(user_id, chat_id, statfields)
 
+                result = True
+        return result
 
-
+        
     def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
         """Обработчик команд."""
 
