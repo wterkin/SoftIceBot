@@ -77,5 +77,10 @@ class CTestStarGazer(TestCase):
         self.assertIn("20.04.2025", self.stargazer.stargazer(test_softice.TESTPLACE_CHAT_NAME, "!пасха 2025"))
         self.assertIn("Невозможно рассчитать", self.stargazer.stargazer(test_softice.TESTPLACE_CHAT_NAME, "!пасха в этом году"))
         now_date: date = date.today()
-        self.assertIn(f"{now_date.day:02}/{now_date.month:02}", self.stargazer.stargazer(test_softice.TESTPLACE_CHAT_NAME, "!дата"))
+        if now_date.day == 1 and now_date.month == 1:
+
+            self.assertIn(f"Новый год", self.stargazer.stargazer(test_softice.TESTPLACE_CHAT_NAME, "!дата"))
+        else:
+
+            self.assertIn(f"{now_date.day:02}/{now_date.month:02}", self.stargazer.stargazer(test_softice.TESTPLACE_CHAT_NAME, "!дата"))
         

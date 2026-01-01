@@ -240,7 +240,6 @@ class CStatistic(prototype.CPrototype):
         return None
 
 
-
     def get_user_stat(self, pchat_id: int, puser_id: int):
         """Получает из базы статистику пользователя и возвращает её."""
 
@@ -271,7 +270,8 @@ class CStatistic(prototype.CPrototype):
         print(f"**** stat:sav 00 {pevent[cn.MCHAT_TITLE]= }")
         result: bool = False
         if self.is_enabled(pevent[cn.MCHAT_TITLE]):
-            # ~ print(f"**** stat:sav 01 {pevent[cn.MUSER_NAME]= }")
+
+            print(f"**** stat:sav 01 {pevent[cn.MUSER_NAME]= }")
             # *** Получим текстовое сообщение из события
             if cn.MTEXT in pevent:
 
@@ -288,6 +288,8 @@ class CStatistic(prototype.CPrototype):
             if cn.MUSER_NAME in pevent:
 
                 tg_user_name = pevent[cn.MUSER_NAME]
+            print(f"**** stat:sav 01 {tg_user_name= }")
+
             # *** Создаём пустой словарь для статистических данных
             statfields: dict = {db.STATUSERID: 0,
                                 db.STATLETTERS: 0,
@@ -307,10 +309,11 @@ class CStatistic(prototype.CPrototype):
                 chat_id = self.get_chat_id(tg_chat_id)
                 if chat_id is None:
 
-                    # Нету еще, новый чат - добавить, и получить id
+                    # *** Нету еще, новый чат - добавить, и получить id
                     chat_id = self.add_chat_to_base(tg_chat_id, tg_chat_title)
                 # *** Проверить, нет ли юзера в таблице тг юзеров
                 user_id = self.get_user_id(tg_user_id)
+                print(f"**** stat:sav 03 {user_id=}")
                 if user_id is None:
 
                     # *** Нету, новый пользователь

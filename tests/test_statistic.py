@@ -118,8 +118,8 @@ class CTestStatistic(TestCase):
         event[cn.MCAPTION] = "Some picture"
         self.assertTrue(self.statistic.save_all_type_of_messages(event))
         event[cn.MUSER_NAME] = "User"
-        self.assertFalse(self.statistic.save_all_type_of_messages(event))
-        event[cn.MUSER_NAME] = "TrueMafiaBot"
+        self.assertTrue(self.statistic.save_all_type_of_messages(event))
+        event[cn.MUSER_NAME] = "Mafioso"
         self.assertFalse(self.statistic.save_all_type_of_messages(event))
         event[cn.MCHAT_TITLE] = "fakechat"
         self.assertFalse(self.statistic.save_all_type_of_messages(event))
