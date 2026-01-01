@@ -283,9 +283,9 @@ class CDataBase:
         """Устанавливает соединение с БД."""
 
         result: bool = False
-        # print(f"{self.data_path=} {self.database_name=}")
         try:
             alchemy_echo: bool = self.config["alchemy_echo"] == "1"
+            # print(f"{alchemy_echo=} {self.config['alchemy_echo']=}")
             self.engine = create_engine('sqlite:///' + self.data_path + self.database_name,
                                         echo=alchemy_echo,
                                         connect_args={'check_same_thread': False})

@@ -23,13 +23,6 @@ SORTED_BY: tuple = ("фраз", "слов", "стикеров", "картино�
                     "звуковых сообщений", "видео сообщений")
 
 
-#def decode_stat(pstat: db.CStat):
-#    """Декодирует запись статистики."""
-
-#    return pstat.fletters, pstat.fwords, pstat.fphrases, pstat.fstickers, \
-#        pstat.fpictures, pstat.faudios, pstat.fvideos
-
-
 def extract_user_name(pevent: dict):
     """Возвращает имя пользователя, при его наличии."""
 
@@ -69,7 +62,6 @@ class CStatistic(prototype.CPrototype):
             return cn.ERROR_CODE
 
 
-
     def add_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
         """Добавляет новую запись статистики по человеку."""
 
@@ -81,7 +73,6 @@ class CStatistic(prototype.CPrototype):
         except SQLAlchemyError:
             
             return cn.ERROR_CODE
-
 
 
     def add_user_to_base(self, ptg_user_id: int, ptg_user_title: str):
@@ -97,7 +88,6 @@ class CStatistic(prototype.CPrototype):
             return cn.ERROR_CODE
             
 
-
     def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
         """Возвращает True, если модуль может обработать команду, иначе False."""
 
@@ -106,7 +96,6 @@ class CStatistic(prototype.CPrototype):
             word_list: list = func.parse_input(pmessage_text)
             return word_list[0] in COMMANDS or word_list[0] in HINT
         return False
-
 
 
     def get_chat_id(self, ptg_chat_id):
@@ -126,7 +115,6 @@ class CStatistic(prototype.CPrototype):
             return cn.ERROR_CODE
 
 
-
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд модуля, доступных пользователю."""
 
@@ -138,7 +126,6 @@ class CStatistic(prototype.CPrototype):
         return ""
 
 
-
     def get_hint(self, pchat_title: str) -> str:
         """Возвращает команду верхнего уровня, в ответ на которую
            модуль возвращает полный список команд, доступных пользователю."""
@@ -147,7 +134,6 @@ class CStatistic(prototype.CPrototype):
 
             return ", ".join(HINT)
         return ""
-
 
 
     def get_personal_information(self, ptg_chat_id: int, puser_title: str):
@@ -181,7 +167,6 @@ class CStatistic(prototype.CPrototype):
         return answer
 
 
-
     def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
         """Получает из базы статистику по самым говорливым юзерам."""
 
@@ -190,7 +175,7 @@ class CStatistic(prototype.CPrototype):
         query = query.filter_by(fchatid=ptg_chat_id)
         query = query.join(db.CStat, db.CStat.fchatid == db.CChat.id)
         query = query.join(db.CUser, db.CUser.id == db.CStat.fuserid)
-        print(f"0 {porder_by}")
+        # print(f"0 {porder_by}")
         if porder_by == 1:
 
             query = query.order_by(db.CStat.fphrases.desc())
@@ -216,7 +201,7 @@ class CStatistic(prototype.CPrototype):
         answer = "Самые говорливые:\n"
         for number, item in enumerate(stat):
 
-#             print(f"{number} {porder_by}")
+            # print(f"{number} {porder_by}")
             answer += f"{number + 1} : {item[2].fusername} : {item[1].fphrases}" \
                       f" фраз, {item[1].fwords} слов, " \
                       f"{0 if item[1].fstickers is None else item[1].fstickers} стик., " \
@@ -267,11 +252,11 @@ class CStatistic(prototype.CPrototype):
     def save_all_type_of_messages(self, pevent: dict) -> bool:
         """Учитывает стикеры, видео, аудиосообщения."""
 
-        print(f"**** stat:sav 00 {pevent[cn.MCHAT_TITLE]= }")
+        # print(f"**** stat:sav 00 {pevent[cn.MCHAT_TITLE]= }")
         result: bool = False
         if self.is_enabled(pevent[cn.MCHAT_TITLE]):
 
-            print(f"**** stat:sav 01 {pevent[cn.MUSER_NAME]= }")
+            # print(f"**** stat:sav 01 {pevent[cn.MUSER_NAME]= }")
             # *** Получим текстовое сообщение из события
             if cn.MTEXT in pevent:
 
@@ -288,7 +273,7 @@ class CStatistic(prototype.CPrototype):
             if cn.MUSER_NAME in pevent:
 
                 tg_user_name = pevent[cn.MUSER_NAME]
-            print(f"**** stat:sav 01 {tg_user_name= }")
+            # print(f"**** stat:sav 01 {tg_user_name= }")
 
             # *** Создаём пустой словарь для статистических данных
             statfields: dict = {db.STATUSERID: 0,
@@ -304,7 +289,7 @@ class CStatistic(prototype.CPrototype):
             # *** Это не бот написал? Чужой бот, не наш?
             if tg_user_name not in self.config[FOREIGN_BOTS]:
 
-                print("**** stat:sav 02")
+                # print("**** stat:sav 02")
                 # Проверить, нет ли уже этого чата в таблице чатов
                 chat_id = self.get_chat_id(tg_chat_id)
                 if chat_id is None:
@@ -313,7 +298,7 @@ class CStatistic(prototype.CPrototype):
                     chat_id = self.add_chat_to_base(tg_chat_id, tg_chat_title)
                 # *** Проверить, нет ли юзера в таблице тг юзеров
                 user_id = self.get_user_id(tg_user_id)
-                print(f"**** stat:sav 03 {user_id=}")
+                # print(f"**** stat:sav 03 {user_id=}")
                 if user_id is None:
 
                     # *** Нету, новый пользователь

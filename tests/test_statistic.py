@@ -104,6 +104,31 @@ class CTestStatistic(TestCase):
         self.assertIn("стат, stat", self.statistic.get_hint(test_softice.TESTPLACE_CHAT_NAME))
 
 
+    def test_get_personal_information(self):
+
+        # def get_personal_information(self, ptg_chat_id: int, puser_title: str):
+        self.assertIn("наболтал", self.statistic.get_personal_information(777, "Master"))
+        self.assertEqual(self.statistic.get_personal_information(777, "Somebody"), "")
+        self.assertEqual(self.statistic.get_personal_information(1, "Master"), "")
+
+
+    def test_get_statistic(self):
+
+        #  def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[0]}", 
+                      self.statistic.get_statistic(777, 5, 0))
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[1]}", 
+                      self.statistic.get_statistic(777, 5, 1))
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[2]}", 
+                      self.statistic.get_statistic(777, 5, 2))
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[3]}", 
+                      self.statistic.get_statistic(777, 5, 3))
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[4]}", 
+                      self.statistic.get_statistic(777, 5, 4))
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[5]}", 
+                      self.statistic.get_statistic(777, 5, 5))
+
+
     def test_save_all_type_of_messages(self):
 
         #    def save_all_type_of_messages(self, pevent: dict):
@@ -127,18 +152,7 @@ class CTestStatistic(TestCase):
         self.assertFalse(self.statistic.save_all_type_of_messages(event))
 
 
-    def test_get_personal_information(self):
-        
-        # def get_personal_information(self, ptg_chat_id: int, puser_title: str):
-        self.assertIn("наболтал", self.statistic.get_personal_information(777, "Master"))
-        self.assertEqual(self.statistic.get_personal_information(777, "Somebody"), "")
-        self.assertEqual(self.statistic.get_personal_information(1, "Master"), "")
 
-
-    def test_get_statistic(self):
-
-        #  def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
-        pass        
 
     # def get_user_id(self, ptg_user_id):
     # def get_user_stat(self, pchat_id: int, puser_id: int):
