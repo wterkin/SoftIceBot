@@ -212,7 +212,6 @@ class CStatistic(prototype.CPrototype):
         return answer
 
 
-
     def get_user_id(self, ptg_user_id):
         """Если пользователь уже есть в базе, возвращает его ID, если нет - None."""
 

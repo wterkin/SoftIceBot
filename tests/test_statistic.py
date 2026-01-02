@@ -61,7 +61,7 @@ class CTestStatistic(TestCase):
         
 
     def test_add_user_stat(self):
-
+ 
         statfields: dict = {db.STATUSERID: 0,
                             db.STATLETTERS: 2,
                             db.STATWORDS: 3,
@@ -129,6 +129,18 @@ class CTestStatistic(TestCase):
                       self.statistic.get_statistic(777, 5, 5))
 
 
+    def test_get_user_id(self):
+        # def get_user_id(self, ptg_user_id):
+        self.assertIsNotNone(self.statistic.get_user_id(777))
+        self.assertIsNone(self.statistic.get_user_id(111))
+
+
+    def test_get_user_stat(self):
+        #    def get_user_stat(self, pchat_id: int, puser_id: int):
+        #assertEqual
+        pass
+        
+        
     def test_save_all_type_of_messages(self):
 
         #    def save_all_type_of_messages(self, pevent: dict):
@@ -154,7 +166,6 @@ class CTestStatistic(TestCase):
 
 
 
-    # def get_user_id(self, ptg_user_id):
     # def get_user_stat(self, pchat_id: int, puser_id: int):
     # def is_enabled(self, pchat_title: str) -> bool:
     # def reload(self):
@@ -164,3 +175,4 @@ class CTestStatistic(TestCase):
     def tearDown(self):
 
         self.database.disconnect()
+        # pass
