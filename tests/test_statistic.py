@@ -136,10 +136,24 @@ class CTestStatistic(TestCase):
 
 
     def test_get_user_stat(self):
+
         #    def get_user_stat(self, pchat_id: int, puser_id: int):
-        #assertEqual
-        pass
+        stat: db.CStat = self.statistic.get_user_stat(1, 1)
+        self.assertEqual(stat.fletters,2)
+        self.assertEqual(stat.fwords,3)
+        self.assertEqual(stat.fphrases,4)
+        self.assertEqual(stat.fpictures,5)
+        self.assertEqual(stat.fstickers,6)
+        self.assertEqual(stat.faudios,7)
+        self.assertEqual(stat.fvideos,8)
+
+
+    def test_is_enabled(self):
         
+        self.assertTrue(self.statistic.is_enabled(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertFalse(self.statistic.is_enabled("fakechat"))
+        self.assertFalse(self.statistic.is_enabled("emptychat"))
+
         
     def test_save_all_type_of_messages(self):
 
@@ -164,11 +178,11 @@ class CTestStatistic(TestCase):
         self.assertFalse(self.statistic.save_all_type_of_messages(event))
 
 
+    def test_statistic(self):
+        
+        # def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
 
 
-    # def get_user_stat(self, pchat_id: int, puser_id: int):
-    # def is_enabled(self, pchat_title: str) -> bool:
-    # def reload(self):
     # def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
     # def update_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
 

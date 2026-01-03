@@ -232,7 +232,6 @@ class CStatistic(prototype.CPrototype):
         return query.first()
 
 
-
     def is_enabled(self, pchat_title: str) -> bool:
         """Возвращает True, если на этом канале этот модуль разрешен."""
 
@@ -242,10 +241,8 @@ class CStatistic(prototype.CPrototype):
         return False
 
 
-
     def reload(self):
         """Вызывает перезагрузку внешних данных модуля."""
-
 
 
     def save_all_type_of_messages(self, pevent: dict) -> bool:
