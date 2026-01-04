@@ -116,17 +116,17 @@ class CTestStatistic(TestCase):
 
         #  def get_statistic(self, ptg_chat_id: int, pcount: int, porder_by: int):
         self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[0]}", 
-                      self.statistic.get_statistic(777, 5, 0))
-        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[1]}", 
                       self.statistic.get_statistic(777, 5, 1))
-        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[2]}", 
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[1]}", 
                       self.statistic.get_statistic(777, 5, 2))
-        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[3]}", 
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[2]}", 
                       self.statistic.get_statistic(777, 5, 3))
-        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[4]}", 
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[3]}", 
                       self.statistic.get_statistic(777, 5, 4))
-        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[5]}", 
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[4]}", 
                       self.statistic.get_statistic(777, 5, 5))
+        self.assertIn(f"Отсортировано по количеству {statistic.SORTED_BY[5]}", 
+                      self.statistic.get_statistic(777, 5, 6))
 
 
     def test_get_user_id(self):
@@ -183,17 +183,14 @@ class CTestStatistic(TestCase):
         # def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
         self.assertTrue(self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top10"))
         self.assertIn("перв10", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!стат"))
-        self.assertIn("Самые говорливые", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top10 1"))
-        self.assertIn("Самые говорливые", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top25 2"))
-        self.assertIn("Самые говорливые", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top50 3"))
-        self.assertIn("Самые говорливые", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top10 4"))
-        self.assertIn("Самые говорливые", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top25 5"))
-        self.assertIn("Самые говорливые", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top50 6"))
-        self.assertIn("Master наболтал", self.statistic.statistic(1, test_softice.TESTPLACE_CHAT_NAME, "Master", "!pers"))
+        self.assertIn("Самые говорливые", self.statistic.statistic(777, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top10 1"))
+        self.assertIn("Самые говорливые", self.statistic.statistic(777, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top25 2"))
+        self.assertIn("Самые говорливые", self.statistic.statistic(777, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top50 3"))
+        self.assertIn("Самые говорливые", self.statistic.statistic(777, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top10 4"))
+        self.assertIn("Самые говорливые", self.statistic.statistic(777, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top25 5"))
+        self.assertIn("Самые говорливые", self.statistic.statistic(777, test_softice.TESTPLACE_CHAT_NAME, "Master", "!top50 6"))
+        self.assertIn("Master наболтал", self.statistic.statistic(777, test_softice.TESTPLACE_CHAT_NAME, "Master", "!pers"))
 
-        # "top10", "top25", "top50", "pers" 
-    # def statistic(self, pchat_id: int, pchat_title: str, puser_title, pmessage_text: str):
-    # def update_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
 
     def tearDown(self):
 

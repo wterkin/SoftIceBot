@@ -208,7 +208,7 @@ class CStatistic(prototype.CPrototype):
                       f"{0 if item[1].fpictures is None else item[1].fpictures} фоток, " \
                       f"{0 if item[1].faudios is None else item[1].faudios} звук. и " \
                       f"{0 if item[1].fvideos is None else item[1].fvideos} вид. \n"
-        answer += f"Отсортировано по количеству {SORTED_BY[porder_by]}. \n"
+        answer += f"Отсортировано по количеству {SORTED_BY[porder_by-1]}. \n"
         return answer
 
 
@@ -364,6 +364,7 @@ class CStatistic(prototype.CPrototype):
                         if order_by < 1 or order_by > 6:
 
                             order_by = 1
+                        # print(f"********** {order_by=}")    
                     if command in TOP_10_COMMAND:
 
                         answer = self.get_statistic(pchat_id, 10, order_by)
@@ -375,9 +376,9 @@ class CStatistic(prototype.CPrototype):
                         answer = self.get_statistic(pchat_id, 50, order_by)
                     elif command in PERS_COMMAND:
 
+                        # print("***********  PERSONAL")
                         answer = self.get_personal_information(pchat_id, puser_title)
         return answer
-
 
 
     def update_user_stat(self, puser_id: int, pchat_id: int, pstatfields: dict):
