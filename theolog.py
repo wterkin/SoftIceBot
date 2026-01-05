@@ -106,7 +106,6 @@ FULL_OUTPUT = "-f"
 def search_in_book(pbook_file: str, pbook_title: str, pphrase: str):
     """Ищет заданную строку в заданном файле."""
 
-    # print(f"^^^^^^^^ {pbook_file=}")
     result_list: list = []
     with open(pbook_file, "r", encoding="utf-8") as book_file:
 
@@ -115,8 +114,6 @@ def search_in_book(pbook_file: str, pbook_title: str, pphrase: str):
             lower_line = line.lower()
             parsed_line = re.split(r':', lower_line, maxsplit=2)
             joined_line: str = " ".join(parsed_line[2:])
-            # print(f"^^^^^^^^ {pphrase=}")
-            # print(f"^^^^^^^^ {joined_line=}")
             if pphrase in joined_line:
 
                 parsed_line = re.split(r':', line, maxsplit=2)

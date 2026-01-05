@@ -27,4 +27,5 @@ class CTestTheolog(TestCase):
         
         #def search_in_book(pbook_file: str, pbook_title: str, pphrase: str):
         self.assertIn("и почил в день седьмый", theolog.search_in_book(self.data_path+"1.txt", "Книга Бытия", "И совершил Бог к седьмому дню дела Свои".lower()))
+        self.assertNotIn("\n", theolog.search_in_book(self.data_path+"1.txt", "Книга Бытия", "Пусть бегут неуклюже".lower()))
     
