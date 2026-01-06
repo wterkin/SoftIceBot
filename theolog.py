@@ -94,7 +94,8 @@ FIND_IN_BOOK: str = "найти"
 OLD_TESTAMENT_BOOKS = range(1, 40)
 NEW_TESTAMENT_BOOKS = range(40, 67)
 
-THEOLOG_HINT: list = ["книги", "books", f"{OLD_TESTAMENT}", f"{NEW_TESTAMENT}", f"{FIND_IN_BOOK}"]
+THEOLOG_HINT: list = ["библия", "bible"]
+THEOLOG_HELP: list = ["книги", "books", f"{OLD_TESTAMENT}", f"{NEW_TESTAMENT}", f"{FIND_IN_BOOK}"]
 MAX_SEARCH_RESULT: int = 4
 OUTPUT_COUNT = "-n"
 FULL_OUTPUT = "-f"
@@ -147,7 +148,9 @@ class CTheolog(prototype.CPrototype):
         if self.is_enabled(pchat_title):
 
             word_list: list = func.parse_input(pmessage_text)
-            if word_list[0].lower() in THEOLOG_HINT:
+
+            
+            if word_list[0].lower() in THEOLOG_HELP or word_list[0].lower() in THEOLOG_HINT:
 
                 return True
 
@@ -206,6 +209,14 @@ class CTheolog(prototype.CPrototype):
 
     def get_help(self, pchat_title: str) -> str:
         """Возвращает список команд, поддерживаемых модулем."""
+        
+        if self.is_enabled(pchat_title):
+            
+            return ", ".join(THEOLOG_HELP)
+
+
+    def get_books(self, pchat_title: str) -> str:
+        """Возвращает список книг Библии."""
 
         books: str = ""
         if self.is_enabled(pchat_title):
@@ -229,12 +240,12 @@ class CTheolog(prototype.CPrototype):
             "No <pchat_title> parameter specified!"
         if self.is_enabled(pchat_title):
 
-            hint: list = THEOLOG_HINT
-            hint[2] += " [-nX] [-f]"
-            hint[3] += " [-nX] [-f]"
-            hint[4] += " книга фрагмент"
-            hint.append("книга [-nX] глава стих")
-            return ", ".join(hint)
+            # hint: list = THEOLOG_HINT
+            # hint[2] += " [-nX] [-f]"
+            # hint[3] += " [-nX] [-f]"
+            # hint[4] += " книга фрагмент"
+            # hint.append("книга [-nX] глава стих")
+            return ", ".join(THEOLOG_HINT)
         return ""
 
 
@@ -314,9 +325,17 @@ class CTheolog(prototype.CPrototype):
         if self.can_process(pchat_title, pmessage_text):
 
             # *** Если есть один параметр, то запрос помощи должен быть это
-            if (param_count == 1) and word_list[COMMAND_ARG] in THEOLOG_HINT:
+            if (param_count == 1):
+                
+                if word_list[COMMAND_ARG] in THEOLOG_HINT:
 
-                return self.get_help(pchat_title)
+                    return self.get_help(pchat_title)
+                # *** Либо запрос списка книг
+                print(f"@@@ {word_list[COMMAND_ARG]}")
+                print(f"@@@ {THEOLOG_HELP[0:2]}")
+                if word_list[COMMAND_ARG] in THEOLOG_HELP[0:2]:
+                
+                    return self.get_books(pchat_title)
             # *** Если есть два параметра, то это книга и глава/стих.
             if param_count > 1:
 
