@@ -297,10 +297,12 @@ class CTheolog(prototype.CPrototype):
                                            f" стих {parsed_line[1]} : {parsed_line[2]}")
         # *** Если что-то нашли и ответ готов...
         if len(result_list) > 0:
-
+            
+            # *** Если нужна полная выдача (??)
             if pfull_output:
 
                 answer = "\n".join(result_list)
+            # *** Или задано количество строк в выдаче...    
             elif poutput_count > 0:
 
                 if len(result_list) < poutput_count:
@@ -308,7 +310,8 @@ class CTheolog(prototype.CPrototype):
                     poutput_count = len(result_list)
                 answer = "\n".join(result_list[:poutput_count])
             else:
-
+                
+                # *** Иначе берем случайную строчку
                 answer = random.choice(result_list)
         return answer
 
