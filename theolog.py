@@ -268,24 +268,34 @@ class CTheolog(prototype.CPrototype):
         result_list: list = []
         parsed_line: list
         answer: str = ""
+        # *** По умолчанию берем Ветхий Завет
         search_range = OLD_TESTAMENT_BOOKS
+        # *** Если нужен Новый - выбираем его
         if ptestament == NEW_TESTAMENT:
 
             search_range = NEW_TESTAMENT_BOOKS
+        # *** Перебираем книги в заданном диапазоне    
         for book in search_range:
 
+            # *** Берем полное наименование книги
             book_title: str = BIBLE_BOOKS[book-1][2]
+            # *** И название файла книги
             book_name = f"{self.data_path}{book}.txt"
+            # *** Открываем файл и экшен!
             with open(book_name, "r", encoding="utf-8") as book_file:
 
                 for line in book_file:
 
                     lower_line = line.lower()
+                    # *** Если искомая фраза содержится в строке...
                     if pphrase in lower_line:
 
+                        # *** Парсим строчку на три части
                         parsed_line = re.split(r'\:', line, maxsplit=2)
+                        # *** Формируем ответ
                         result_list.append(f"{book_title} глава {parsed_line[0]}"
                                            f" стих {parsed_line[1]} : {parsed_line[2]}")
+        # *** Если что-то нашли и ответ готов...
         if len(result_list) > 0:
 
             if pfull_output:

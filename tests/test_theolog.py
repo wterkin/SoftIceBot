@@ -62,3 +62,17 @@ class CTestTheolog(TestCase):
         self.assertIn("Бытие", self.theolog.get_books(test_softice.TESTPLACE_CHAT_NAME))
         self.assertIn("", self.theolog.get_books("fakechat"))
         self.assertIn("", self.theolog.get_books("emptychat"))        
+
+
+    def test_get_hint(self):
+        
+        # def get_hint(self, pchat_title: str) -> str:  # [arguments-differ]
+        self.assertIn("библия, bible", self.theolog.get_hint(test_softice.TESTPLACE_CHAT_NAME))
+        self.assertIn("", self.theolog.get_hint("fakechat"))
+        self.assertIn("", self.theolog.get_hint("emptychat"))        
+
+
+    def test_global_search(self):
+        
+        # def global_search(self, ptestament: str, pphrase: str,
+                          # pfull_output: bool = False, poutput_count: int = 0) -> str:  # noqa
