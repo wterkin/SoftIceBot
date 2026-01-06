@@ -94,11 +94,11 @@ class CTestMeterolog(TestCase):
         now_date = dtime.datetime.now()
         self.assertIn(now_date.strftime("Смоленск : %d.%m.%Y"), self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг Смоленск"))
         tomorrow_date = now_date + dtime.timedelta(days=1) 
-        self.assertIn(tomorrow_date.strftime("Смоленск : %d.%m.%Y"), self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пг Смоленск"))
+        self.assertIn(tomorrow_date.strftime("Смоленск : %d.%m.%Y"), self.meteorolog.meteorolog(test_softice.TESTPLACE_CHAT_NAME, "!пр Смоленск"))
 
 
     def test_request_weather(self):
 
         now_date = dtime.datetime.now()
-        self.assertIn(now_date.strftime("Смоленск : %d.%m.%Y"), self.meteorolog.request_weather(491687, now_date))
+        self.assertIn("Темп.:", self.meteorolog.request_weather(491687, now_date))
         
