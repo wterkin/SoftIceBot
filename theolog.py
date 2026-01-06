@@ -152,8 +152,6 @@ class CTheolog(prototype.CPrototype):
         if self.is_enabled(pchat_title):
 
             word_list: list = func.parse_input(pmessage_text)
-
-            
             if word_list[0].lower() in THEOLOG_HELP or word_list[0].lower() in THEOLOG_HINT:
 
                 return True
@@ -181,27 +179,32 @@ class CTheolog(prototype.CPrototype):
         answer: str = ""
         # *** Путь к файлу
         book_file_name: str = f"{self.data_path}{pbook_idx + 1}.txt"
-        if len(pverse.strip()) == 0:
+        # *** Если номер строки пустой, берем первый
+        if not pverse.strip():
 
             pverse = "1"
-        line_id = f"{pchapter}:{pverse}:"
+        line_id: str = f"{pchapter}:{pverse}:"
+        # *** Открываем нужную книгу и перебираем её
         with open(book_file_name, "r", encoding="utf-8") as book_file:
-
+    
             for line in book_file:
 
                 # *** Ищем в файле заданный идентификатор строки
                 if re.search(f"^{line_id}", line) is not None:
 
-                    text_pos = line.find(':', line.find(':') + 1)
-                    line = line[:text_pos] + " " + line[text_pos+1:]
-                    answer = f"{pbook_name} {line}"
+                    text_pos: int = line.find(':', line.find(':') + 1)
+                    result: str = line[:text_pos] + " " + line[text_pos+1:]
+                    answer = f"{pbook_name} {result}"
                     if poutput_count == 1:
 
                         break
+                # *** Если что-то нашлось в предыдущей итерации..        
                 elif answer:
 
+                    # *** и нужно выдать больше одной строки...
                     if poutput_count > 1:
 
+                        # *** Добавляем их в ответ
                         parsed_line: list = line.split(":")
                         answer += "\n" + parsed_line[2]
                         poutput_count -= 1
@@ -217,6 +220,7 @@ class CTheolog(prototype.CPrototype):
         if self.is_enabled(pchat_title):
             
             return ", ".join(THEOLOG_HELP)
+        return None
 
 
     def get_books(self, pchat_title: str) -> str:
@@ -304,7 +308,10 @@ class CTheolog(prototype.CPrototype):
 
         assert pchat_title is not None, \
             "Assert: [theolog.is_enabled] No <pchat_title> parameter specified!"
-        return UNIT_ID in self.config["chats"][pchat_title]
+        if pchat_title in self.config["chats"]:
+
+            return UNIT_ID in self.config["chats"][pchat_title]
+        return False
 
 
     def reload(self):

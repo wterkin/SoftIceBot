@@ -1,8 +1,8 @@
 #~/bin/env/bin/python3 test_softice.py -v
 clear
 touch flags/unittest.flg
-#/home/app/bin/python/tg_env/bin/python3 -m unittest discover -s tests/ -p 'test_theolog.py' -vv >unittest.log 2>unittest2.log
-/home/app/bin/python/tg_env/bin/python3 -m unittest discover -s tests/ -p 'test_meteorolog.py' -vv >unittest.log 2>unittest2.log
+/home/app/bin/python/tg_env/bin/python3 -m unittest discover -s tests/ -p 'test_theolog.py' -vv >unittest.log 2>unittest2.log
+#/home/app/bin/python/tg_env/bin/python3 -m unittest discover -s tests/ -p 'test_meteorolog.py' -vv >unittest.log 2>unittest2.log
 # /home/app/bin/python/tg_env/bin/python3 -m unittest discover -s tests/ -p 'test_barman.py' -vv >unittest.log 2>unittest2.log
 # python -m unittest discover -s <directory> -p '*_test.py'
 rm flags/unittest.flg
