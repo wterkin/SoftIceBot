@@ -90,12 +90,16 @@ UNIT_ID = "theolog"
 # *** Команды поиска текста по книгам Библии
 NEW_TESTAMENT: str = "найтинз"
 OLD_TESTAMENT: str = "найтивз"
+NEW_TESTAMENT_ENG: str = "findnew"
+OLD_TESTAMENT_ENG: str = "findold"
 FIND_IN_BOOK: str = "найти"
+FIND_IN_BOOK_ENG: str = "find"
 OLD_TESTAMENT_BOOKS = range(1, 40)
 NEW_TESTAMENT_BOOKS = range(40, 67)
 
 THEOLOG_HINT: list = ["библия", "bible"]
-THEOLOG_HELP: list = ["книги", "books", f"{OLD_TESTAMENT}", f"{NEW_TESTAMENT}", f"{FIND_IN_BOOK}"]
+THEOLOG_HELP: list = ["книги", "books", f"{OLD_TESTAMENT}", f"{NEW_TESTAMENT}", 
+                      f"{OLD_TESTAMENT_ENG}", f"{NEW_TESTAMENT_ENG}", f"{FIND_IN_BOOK}", f"{FIND_IN_BOOK_ENG}" ]
 MAX_SEARCH_RESULT: int = 4
 OUTPUT_COUNT = "-n"
 FULL_OUTPUT = "-f"

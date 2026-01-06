@@ -29,3 +29,6 @@ class CTestTheolog(TestCase):
         self.assertIn("и почил в день седьмый", theolog.search_in_book(self.data_path+"1.txt", "Книга Бытия", "И совершил Бог к седьмому дню дела Свои".lower()))
         self.assertNotIn("\n", theolog.search_in_book(self.data_path+"1.txt", "Книга Бытия", "Пусть бегут неуклюже".lower()))
     
+    def test_can_process():
+        
+        # def can_process(self, pchat_title: str, pmessage_text: str) -> bool:
