@@ -62,7 +62,7 @@ def parse_weather(pdata, preq_date) -> str:
     """Парсит данные погоды и формирует строку погоды."""
 
     min_temperature: int = 100
-    max_temperature: int = 0
+    max_temperature: int = -100
     min_pressure: int = 10000
     max_pressure: int = 0
     min_humidity: int = 100
@@ -114,7 +114,7 @@ def parse_weather(pdata, preq_date) -> str:
             if icon not in weather:
 
                 weather.append(icon)
-    answer = f"Темп.: {round(min_temperature)} - {round(max_temperature)} °C, " \
+    answer = f"Темп.: {round(min_temperature)}  -  {round(max_temperature)} °C, " \
              f" давл.: {round(min_pressure * 0.75)} - {round(max_pressure * 0.75)}" \
              f" мм.рт.ст., " \
              f" влажн.: {round(min_humidity)} - {round(max_humidity)} %, " \
